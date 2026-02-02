@@ -1,5 +1,3 @@
-import type { Course } from "@/features/courses/types/course.types";
-
 export type Role = 'admin' | 'student' | 'instructor';
 
 export type CourseRelation = | { type: 'OWNER' } | { type: 'ENROLLED' } | { type: 'NONE' };
@@ -15,15 +13,6 @@ export interface User {
   isActive: boolean
   createdAt?: Date;
   updateAt?: Date;
-}
-
-
-
-export interface Enrollment {
-  course: Course;
-  user: User;
-  createdAt: Date;
-  updateAt: Date;
 }
 
 // Entidad Tarea/Asignación
@@ -68,21 +57,6 @@ export interface Grade {
   feedback?: string;
   gradedBy: string;
   gradedAt: string;
-}
-
-export interface Module {
-  id: string;
-  title: string;
-  description?: string;
-  position?: number;
-  courseId?: string;
-  lessons?: Lesson[];
-  isPublished?: boolean;
-}
-
-export interface Lesson{
-  title: string;
-
 }
 
 

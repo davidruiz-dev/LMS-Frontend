@@ -1,6 +1,6 @@
 import type { EnrollmentFormData } from "@/features/courses/schemas";
+import type { Enrollment } from "@/features/courses/types/course.types";
 import { api } from "@/lib/client";
-import type { Enrollment, } from "@/shared/types";
 
 const ENROLLMENT_URL = '/enrollments';
 

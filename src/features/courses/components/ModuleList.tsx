@@ -1,4 +1,3 @@
-import type { Module } from "@/shared/types"
 import { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable, type DropResult, } from "@hello-pangea/dnd";
 import { Grip, TrashIcon } from "lucide-react";
@@ -6,15 +5,18 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { useCourseAccess } from "@/features/courses/hooks/use-course-access";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { reorder } from "@/utils/reorder";
+import type { Module, ReorderModulesDto } from "@/features/courses/types/course.types";
 
 interface ModuleListProps {
     courseId: string;
     items: Module[];
-    onReorder: (modules: Module[]) => void;
+    onReorder: (modules: ReorderModulesDto) => void;
     onEdit: (id: string) => void;
+    onAddItem: () => void;
 }
 
-const ModuleList = ({ courseId, items, onReorder, onEdit }: ModuleListProps) => {
+const ModuleList = ({ courseId, items, onReorder, onEdit, onAddItem }: ModuleListProps) => {
     const [isMounted, setIsMounted] = useState(false);
     const [modules, setModules] = useState<Module[]>(items);
     const access = useCourseAccess(courseId);
@@ -28,21 +30,23 @@ const ModuleList = ({ courseId, items, onReorder, onEdit }: ModuleListProps) => 
     }, [items]);
 
     const onDragEnd = (result: DropResult) => {
-        if (!result.destination) return;
-        const items = Array.from(modules);
-        const [reorderedItems] = items.splice(result.source.index, 1);
-        items.splice(result.destination.index, 0, reorderedItems);
-        const startIndex = Math.min(result.source.index, result.destination.index)
-        const endIndex = Math.max(result.source.index, result.destination.index)
-        const updatedItems = items.slice(startIndex, endIndex + 1);
-        setModules(items);
-        const bulkUpdateModules = updatedItems.map((module) => ({
-            id: module.id,
-            title: module.title,
-            position: items.findIndex((item) => item.id === module.id),
-        }));
-        
-        onReorder(bulkUpdateModules);
+        const { destination, source, type } = result;
+        if (!destination) return;
+
+        const newModules = reorder(
+            modules,
+            source.index,
+            destination.index
+        );
+        setModules(newModules);
+        try {
+            onReorder({
+                moduleIds: newModules.map(m => m.id),
+            });
+        } catch (error) {
+            console.error(error);
+            setModules(modules);
+        }
     };
 
     if (!isMounted) return null;
@@ -76,17 +80,24 @@ const ModuleList = ({ courseId, items, onReorder, onEdit }: ModuleListProps) => 
                                                     {module.title}
                                                     {access?.canEditModules && (
                                                         <div className="flex justify-end items-center gap-2 flex-1">
-                                                            <Badge variant={module.isPublished ? 'default' : 'destructive' }>
+                                                            <Badge variant={module.isPublished ? 'default' : 'destructive'}>
                                                                 {module.isPublished ? "publicado" : "draft"}</Badge>
-                                                            <Button variant="outline" size={"icon"}><TrashIcon className="text-muted-foreground size-4"/></Button>
-                                                        
+                                                            {/* <Button variant="outline" size={"icon"}><TrashIcon className="text-muted-foreground size-4" /></Button> */}
+
                                                         </div>
-                                                        )
+                                                    )
                                                     }
-                                                    
+
                                                 </AccordionTrigger>
                                                 <AccordionContent>
-                                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere, tempora dolores? Impedit libero dolores nihil quisquam? Nesciunt perferendis magnam accusantium.
+                                                    <div className="border rounded-md bg-stone-50 p-4 border-dashed flex flex-col items-center gap-2" >
+                                                        {module.items?.length === 0 && (
+                                                            <>
+                                                                <span>No hay contenido en este módulo</span>
+                                                                <Button onClick={() => onAddItem()}>Agregar</Button>
+                                                            </>
+                                                        )}
+                                                    </div>
                                                 </AccordionContent>
                                             </AccordionItem>
                                         </div>

@@ -1,6 +1,6 @@
 import type { ModuleFormData } from "@/features/courses/schemas";
 import { moduleService } from "@/features/courses/services/moduleService";
-import type { Module } from "@/shared/types";
+import type { ReorderModulesDto } from "@/features/courses/types/course.types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 
@@ -37,11 +37,10 @@ export const useCreateModule = () => {
     })
 }
 
-
 export const useReorderModules = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({ courseId, orderData }: { courseId: string; orderData: { modules: Module[]} }) => moduleService.reorderModules(courseId, orderData),
+        mutationFn: ({ courseId, orderData }: { courseId: string; orderData: ReorderModulesDto }) => moduleService.reorderModules(courseId, orderData),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['modules-course'] })
             Swal.fire({

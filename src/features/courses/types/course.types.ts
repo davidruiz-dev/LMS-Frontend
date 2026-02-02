@@ -20,3 +20,31 @@ export interface Course {
   isActive: boolean;
   status: CourseStatus;
 }
+
+export interface Module {
+  id: string;
+  title: string;
+  description?: string;
+  position?: number;
+  courseId?: string;
+  items?: ModuleItem[];
+  isPublished?: boolean;
+}
+
+export interface ReorderModulesDto {
+  moduleIds: string[];
+}
+
+export interface ModuleItem{
+  id: string;
+  title: string;
+
+}
+
+export interface Enrollment {
+  id: string;
+  course: Course;
+  user: User;
+  createdAt: Date;
+  updateAt: Date;
+}

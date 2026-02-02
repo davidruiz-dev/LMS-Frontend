@@ -1,16 +1,19 @@
 import LoadingPage from "@/components/LoadingPage";
 import { Button } from "@/components/ui/button"
 import ModuleForm from "@/features/courses/components/ModuleForm";
+import ModuleItemForm from "@/features/courses/components/ModuleItemForm";
 import ModuleList from "@/features/courses/components/ModuleList";
 import { useCourseAccess } from "@/features/courses/hooks/use-course-access";
 import { useModulesByCourse, useReorderModules } from "@/features/courses/hooks/use-modules";
-import type { Module } from "@/shared/types";
+import type { ReorderModulesDto } from "@/features/courses/types/course.types";
 import { PlusCircleIcon } from "lucide-react"
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 
 const CourseModulesPage = () => {
     const [modalOpen, setModalOpen] = useState<boolean>(false);
+    const [modalItemOpen, setModalItemOpen] = useState<boolean>(false);
+
     const { id } = useParams<{ id: string }>();
     const { data: modules, isLoading } = useModulesByCourse(id);
     const { mutate: reorderModules } = useReorderModules();
@@ -18,14 +21,14 @@ const CourseModulesPage = () => {
     const access = useCourseAccess(id!);
 
     if (isLoading) return <LoadingPage message='cargando...' />
-    
+
     const toggleModal = () => {
         setModalOpen(!modalOpen);
     }
 
-    const handleReorder = async (modules: Module[]) => {
+    const handleReorder = async (modules: ReorderModulesDto) => {
         try {
-            reorderModules({ courseId: id!, orderData: {modules} });
+            reorderModules({ courseId: id!, orderData: modules });
         } catch (error) {
             throw error;
         }
@@ -43,21 +46,26 @@ const CourseModulesPage = () => {
                 )}
             </div>
 
-            {modules?.length === 0 && (
+            {modules && modules?.length === 0 && 
                 <div className='text-center text-gray-400 p-4'>No hay módulos agregados a este curso.</div>
-            )}
+            }
 
             {modules && (
-                <ModuleList courseId={id!} items={modules} onReorder={handleReorder} onEdit={() => {}} />
+                <ModuleList
+                    courseId={id!}
+                    items={modules}
+                    onReorder={handleReorder}
+                    onEdit={() => { }}
+                    onAddItem={() => setModalItemOpen(true)} />
             )}
-            
-            {modalOpen && id && (
-                <ModuleForm
-                    isOpen={modalOpen}
-                    onClose={() => setModalOpen(false)}
-                    courseId={id}
-                />
-            )}
+
+            <ModuleForm
+                isOpen={modalOpen}
+                onClose={toggleModal}
+                courseId={id!}
+            />
+
+            <ModuleItemForm isOpen={modalItemOpen} onClose={() => setModalItemOpen(false)} courseId={id!} />
         </div>
     )
 }

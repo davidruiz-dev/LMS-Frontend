@@ -17,9 +17,9 @@ const EditUserPage = lazy(() => import('@/features/users/pages/EditUserPage'));
 const CoursesPage = lazy(() => import('@/features/courses/pages/CoursesPage'));
 const AddCoursePage = lazy(() => import('@/features/courses/pages/AddCoursePage'));
 const EditCourseRoute = lazy(() => import('@/router/EditCourseRoute'));
-const CoursePage = lazy(() => import('@/features/courses/pages/course-detail/CoursePage'));
-const CourseEnrollments = lazy(() => import('@/features/courses/pages/course-detail/CourseEnrollmentsPage'));
-const CourseModules = lazy(() => import('@/features/courses/pages/course-detail/CourseModulesPage'));
+const CoursePage = lazy(() => import('@/features/courses/pages/CoursePage'));
+const CourseEnrollments = lazy(() => import('@/features/courses/pages/CourseEnrollmentsPage'));
+const CourseModules = lazy(() => import('@/features/courses/pages/CourseModulesPage'));
 
 const GradeLevelsPage = lazy(() => import('@/features/grade-level/pages/GradeLevelsPage'));
 

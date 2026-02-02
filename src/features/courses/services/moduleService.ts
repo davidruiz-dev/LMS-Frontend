@@ -1,6 +1,6 @@
 import type { ModuleFormData } from "@/features/courses/schemas";
+import type { Module, ReorderModulesDto } from "@/features/courses/types/course.types";
 import { api } from "@/lib/client";
-import type { Module } from "@/shared/types";
 
 export const moduleService = {
     getModulesByCourse: async (courseId: string): Promise<Module[]> => {
@@ -13,9 +13,8 @@ export const moduleService = {
         return response.data;
     },
 
-    reorderModules: async (courseId: string, orderData: { modules: Module[]}) => {
-        const response = await api.post(
-            `/courses/${courseId}/modules/reorder`, orderData);
-        return response.data;
+    reorderModules: async (courseId: string, orderData: ReorderModulesDto): Promise<Module[]> => {
+        const { data } = await api.post(`/courses/${courseId}/modules/reorder`, orderData);
+        return data;
     }
 }

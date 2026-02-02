@@ -1,6 +1,7 @@
 import type { CourseFormData } from "@/features/courses/schemas";
+import type { Course } from "@/features/courses/types/course.types";
 import { api } from "@/lib/client";
-import type { Course, PaginatedResponse, PaginationFilters, } from "@/shared/types";
+import type { PaginatedResponse, PaginationFilters, } from "@/shared/types";
 
 const COURSE_URL = "/courses"
 
@@ -26,9 +27,8 @@ export const CourseService = {
     formData.append('startDate', course.startDate.toString())
     formData.append('endDate', course.endDate.toString())
     formData.append('status', course.status.toString())
-    if (image) {
-      formData.append('imagen', image)
-    }
+    if (image) formData.append('imagen', image)
+  
     const response = await api.post(COURSE_URL, formData, {
       headers: { 
         "Content-Type": "multipart/form-data"
@@ -71,4 +71,6 @@ export const CourseService = {
     const { data } = await api.post<Course>(`/courses/${id}/publish`);
     return data;
   },
+
+  
 }
