@@ -1,5 +1,5 @@
-import type { ModuleFormData } from "@/features/courses/schemas";
-import type { Module, ReorderModulesDto } from "@/features/courses/types/course.types";
+import type { ModuleFormData, ModuleItemFormData } from "@/features/courses/schemas/module.schema";
+import type { Module, ModuleItem, ReorderModuleItemsDto, ReorderModulesDto } from "@/features/courses/types/course.types";
 import { api } from "@/lib/client";
 
 export const moduleService = {
@@ -15,6 +15,17 @@ export const moduleService = {
 
     reorderModules: async (courseId: string, orderData: ReorderModulesDto): Promise<Module[]> => {
         const { data } = await api.post(`/courses/${courseId}/modules/reorder`, orderData);
+        return data;
+    },
+
+    /* Module Items methods */
+    createModuleItem: async (moduleId: string, moduleItemData: ModuleItemFormData): Promise<ModuleItem> => {
+        const { data } = await api.post(`/modules/${moduleId}/items`, moduleItemData);
+        return data;
+    },
+
+    reorderModuleItems: async (moduleId: string, orderData: ReorderModuleItemsDto): Promise<ModuleItem[]> => {
+        const { data } = await api.post(`/modules/${moduleId}/items/reorder`, orderData);
         return data;
     }
 }

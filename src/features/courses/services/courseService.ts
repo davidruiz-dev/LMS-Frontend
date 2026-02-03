@@ -1,4 +1,4 @@
-import type { CourseFormData } from "@/features/courses/schemas";
+import type { CourseFormData } from "@/features/courses/schemas/course.schema";
 import type { Course } from "@/features/courses/types/course.types";
 import { api } from "@/lib/client";
 import type { PaginatedResponse, PaginationFilters, } from "@/shared/types";

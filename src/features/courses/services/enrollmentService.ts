@@ -1,4 +1,4 @@
-import type { EnrollmentFormData } from "@/features/courses/schemas";
+import type { EnrollmentFormData } from "@/features/courses/schemas/enrollment.schema";
 import type { Enrollment } from "@/features/courses/types/course.types";
 import { api } from "@/lib/client";
 

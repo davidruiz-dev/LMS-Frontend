@@ -1,8 +1,7 @@
-import type { ModuleFormData } from "@/features/courses/schemas";
+import type { ModuleFormData, ModuleItemFormData } from "@/features/courses/schemas/module.schema";
 import { moduleService } from "@/features/courses/services/moduleService";
-import type { ReorderModulesDto } from "@/features/courses/types/course.types";
+import type { ReorderModuleItemsDto, ReorderModulesDto } from "@/features/courses/types/course.types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import Swal from "sweetalert2";
 
 export function useModulesByCourse(idCourse: string | undefined) {
     return useQuery({
@@ -18,20 +17,8 @@ export const useCreateModule = () => {
         mutationFn: ({ courseId, module }: { courseId: string; module: ModuleFormData }) => moduleService.createModule(courseId, module),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['modules-course'] })
-            Swal.fire({
-                icon: "success",
-                title: "Inscripción creada",
-                showConfirmButton: false,
-                timer: 2000
-            });
         },
         onError: (error) => {
-            Swal.fire({
-                icon: "error",
-                title: "Error al crear módulo",
-                showConfirmButton: false,
-                timer: 2000
-            });
             console.error(error);
         }
     })
@@ -43,20 +30,34 @@ export const useReorderModules = () => {
         mutationFn: ({ courseId, orderData }: { courseId: string; orderData: ReorderModulesDto }) => moduleService.reorderModules(courseId, orderData),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['modules-course'] })
-            Swal.fire({
-                icon: "success",
-                title: "Actualizado",
-                showConfirmButton: false,
-                timer: 2000
-            });
         },
         onError: (error) => {
-            Swal.fire({
-                icon: "error",
-                title: "Error al reordenar módulos",
-                showConfirmButton: false,
-                timer: 2000
-            });
+            console.error(error);
+        }
+    })
+}
+
+export const useCreateModuleItem = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ moduleId, moduleItem }: { moduleId: string; moduleItem: ModuleItemFormData }) => moduleService.createModuleItem(moduleId, moduleItem),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['modules-course'] })
+        },
+        onError: (error) => {
+            console.error(error);
+        }
+    })
+}
+
+export const useReorderModuleItems = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ moduleId, orderData }: { moduleId: string; orderData: ReorderModuleItemsDto }) => moduleService.reorderModuleItems(moduleId, orderData),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['modules-course'] })
+        },
+        onError: (error) => {
             console.error(error);
         }
     })

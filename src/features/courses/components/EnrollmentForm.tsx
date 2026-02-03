@@ -2,7 +2,6 @@ import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { useCreateEnrollment } from '@/features/courses/hooks/use-enrollments'
-import { enrollmentSchema, type EnrollmentFormData } from '@/features/courses/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState, type FC } from 'react'
 import { useForm } from 'react-hook-form'
@@ -12,6 +11,7 @@ import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { UsersService } from '@/features/users/services/userService'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { enrollmentSchema, type EnrollmentFormData } from '@/features/courses/schemas/enrollment.schema'
 
 interface Props {
     isOpen: boolean;

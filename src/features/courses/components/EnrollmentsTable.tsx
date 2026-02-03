@@ -5,8 +5,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import EnrollmentForm from '@/features/courses/components/EnrollmentForm'
 import { useCourseAccess } from '@/features/courses/hooks/use-course-access'
 import { useEnrollmentsByCourse } from '@/features/courses/hooks/use-enrollments'
-import { USER_ROLES } from '@/shared/constants'
-import { useAuth } from '@/shared/providers/AuthProvider'
 import { PlusCircleIcon, Search } from 'lucide-react'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -17,7 +15,6 @@ const EnrollmentsTable = () => {
     const { id } = useParams<{id: string}>();
 
     const { data: enrollments, isLoading }  = useEnrollmentsByCourse(id);
-    const { user } = useAuth();
 
     const access = useCourseAccess(id!);
 

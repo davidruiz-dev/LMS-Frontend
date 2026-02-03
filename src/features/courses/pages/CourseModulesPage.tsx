@@ -4,35 +4,73 @@ import ModuleForm from "@/features/courses/components/ModuleForm";
 import ModuleItemForm from "@/features/courses/components/ModuleItemForm";
 import ModuleList from "@/features/courses/components/ModuleList";
 import { useCourseAccess } from "@/features/courses/hooks/use-course-access";
-import { useModulesByCourse, useReorderModules } from "@/features/courses/hooks/use-modules";
-import type { ReorderModulesDto } from "@/features/courses/types/course.types";
+import { useModulesByCourse, useReorderModuleItems, useReorderModules } from "@/features/courses/hooks/use-modules";
+import type { ReorderModuleItemsDto, ReorderModulesDto } from "@/features/courses/types/course.types";
+import { showError, showSuccess } from "@/helpers/alerts";
+import { reorder } from "@/utils/reorder";
+import { DragDropContext, type DropResult } from "@hello-pangea/dnd";
 import { PlusCircleIcon } from "lucide-react"
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 
 const CourseModulesPage = () => {
+    const { id } = useParams<{ id: string }>();
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [modalItemOpen, setModalItemOpen] = useState<boolean>(false);
+    const [selectedModuleId, setSelectedModuleId] = useState<string | null>(null);
 
-    const { id } = useParams<{ id: string }>();
-    const { data: modules, isLoading } = useModulesByCourse(id);
+    const { data: modules, isLoading, error } = useModulesByCourse(id);
     const { mutate: reorderModules } = useReorderModules();
+    const { mutate: reorderModuleItems } = useReorderModuleItems();
 
     const access = useCourseAccess(id!);
 
     if (isLoading) return <LoadingPage message='cargando...' />
 
-    const toggleModal = () => {
-        setModalOpen(!modalOpen);
-    }
+    const toggleModal = () => setModalOpen(!modalOpen);
 
-    const handleReorder = async (modules: ReorderModulesDto) => {
-        try {
-            reorderModules({ courseId: id!, orderData: modules });
-        } catch (error) {
-            throw error;
+    const onDragEnd = (result: DropResult) => {
+        const { destination, source, type } = result;
+        if (!destination || !modules) return;
+
+        if (type === 'MODULE') {
+            const reorderedModules = reorder(modules, source.index, destination.index)
+            handleReorderModules({ moduleIds: reorderedModules.map(m => m.id) })
+            return;
+        }
+
+        if (type === 'ITEM') {
+            const moduleId = source.droppableId;
+            const module = modules!.find(m => m.id === moduleId);
+            if (!module) return;
+            const newItems = reorder(module.items,source.index,destination.index);
+            handleReorderModuleItems(moduleId, { itemIds: newItems.map(i => i.id) })
         }
     }
+
+    const handleReorderModules = async (modules: ReorderModulesDto) => {
+        reorderModules({ courseId: id!, orderData: modules }, {
+            onSuccess: () => {
+                showSuccess("Módulos reordenados correctamente");
+            },
+            onError: () => {
+                showError("Error al reordenar módulos");
+            }
+        })
+    };
+
+    const handleReorderModuleItems = async (moduleId: string, items: ReorderModuleItemsDto) => {
+        reorderModuleItems({ moduleId, orderData: items }, {
+            onSuccess:() => {
+                showSuccess("Elementos reordenados correctamente");
+            },
+            onError: () => {
+                showError("Error al reordenar elementos");
+            }
+        })
+    };
+
+    if (error) return <div>Error al cargar los módulos.</div>
 
     return (
         <div className='space-y-4'>
@@ -46,18 +84,20 @@ const CourseModulesPage = () => {
                 )}
             </div>
 
-            {modules && modules?.length === 0 && 
+            {modules && modules?.length === 0 &&
                 <div className='text-center text-gray-400 p-4'>No hay módulos agregados a este curso.</div>
             }
 
-            {modules && (
+            <DragDropContext onDragEnd={onDragEnd}>
                 <ModuleList
                     courseId={id!}
-                    items={modules}
-                    onReorder={handleReorder}
+                    items={modules!}
                     onEdit={() => { }}
-                    onAddItem={() => setModalItemOpen(true)} />
-            )}
+                    onAddItem={(moduleId: string) => {
+                        setModalItemOpen(true)
+                        setSelectedModuleId(moduleId)
+                    }} />
+            </DragDropContext>
 
             <ModuleForm
                 isOpen={modalOpen}
@@ -65,7 +105,11 @@ const CourseModulesPage = () => {
                 courseId={id!}
             />
 
-            <ModuleItemForm isOpen={modalItemOpen} onClose={() => setModalItemOpen(false)} courseId={id!} />
+            <ModuleItemForm
+                isOpen={modalItemOpen}
+                onClose={() => setModalItemOpen(!modalItemOpen)}
+                moduleId={selectedModuleId!}
+            />
         </div>
     )
 }

@@ -1,4 +1,4 @@
-import type { CourseFormData } from "@/features/courses/schemas";
+import type { CourseFormData } from "@/features/courses/schemas/course.schema";
 import { CourseService } from "@/features/courses/services/courseService";
 import type { ApiError } from "@/shared/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";

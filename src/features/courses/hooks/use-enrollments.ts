@@ -1,4 +1,4 @@
-import { type EnrollmentFormData } from '../schemas/index';
+import { type EnrollmentFormData } from '../schemas/module.schema';
 import { EnrollmentService } from "@/features/courses/services/enrollmentService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Swal from 'sweetalert2';

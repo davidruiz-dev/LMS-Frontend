@@ -12,7 +12,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from "react-router-dom";
 import { useCourse, useCreateCourse, useUpdateCourse } from "@/features/courses/hooks/use-courses";
-import { courseSchema, type CourseFormData } from "@/features/courses/schemas";
 import { GradeLevelService } from "@/features/grade-level/services/gradeLevelService";
 import type { GradeLevel } from "@/features/grade-level/types";
 import { ROUTES } from "@/shared/constants/routes";
@@ -21,6 +20,7 @@ import { UsersService } from "@/features/users/services/userService";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { COURSE_STATUS } from "@/shared/constants";
+import { courseSchema, type CourseFormData } from "@/features/courses/schemas/course.schema";
 
 interface Props {
     courseId?: string;
@@ -95,8 +95,10 @@ function FormCourse({ courseId }: Props) {
                 instructorId: courseData?.instructor.id || '',
                 startDate: courseData.startDate ? new Date(courseData.startDate) : undefined,
                 endDate: courseData.endDate ? new Date(courseData.endDate) : undefined,
-                status: courseData.status || COURSE_STATUS.DRAFT,
+                status: courseData.status,
             });
+
+            console.log(courseData)
 
             // Cargar imagen existente si hay
             if (courseData.imageUrl) {
@@ -453,7 +455,7 @@ function FormCourse({ courseId }: Props) {
                                                 <FormControl>
                                                     <Select {...field} onValueChange={field.onChange} value={field.value}>
                                                         <SelectTrigger className="w-full">
-                                                            <SelectValue placeholder="status" />
+                                                            <SelectValue placeholder="selecciona" />
                                                         </SelectTrigger>
                                                         <SelectContent>
                                                             <SelectItem value={COURSE_STATUS.DRAFT}>{COURSE_STATUS.DRAFT}</SelectItem>

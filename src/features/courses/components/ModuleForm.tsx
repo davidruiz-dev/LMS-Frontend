@@ -1,4 +1,4 @@
-import { moduleSchema, type ModuleFormData } from "@/features/courses/schemas";
+import { moduleSchema, type ModuleFormData } from "@/features/courses/schemas/module.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type FC } from "react";
 import { useForm } from "react-hook-form";
@@ -7,6 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCreateModule } from "@/features/courses/hooks/use-modules";
+import { showError, showSuccess } from "@/helpers/alerts";
 
 interface Props {
     isOpen: boolean;
@@ -17,33 +18,29 @@ interface Props {
 const ModuleForm: FC<Props> = ({ isOpen, onClose, courseId }) => {
     const moduleForm = useForm<ModuleFormData>({
         resolver: zodResolver(moduleSchema),
-        defaultValues: {
-            title: '',
-            description: '',
-        },
         mode: 'onChange',
-    })
+    });
 
-    const createModule = useCreateModule();
+    const { mutate, isPending} = useCreateModule();
 
-    const onSubmit = (values: ModuleFormData) => {
-        try {
-            const response = createModule.mutate({ courseId, module: values });
-            return response
-        } catch (error) {
-            console.error('Error al guardar el modulo:', error);
-            throw error;
+    const onSubmit = (values: ModuleFormData) => mutate({ courseId, module: values }, {
+        onSuccess: () => { 
+            onClose(), 
+            moduleForm.reset();
+            showSuccess("Módulo creado exitosamente");
+        },
+        onError: (error) => {
+            showError("Error al crear módulo");
+            console.log(error)
         }
-    }
-
-
+    });
+    
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Agregar módulo</DialogTitle>
                     <DialogDescription>Completa todos los campos requeridos.</DialogDescription>
-
                 </DialogHeader>
                 <Form {...moduleForm}>
                     <form className='space-y-4' onSubmit={moduleForm.handleSubmit(onSubmit)}>
@@ -59,12 +56,10 @@ const ModuleForm: FC<Props> = ({ isOpen, onClose, courseId }) => {
                                 </FormItem>
                             )}
                         />
-
-                        <Button disabled={createModule.isPending}>{createModule.isPending ? 'Guardando...' : 'Guardar'}</Button>
+                        <Button disabled={isPending}>{isPending ? 'Guardando...' : 'Guardar'}</Button>
                     </form>
                 </Form>
             </DialogContent>
-
         </Dialog>
     )
 }
