@@ -1,10 +1,11 @@
+import AlertConfirmation from "@/features/courses/components/ModuleDelete";
 import LoadingPage from "@/components/LoadingPage";
 import { Button } from "@/components/ui/button"
 import ModuleForm from "@/features/courses/components/ModuleForm";
 import ModuleItemForm from "@/features/courses/components/ModuleItemForm";
 import ModuleList from "@/features/courses/components/ModuleList";
 import { useCourseAccess } from "@/features/courses/hooks/use-course-access";
-import { useModulesByCourse, useReorderModuleItems, useReorderModules } from "@/features/courses/hooks/use-modules";
+import { useDeleteModule, useModulesByCourse, useReorderModuleItems, useReorderModules } from "@/features/courses/hooks/use-modules";
 import type { ReorderModuleItemsDto, ReorderModulesDto } from "@/features/courses/types/course.types";
 import { showError, showSuccess } from "@/helpers/alerts";
 import { reorder } from "@/utils/reorder";
@@ -15,19 +16,21 @@ import { useParams } from "react-router-dom";
 
 const CourseModulesPage = () => {
     const { id } = useParams<{ id: string }>();
-    const [modalOpen, setModalOpen] = useState<boolean>(false);
-    const [modalItemOpen, setModalItemOpen] = useState<boolean>(false);
-    const [selectedModuleId, setSelectedModuleId] = useState<string | null>(null);
+    const [ modalModuleOpen, setModalModuleOpen ] = useState<boolean>(false);
+    const [ modalItemOpen, setModalItemOpen ] = useState<boolean>(false);
+    const [ selectedModuleId, setSelectedModuleId ] = useState<string | null>(null);
+    const [deleteOpen, setDeleteOpen] = useState(false);
 
     const { data: modules, isLoading, error } = useModulesByCourse(id);
     const { mutate: reorderModules } = useReorderModules();
     const { mutate: reorderModuleItems } = useReorderModuleItems();
+    
 
     const access = useCourseAccess(id!);
 
     if (isLoading) return <LoadingPage message='cargando...' />
 
-    const toggleModal = () => setModalOpen(!modalOpen);
+    const toggleModal = () => setModalModuleOpen(!modalModuleOpen);
 
     const onDragEnd = (result: DropResult) => {
         const { destination, source, type } = result;
@@ -70,6 +73,8 @@ const CourseModulesPage = () => {
         })
     };
 
+    
+
     if (error) return <div>Error al cargar los módulos.</div>
 
     return (
@@ -96,11 +101,12 @@ const CourseModulesPage = () => {
                     onAddItem={(moduleId: string) => {
                         setModalItemOpen(true)
                         setSelectedModuleId(moduleId)
-                    }} />
+                    }}
+                />
             </DragDropContext>
 
             <ModuleForm
-                isOpen={modalOpen}
+                isOpen={modalModuleOpen}
                 onClose={toggleModal}
                 courseId={id!}
             />
@@ -110,6 +116,8 @@ const CourseModulesPage = () => {
                 onClose={() => setModalItemOpen(!modalItemOpen)}
                 moduleId={selectedModuleId!}
             />
+
+            
         </div>
     )
 }

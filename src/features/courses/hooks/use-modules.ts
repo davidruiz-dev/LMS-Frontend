@@ -1,3 +1,4 @@
+import { queryClient } from './../../../lib/queryClient';
 import type { ModuleFormData, ModuleItemFormData } from "@/features/courses/schemas/module.schema";
 import { moduleService } from "@/features/courses/services/moduleService";
 import type { ReorderModuleItemsDto, ReorderModulesDto } from "@/features/courses/types/course.types";
@@ -15,6 +16,19 @@ export const useCreateModule = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ courseId, module }: { courseId: string; module: ModuleFormData }) => moduleService.createModule(courseId, module),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['modules-course'] })
+        },
+        onError: (error) => {
+            console.error(error);
+        }
+    })
+}
+
+export const useDeleteModule = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ courseId, moduleId}: { courseId: string, moduleId: string }) => moduleService.deleteModule(courseId, moduleId),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['modules-course'] })
         },

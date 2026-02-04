@@ -13,6 +13,11 @@ export const moduleService = {
         return response.data;
     },
 
+    deleteModule: async (courseId: string, moduleId: string) => {
+        const { data } = await api.delete(`/courses/${courseId}/modules/${moduleId}`)
+        return data;
+    },
+
     reorderModules: async (courseId: string, orderData: ReorderModulesDto): Promise<Module[]> => {
         const { data } = await api.post(`/courses/${courseId}/modules/reorder`, orderData);
         return data;
