@@ -6,7 +6,7 @@ import { useCourseAccess } from "@/features/courses/hooks/use-course-access";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { Module } from "@/features/courses/types/course.types";
-import ModuleDeleteDialog from "@/features/courses/components/ModuleDelete";
+import ModuleDeleteDialog from "@/features/courses/components/modules/ModuleDelete";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Switch } from "@/components/ui/switch"
 
@@ -78,7 +78,10 @@ const ModuleList = ({
                                   }}>
                                     Eliminar
                                   </DropdownMenuItem>
-                                  <DropdownMenuItem>
+                                  <DropdownMenuItem onClick={(e) => {
+                                    e.stopPropagation();
+                                    onEdit(module.id)
+                                  }}>
                                     Editar
                                   </DropdownMenuItem>
                                   <DropdownMenuItem onClick={(e) => {

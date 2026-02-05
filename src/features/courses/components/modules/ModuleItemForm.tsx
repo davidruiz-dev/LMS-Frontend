@@ -16,9 +16,10 @@ interface Props {
     isOpen: boolean;
     onClose: () => void;
     moduleId: string;
+    courseId: string
 }
 
-const ModuleItemForm: FC<Props> = ({ isOpen, onClose, moduleId }) => {
+const ModuleItemForm: FC<Props> = ({ isOpen, onClose, moduleId, courseId }) => {
     const moduleForm = useForm<ModuleItemFormData>({
         resolver: zodResolver(moduleItemSchema),
         defaultValues: {
@@ -32,7 +33,7 @@ const ModuleItemForm: FC<Props> = ({ isOpen, onClose, moduleId }) => {
     const { mutate, isPending } = useCreateModuleItem();
 
     const onSubmit = (values: ModuleItemFormData) => {
-        mutate({ moduleId, moduleItem: values },
+        mutate({ courseId, moduleId, moduleItem: values },
             {
                 onSuccess: () => {
                     moduleForm.reset();

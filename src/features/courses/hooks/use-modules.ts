@@ -2,13 +2,14 @@ import { queryClient } from './../../../lib/queryClient';
 import type { ModuleFormData, ModuleItemFormData } from "@/features/courses/schemas/module.schema";
 import { moduleService } from "@/features/courses/services/moduleService";
 import type { ReorderModuleItemsDto, ReorderModulesDto } from "@/features/courses/types/course.types";
+import { showError, showSuccess } from '@/helpers/alerts';
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export function useModulesByCourse(idCourse: string | undefined) {
+export function useModulesByCourse(id: string | undefined) {
     return useQuery({
-        queryKey: ['modules-course', idCourse],
-        queryFn: () => moduleService.getModulesByCourse(idCourse!),
-        enabled: !!idCourse
+        queryKey: ['modules-course', id],
+        queryFn: () => moduleService.getModulesByCourse(id!),
+        enabled: !!id
     })
 }
 
@@ -44,8 +45,10 @@ export const useReorderModules = () => {
         mutationFn: ({ courseId, orderData }: { courseId: string; orderData: ReorderModulesDto }) => moduleService.reorderModules(courseId, orderData),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['modules-course'] })
+            showSuccess("Módulos reordenados correctamente");
         },
         onError: (error) => {
+            showError("Error al reordenar módulos");
             console.error(error);
         }
     })
@@ -54,7 +57,7 @@ export const useReorderModules = () => {
 export const useCreateModuleItem = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({ moduleId, moduleItem }: { moduleId: string; moduleItem: ModuleItemFormData }) => moduleService.createModuleItem(moduleId, moduleItem),
+        mutationFn: ({ courseId, moduleId, moduleItem }: { courseId: string, moduleId: string; moduleItem: ModuleItemFormData }) => moduleService.createModuleItem(courseId, moduleId, moduleItem),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['modules-course'] })
         },
@@ -67,11 +70,13 @@ export const useCreateModuleItem = () => {
 export const useReorderModuleItems = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({ moduleId, orderData }: { moduleId: string; orderData: ReorderModuleItemsDto }) => moduleService.reorderModuleItems(moduleId, orderData),
+        mutationFn: ({ courseId, moduleId, orderData }: { courseId: string, moduleId: string; orderData: ReorderModuleItemsDto }) => moduleService.reorderModuleItems(courseId, moduleId, orderData),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['modules-course'] })
+            showSuccess("Elementos reordenados correctamente");
         },
         onError: (error) => {
+            showError("Error al reordenar elementos");
             console.error(error);
         }
     })

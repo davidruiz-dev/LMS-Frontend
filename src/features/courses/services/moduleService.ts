@@ -24,13 +24,13 @@ export const moduleService = {
     },
 
     /* Module Items methods */
-    createModuleItem: async (moduleId: string, moduleItemData: ModuleItemFormData): Promise<ModuleItem> => {
-        const { data } = await api.post(`/modules/${moduleId}/items`, moduleItemData);
+    createModuleItem: async (courseId: string, moduleId: string, moduleItemData: ModuleItemFormData): Promise<ModuleItem> => {
+        const { data } = await api.post(`/courses/${courseId}/modules/${moduleId}/items`, moduleItemData);
         return data;
     },
 
-    reorderModuleItems: async (moduleId: string, orderData: ReorderModuleItemsDto): Promise<ModuleItem[]> => {
-        const { data } = await api.post(`/modules/${moduleId}/items/reorder`, orderData);
+    reorderModuleItems: async (courseId: string, moduleId: string, orderData: ReorderModuleItemsDto): Promise<ModuleItem[]> => {
+        const { data } = await api.post(`/courses/${courseId}/modules/${moduleId}/items/reorder`, orderData);
         return data;
     }
 }

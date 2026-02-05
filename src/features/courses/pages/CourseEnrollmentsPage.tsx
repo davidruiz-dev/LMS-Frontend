@@ -1,4 +1,4 @@
-import EnrollmentsTable from '@/features/courses/components/EnrollmentsTable'
+import EnrollmentsTable from '@/features/courses/components/enrollments/EnrollmentsTable'
 import React from 'react'
 
 const CourseEnrollmentsPage: React.FC = () => {

@@ -9,24 +9,25 @@ import { Input } from "@/components/ui/input";
 import { useCreateModule } from "@/features/courses/hooks/use-modules";
 import { showError, showSuccess } from "@/helpers/alerts";
 
-interface Props {
+interface ModuleFormProps {
     isOpen: boolean;
     onClose: () => void;
     courseId: string;
 }
 
-const ModuleForm: FC<Props> = ({ isOpen, onClose, courseId }) => {
+
+const ModuleForm: FC<ModuleFormProps> = ({ isOpen, onClose, courseId }) => {
     const moduleForm = useForm<ModuleFormData>({
         resolver: zodResolver(moduleSchema),
         mode: 'onChange',
     });
 
-    const { mutate, isPending} = useCreateModule();
+    const { mutate, isPending } = useCreateModule();
 
     const onSubmit = (values: ModuleFormData) => mutate({ courseId, module: values }, {
-        onSuccess: () => { 
-            onClose(), 
-            moduleForm.reset();
+        onSuccess: () => {
+            onClose(),
+                moduleForm.reset();
             showSuccess("Módulo creado exitosamente");
         },
         onError: (error) => {
@@ -34,7 +35,7 @@ const ModuleForm: FC<Props> = ({ isOpen, onClose, courseId }) => {
             console.log(error)
         }
     });
-    
+
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent>
