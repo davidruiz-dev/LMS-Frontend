@@ -1,11 +1,15 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
 import EnrollmentsTable from '@/features/courses/components/enrollments/EnrollmentsTable'
+import { useCourse } from '@/features/courses/hooks/use-courses'
 import { ROUTES } from '@/shared/constants/routes'
-import { HomeIcon } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { Book } from 'lucide-react'
+import { useNavigate, useParams } from 'react-router-dom'
 
 export default function CourseEnrollmentsPage () {
+  const { id } = useParams();
   const navigate = useNavigate();
+  const { data: course } = useCourse(id);
+  if(!id) return null;
 
   return (
     <div className='space-y-4'>
@@ -14,17 +18,17 @@ export default function CourseEnrollmentsPage () {
           <BreadcrumbItem>
             <BreadcrumbLink onClick={() => navigate(ROUTES.COURSES)}>
               <div className="flex items-center gap-2">
-                <HomeIcon size={15} /> Cursos
+                <Book size={15} /> Cursos
               </div>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink onClick={() => navigate(ROUTES.COURSES)}>Cursos</BreadcrumbLink>
+            <BreadcrumbLink onClick={() => navigate(ROUTES.COURSE_DETAIL(id))}>{course?.name}</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink>Miembros</BreadcrumbLink>
+            <BreadcrumbLink>Alumnos</BreadcrumbLink>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>

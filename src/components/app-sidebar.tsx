@@ -1,4 +1,4 @@
-import { Box, Command, LayoutDashboard, LogOut, Settings, Users, GraduationCap,  } from "lucide-react"
+import { Command, LayoutDashboard, LogOut, Settings, Users, GraduationCap, Book,  } from "lucide-react"
 import {
     Sidebar,
     SidebarContent,
@@ -40,7 +40,7 @@ const sidebarItems: SidebarItem[] = [
     {
         title: "Cursos",
         path: ROUTES.COURSES,
-        icon: Box,
+        icon: Book,
         roles: [USER_ROLES.ADMIN, USER_ROLES.STUDENT, USER_ROLES.INSTRUCTOR]
     },
     {
@@ -80,7 +80,7 @@ export function AppSidebar() {
                                     <Command className="size-4" />
                                 </div>
                                 <div className="grid flex-1 text-left text-sm leading-tight">
-                                    <span className="truncate font-semibold">LMS PZDT</span>
+                                    <span className="truncate font-semibold">INLRN</span>
                                     <span className="truncate text-xs">InnovaLearn</span>
                                 </div>
                             </div>

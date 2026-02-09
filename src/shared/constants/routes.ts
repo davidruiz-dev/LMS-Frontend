@@ -27,9 +27,9 @@ export const ROUTES = {
   // Instructor
   INSTRUCTOR_DASHBOARD: '/instructor/dashboard',
   INSTRUCTOR_COURSES: '/instructor/courses',
-  CREATE_COURSE: '/cursos/agregar',
-  EDIT_COURSE: (courseId: string) => `/cursos/editar/${courseId}`,
-  COURSE_ANALYTICS: (courseId: string) => `/cursos/${courseId}/analytics`,
+  CREATE_COURSE: '/courses/agregar',
+  EDIT_COURSE: (courseId: string) => `/courses/editar/${courseId}`,
+  COURSE_ANALYTICS: (courseId: string) => `/courses/${courseId}/analytics`,
   
   // Admin
   ADMIN_DASHBOARD: '/admin/dashboard',

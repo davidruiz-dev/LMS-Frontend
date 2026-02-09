@@ -97,9 +97,6 @@ function FormCourse({ courseId }: Props) {
                 endDate: courseData.endDate ? new Date(courseData.endDate) : undefined,
                 status: courseData.status,
             });
-
-            console.log(courseData)
-
             // Cargar imagen existente si hay
             if (courseData.imageUrl) {
                 setImagePreview(courseData.imageUrl);

@@ -5,20 +5,25 @@ import {
     ItemActions,
     ItemContent,
     ItemDescription,
+    ItemMedia,
     ItemTitle,
 } from "@/components/ui/item"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Skeleton } from "@/components/ui/skeleton";
 import CreateAssignment from "@/features/courses/components/assignments/CreateAssignment";
 import { useAssignments } from "@/features/courses/hooks/use-assignments";
-import { AlertCircleIcon } from "lucide-react";
+import { AlertCircleIcon, ClipboardList, MoreVertical, Plus } from "lucide-react";
 import { useState } from "react";
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
+import { ROUTES } from "@/shared/constants/routes";
+import { Separator } from "@/components/ui/separator";
 
 export default function AssignmentsList() {
     const { id } = useParams();
     if (!id) return null;
     const { data: assignments, isLoading, error } = useAssignments(id);
-    const [openModal, setOpenModal] = useState(false)
+    const [openModal, setOpenModal] = useState(false);
+    const navigate = useNavigate()
     const toggle = () => setOpenModal(prev => !prev)
 
     if (error) {
@@ -48,23 +53,50 @@ export default function AssignmentsList() {
     }
 
     return (
-        <div>
-            {assignments?.length === 0 && (
-                <div>
-                    no data
-                </div>
-            )}
-            <Button onClick={toggle}>Agregar tarea</Button>
+        <div className="space-y-4 flex flex-col items-end">
+            <Button onClick={toggle}><Plus /> Agregar tarea</Button>
 
             <div className="flex w-full flex-col gap-3">
                 {assignments?.map((a) => (
                     <Item variant="outline">
+                        <ItemMedia variant="icon">
+                            <ClipboardList />
+                        </ItemMedia>
                         <ItemContent>
                             <ItemTitle>{a.name}</ItemTitle>
-                            <ItemDescription>{a.description}</ItemDescription>
+                            <ItemDescription className="truncate">{a.description}</ItemDescription>
+                        </ItemContent>
+                        <ItemContent>
+                            <ItemDescription>
+                                <span>cierra: </span>
+                                {new Date(a.dueDate).toLocaleString("es-ES", {
+                                    dateStyle: "medium",
+                                    timeStyle: "short",
+                                })}
+                            </ItemDescription>
                         </ItemContent>
                         <ItemActions>
-                            <Button>Action</Button>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" className="h-8 w-8 p-0">
+                                        <MoreVertical className="h-4 w-4" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                    <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                                    <DropdownMenuItem
+                                        onClick={() => navigate(ROUTES.COURSE_ASSIGNMENT(id, a.id))}
+                                    >
+                                        Ver contenido
+                                    </DropdownMenuItem>
+                                    <Separator/>
+                                    <DropdownMenuItem
+                                        variant="destructive"
+                                    >
+                                        Eliminar
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </ItemActions>
                     </Item>
                 ))}
