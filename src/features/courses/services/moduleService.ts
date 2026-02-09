@@ -13,6 +13,11 @@ export const moduleService = {
         return response.data;
     },
 
+    updateModule: async (courseId: string, moduleId: string, data: ModuleFormData) => {
+        const response = await api.patch(`/courses/${courseId}/modules/${moduleId}`, data);
+        return response.data;
+    },
+
     deleteModule: async (courseId: string, moduleId: string) => {
         const { data } = await api.delete(`/courses/${courseId}/modules/${moduleId}`)
         return data;
@@ -24,8 +29,18 @@ export const moduleService = {
     },
 
     /* Module Items methods */
+    getItems: async (courseId: string, moduleId: string) : Promise<ModuleItem[]> => {
+        const { data } = await api.get(`/courses/${courseId}/modules/${moduleId}/items`)
+        return data;
+    },
+
     createModuleItem: async (courseId: string, moduleId: string, moduleItemData: ModuleItemFormData): Promise<ModuleItem> => {
         const { data } = await api.post(`/courses/${courseId}/modules/${moduleId}/items`, moduleItemData);
+        return data;
+    },
+
+    deleteItem: async (courseId: string, moduleId: string, id: string) => {
+        const { data } = await api.delete(`/courses/${courseId}/modules/${moduleId}/items/${id}`);
         return data;
     },
 

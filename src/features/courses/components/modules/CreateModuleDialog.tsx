@@ -1,43 +1,39 @@
 import { moduleSchema, type ModuleFormData } from "@/features/courses/schemas/module.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type FC } from "react";
 import { useForm } from "react-hook-form";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCreateModule } from "@/features/courses/hooks/use-modules";
-import { showError, showSuccess } from "@/helpers/alerts";
+import { Checkbox } from "@/components/ui/checkbox";
 
-interface ModuleFormProps {
-    isOpen: boolean;
-    onClose: () => void;
+interface CreateModuleDialogProps {
     courseId: string;
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
 }
 
+export function CreateModuleDialog({ courseId, open, onOpenChange }: CreateModuleDialogProps) {
+    const createModule = useCreateModule(courseId);
 
-const ModuleForm: FC<ModuleFormProps> = ({ isOpen, onClose, courseId }) => {
     const moduleForm = useForm<ModuleFormData>({
         resolver: zodResolver(moduleSchema),
+        defaultValues: {
+            title: '',
+            isPublished: false,
+        },
         mode: 'onChange',
     });
 
-    const { mutate, isPending } = useCreateModule();
-
-    const onSubmit = (values: ModuleFormData) => mutate({ courseId, module: values }, {
-        onSuccess: () => {
-            onClose(),
-                moduleForm.reset();
-            showSuccess("Módulo creado exitosamente");
-        },
-        onError: (error) => {
-            showError("Error al crear módulo");
-            console.log(error)
-        }
-    });
+    const onSubmit = async (values: ModuleFormData) => {
+        await createModule.mutateAsync(values);
+        moduleForm.reset();
+        onOpenChange(false);
+    };
 
     return (
-        <Dialog open={isOpen} onOpenChange={onClose}>
+        <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Agregar módulo</DialogTitle>
@@ -57,12 +53,27 @@ const ModuleForm: FC<ModuleFormProps> = ({ isOpen, onClose, courseId }) => {
                                 </FormItem>
                             )}
                         />
-                        <Button disabled={isPending}>{isPending ? 'Guardando...' : 'Guardar'}</Button>
+                        <FormField
+                            control={moduleForm.control}
+                            name='isPublished'
+                            render={({ field }) => (
+                                <FormItem className="flex">
+                                    <FormControl>
+                                        <Checkbox
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                        />
+                                    </FormControl>
+                                    <FormLabel>publicar</FormLabel>
+                                </FormItem>
+                            )}
+                        />
+                        <Button disabled={createModule.isPending}>
+                            {createModule.isPending ? 'Guardando...' : 'Guardar'}
+                        </Button>
                     </form>
                 </Form>
             </DialogContent>
         </Dialog>
     )
 }
-
-export default ModuleForm

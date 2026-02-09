@@ -5,75 +5,160 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import EnrollmentForm from '@/features/courses/components/enrollments/EnrollmentForm'
 import { useCourseAccess } from '@/features/courses/hooks/use-course-access'
 import { useEnrollmentsByCourse } from '@/features/courses/hooks/use-enrollments'
-import { PlusCircleIcon, Search } from 'lucide-react'
+import { ArrowUpDown, MoreHorizontal, PlusCircleIcon, Search } from 'lucide-react'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { type ColumnDef, type ColumnFiltersState, type SortingState, flexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
+import type { Enrollment } from '@/features/courses/types/course.types'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+
+const columns: ColumnDef<Enrollment>[] = [
+    {
+        accessorFn: (row) => row.user.firstName,
+        id: "estudiante",
+        header: "Estudiante",
+        cell: ({ row }) => {
+            const { firstName, lastName } = row.original.user
+            return <div>{`${firstName} ${lastName}`}</div>
+        },
+    },
+    {
+        accessorFn: (row) => row.user.email,
+        id: "correo",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Correo
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            );
+        },
+        cell: ({ row }) => row.original.user.email,
+    },
+    {
+        accessorKey: "createdAt",
+        header: "Fecha inscripción",
+        cell: ({ row }) => {
+            const date = new Date(row.original.createdAt)
+            return date.toLocaleString("es-ES", {
+                dateStyle: "medium",
+                timeStyle: "short",
+            })
+        }
+    },
+    {
+        id: "actions",
+        cell: ({ row }) => {
+            const enrollment = row.original;
+            return (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                            <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuItem
+                            onClick={() => alert(`Enrollment ${enrollment.id}`)}
+                        >
+                            View
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            );
+        },
+    },
+];
 
 const EnrollmentsTable = () => {
+    const { id } = useParams<{ id: string }>();
+    if (!id) return null;
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const toggleModal = () => setModalOpen(true);
-    const { id } = useParams<{id: string}>();
+    const access = useCourseAccess(id);
+    const canAdddEnrollment = access?.canEnrollUsers;
+    const { data: enrollments = [], isLoading } = useEnrollmentsByCourse(id);
+    const [sorting, setSorting] = useState<SortingState>([]);
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
-    const { data: enrollments, isLoading }  = useEnrollmentsByCourse(id);
-
-    const access = useCourseAccess(id!);
+    const table = useReactTable({
+        getFilteredRowModel: getFilteredRowModel(),
+        data: enrollments,
+        columns,
+        onSortingChange: setSorting,
+        onColumnFiltersChange: setColumnFilters,
+        getCoreRowModel: getCoreRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        state: {
+            sorting,
+            columnFilters,
+        },
+    });
 
     if (isLoading) return (
-        <LoadingPage message='cargando...'/>
+        <LoadingPage message='cargando...' />
     )
-
-    const canAdddEnrollment = access?.canEnrollUsers;
 
     return (
         <>
-            <div className='flex justify-between'>
-                <div className="w-full relative">
+            <div className='flex justify-between w-full'>
+                <div className="relative w-1/3">
                     <Search className="absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
                     <Input
+                        value={(table.getColumn("correo")?.getFilterValue() as string) ?? ""}
+                        onChange={(event) =>
+                            table.getColumn("correo")?.setFilterValue(event.target.value)
+                        }
                         placeholder="buscar usuarios"
-                        className="w-full xl:w-[400px] pl-9"
+                        className="pl-8"
                     />
                 </div>
-                {/* BUTTON ADD ENROLLMENT ABLE TO ADMIN AND INSTRUCTOR*/}
 
                 {canAdddEnrollment && (
-                    <Button onClick={toggleModal}><PlusCircleIcon/> Agregar</Button>
+                    <Button onClick={toggleModal}><PlusCircleIcon /> Agregar</Button>
                 )}
-                  
+
             </div>
-            <div className='border rounded-md'>
+            <div className='overflow-auto rounded-lg border shadow-sm'>
                 <Table>
                     <TableHeader>
-                        <TableRow>
-                            <TableHead>Nombre</TableHead>
-                            <TableHead>Correo</TableHead>
-                            <TableHead>F. Inscripción</TableHead>
-                            {canAdddEnrollment && (<TableHead>Acciones</TableHead>)}
-                        </TableRow>
+                        {table.getHeaderGroups().map((headerGroup) => (
+                            <TableRow key={headerGroup.id}>
+                                {headerGroup.headers.map((header) => (
+                                    <TableHead key={header.id}>
+                                        {header.isPlaceholder
+                                            ? null
+                                            : flexRender(
+                                                header.column.columnDef.header,
+                                                header.getContext()
+                                            )}
+                                    </TableHead>
+                                ))}
+                            </TableRow>
+                        ))}
                     </TableHeader>
                     <TableBody>
-                        {enrollments?.length === 0 && (
+                        {table.getRowModel().rows?.length ? (
+                            table.getRowModel().rows.map((row) => (
+                                <TableRow key={row.id}>
+                                    {row.getVisibleCells().map((cell) => (
+                                        <TableCell key={cell.id}>
+                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            ))
+                        ) : (
                             <TableRow>
-                                <TableCell colSpan={4}>
-                                    <div className='text-center'>sin estudiantes</div>
+                                <TableCell colSpan={columns.length} className="h-24 text-center">
+                                    Sin resultados.
                                 </TableCell>
                             </TableRow>
                         )}
-                        {enrollments?.map((enrollment, index)=>( 
-                            <TableRow key={index}>
-                                <TableCell>{enrollment.user.firstName} {enrollment.user.lastName}</TableCell>
-                                <TableCell>{enrollment.user.email}</TableCell>
-                                <TableCell>{new Date(enrollment.createdAt).toLocaleDateString('en-GB', {
-                                    day: '2-digit',
-                                    month: '2-digit',
-                                    year: 'numeric',
-                                })}</TableCell>
-                                {canAdddEnrollment && (
-                                    <TableCell>acciones</TableCell>
-                                )}
-                            </TableRow>
-                        ))}
-                        
                     </TableBody>
                 </Table>
             </div>
@@ -81,8 +166,8 @@ const EnrollmentsTable = () => {
             {modalOpen && id && (
                 <EnrollmentForm
                     isOpen={modalOpen}
-                    onClose={()=>setModalOpen(false)}
-                    courseId={id} 
+                    onClose={() => setModalOpen(false)}
+                    courseId={id}
                 />
             )}
         </>

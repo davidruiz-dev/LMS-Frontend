@@ -18,8 +18,10 @@ const CoursesPage = lazy(() => import('@/features/courses/pages/CoursesPage'));
 const AddCoursePage = lazy(() => import('@/features/courses/pages/AddCoursePage'));
 const EditCourseRoute = lazy(() => import('@/router/EditCourseRoute'));
 const CoursePage = lazy(() => import('@/features/courses/pages/CoursePage'));
-const CourseEnrollments = lazy(() => import('@/features/courses/pages/CourseEnrollmentsPage'));
-const CourseModules = lazy(() => import('@/features/courses/pages/CourseModulesPage'));
+const CourseEnrollmentsPage = lazy(() => import('@/features/courses/pages/CourseEnrollmentsPage'));
+const CourseModulesPage = lazy(() => import('@/features/courses/pages/CourseModulesPage'));
+const CourseAssignmentsPage = lazy(() => import('@/features/courses/pages/CourseAssignmentsPage'));
+const AssignmentPage = lazy(() => import('@/features/courses/pages/AssignmentPage'))
 
 const GradeLevelsPage = lazy(() => import('@/features/grade-level/pages/GradeLevelsPage'));
 
@@ -69,7 +71,7 @@ export const router = createBrowserRouter([
             ]
           },
           {
-            path: 'cursos',
+            path: 'courses',
             children: [
               {
                 index: true,
@@ -92,12 +94,20 @@ export const router = createBrowserRouter([
                     element: <CoursePage />
                   },
                   {
-                    path: 'inscripciones',
-                    element: <CourseEnrollments />
+                    path: 'enrollments',
+                    element: <CourseEnrollmentsPage />
                   },
                   {
-                    path: 'modulos',
-                    element: <CourseModules />
+                    path: 'modules',
+                    element: <CourseModulesPage />
+                  },
+                  {
+                    path: 'assignments',
+                    element: <CourseAssignmentsPage />,
+                  },
+                  {
+                    path: 'assignments/:assignmentId',
+                    element: <AssignmentPage />
                   }
                 ]
               },

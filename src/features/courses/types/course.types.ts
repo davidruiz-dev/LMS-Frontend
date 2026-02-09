@@ -44,6 +44,8 @@ export interface ModuleItem {
   title: string;
   type: ModuleItemType
   published: boolean;
+  contentId: string;
+  content: string;
   moduleId: string;
 }
 
@@ -63,4 +65,16 @@ export interface Enrollment {
   user: User;
   createdAt: Date;
   updateAt: Date;
+}
+
+export interface Assignment {
+  id: string;
+  name: string;
+  description: string;
+  points: string;
+  dueDate: Date;
+  availableFrom: Date;
+  availableUntil: Date;
+  isPublished: boolean;
+  course: Course
 }

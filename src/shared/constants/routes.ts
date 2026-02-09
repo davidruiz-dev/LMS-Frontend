@@ -2,13 +2,15 @@ export const ROUTES = {
   DASHBOARD: '/dashboard',
   LOGIN: '/login',
   // Cursos
-  COURSES: '/cursos',
-  COURSE_DETAIL: (courseId: string) => `/cursos/${courseId}`,
-  COURSE_MEMBERS: (courseId: string) => `/cursos/${courseId}/inscripciones`,
+  COURSES: '/courses',
+  COURSE_DETAIL: (courseId: string) => `/courses/${courseId}`,
+  COURSE_MEMBERS: (courseId: string) => `/courses/${courseId}/enrollments`,
   LESSON_PLAYER: (courseId: string, lessonId: string) => `/learn/${courseId}/${lessonId}`,
-  COURSE_MODULES: (courseId: string) => `/cursos/${courseId}/modulos`,
-  COURSE_ANNOUNCEMENTS: (courseId: string) => `/cursos/${courseId}/anuncios`,
-
+  COURSE_MODULES: (courseId: string) => `/courses/${courseId}/modules`,
+  COURSE_ANNOUNCEMENTS: (courseId: string) => `/courses/${courseId}/announsments`,
+  COURSE_ASSIGNMENTS: (courseId: string) => `/courses/${courseId}/assignments`,
+  COURSE_ASSIGNMENT: (courseId: string, assignmentId: string) => `/courses/${courseId}/assignments/${assignmentId}`,
+  
   // Usuarios
   CREATE_USER: '/usuarios/agregar',
   USERS: '/usuarios',

@@ -1,193 +1,128 @@
-import { useEffect, useState } from "react";
-import { Droppable, Draggable } from "@hello-pangea/dnd";
-import { Grip, MoreHorizontal, PlusCircleIcon } from "lucide-react";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { useCourseAccess } from "@/features/courses/hooks/use-course-access";
-import { Badge } from "@/components/ui/badge";
+import { useModulesByCourse, useReorderModules } from "@/features/courses/hooks/use-modules";
+import { DragDropContext, Draggable, Droppable, type DropResult } from "@hello-pangea/dnd";
+import { Accordion } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import type { Module } from "@/features/courses/types/course.types";
-import ModuleDeleteDialog from "@/features/courses/components/modules/ModuleDelete";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Switch } from "@/components/ui/switch"
+import { Plus } from "lucide-react";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
+import { ModuleAccordionItem } from "@/features/courses/components/modules/ModuleAccordionItem";
+import { CreateModuleDialog } from "@/features/courses/components/modules/CreateModuleDialog";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { AlertCircleIcon } from "lucide-react"
 
 interface ModuleListProps {
   courseId: string;
-  items: Module[];
-  onEdit: (id: string) => void;
-  onAddItem: (id: string) => void;
+  canEdit: boolean
 }
 
-const ModuleList = ({
-  courseId,
-  items,
-  onEdit,
-  onAddItem,
-}: ModuleListProps) => {
-  const [modules, setModules] = useState<Module[]>(items);
-  const access = useCourseAccess(courseId);
-  const [moduleToDelete, setModuleToDelete] = useState<string | null>(null);
+export function ModuleList({ courseId, canEdit }: ModuleListProps) {
+  const [expandedModules, setExpandedModules] = useState<string[]>([]);
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
-  useEffect(() => {
-    setModules(items);
-  }, [items]);
+  const { data: modules = [], isLoading, error } = useModulesByCourse(courseId);
+  const reorderModules = useReorderModules();
+
+  const handleDragEnd = (result: DropResult) => {
+    if (!result.destination) return;
+    const items = Array.from(modules);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    const moduleIds = items.map((m) => m.id);
+    reorderModules.mutate({ courseId, orderData: { moduleIds } });
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex w-full flex-col gap-7">
+        <div className="flex flex-col gap-3">
+          <Skeleton className="h-6 w-32" />
+          <Skeleton className="h-6 w-72" />
+        </div>
+        <div className="flex flex-col gap-2">
+          {[1, 2, 3, 4, 5].map((index) => (
+            <Skeleton key={index} className="h-12 w-full" />
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    <Alert variant="destructive" className="max-w-md">
+      <AlertCircleIcon />
+      <AlertTitle>Error al obtener módulos</AlertTitle>
+      <AlertDescription>
+        Ocurrió un error inesperado al obtener los módulos del curso, intentalo más adelante.
+      </AlertDescription>
+    </Alert>
+  }
 
   return (
-    <Accordion type="single" collapsible>
-      <Droppable droppableId="modules-course" type="MODULE">
-        {(provided) => (
-          <div {...provided.droppableProps} ref={provided.innerRef}>
-            {/* ---- MODULES LIST MAP ---- */}
-            {modules.map((module, index) => (
-              <Draggable key={module.id} draggableId={module.id} index={index}>
-                {(provided) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    className={
-                      "flex items-center gap-x-2 bg-background border rounded-md mb-4 text-sm px-2"
-                    }
+    <div className="space-y-4">
+      {canEdit && (
+        <div className="flex justify-end">
+          <Button onClick={() => setCreateDialogOpen(true)}>
+            <Plus className="w-4 h-4 mr-2" />
+            Nuevo módulo
+          </Button>
+        </div>
+      )}
+
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable droppableId="modules" isDropDisabled={!canEdit}>
+          {(provided, snapshot) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              className={cn(
+                'space-y-2',
+                snapshot.isDraggingOver && 'bg-muted/50 rounded-lg p-2'
+              )}
+            >
+              <Accordion
+                type="multiple"
+                value={expandedModules}
+                onValueChange={setExpandedModules}
+                className="space-y-2"
+              >
+                {modules.map((module, index) => (
+                  <Draggable
+                    key={module.id}
+                    draggableId={module.id}
+                    index={index}
+                    isDragDisabled={!canEdit}
                   >
-                    <AccordionItem value={module.id} className="flex-1">
-                      <AccordionTrigger>
-                        <div className="flex w-full items-center gap-2">
-                          <div
-                            {...provided.dragHandleProps}
-                            className={`cursor-move ${access?.canEditModules ? "block" : "hidden"}`}
-                          >
-                            <Grip className="text-muted-foreground size-5" />
-                          </div>
-                          <span className="flex-1">{module.title}</span>
-                          {access?.canEditModules && (
-                            <div className="flex items-center gap-2">
-                              <Badge
-                                variant={module.isPublished ? "default" : "destructive"}
-                              >
-                                {module.isPublished ? "publicado" : "borrador"}
-                              </Badge>
-                              <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                  <div className="p-1 cursor-pointer rounded-md hover:bg-muted border">
-                                    <MoreHorizontal className="h-4 w-4" />
-                                  </div>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="w-56">
-                                  <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                                  <DropdownMenuItem onClick={(e) => {
-                                    e.stopPropagation();
-                                    setModuleToDelete(module.id)
-                                  }}>
-                                    Eliminar
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem onClick={(e) => {
-                                    e.stopPropagation();
-                                    onEdit(module.id)
-                                  }}>
-                                    Editar
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem onClick={(e) => {
-                                    e.stopPropagation();
-                                  }}>
-                                    <Switch />
-                                  </DropdownMenuItem>
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-                            </div>
-                          )}
-                        </div>
-                      </AccordionTrigger>
-                      <ModuleDeleteDialog
-                        courseId={courseId}
-                        moduleId={moduleToDelete!}
-                        isOpen={!!moduleToDelete}
-                        onClose={() => setModuleToDelete(null)}
-                      />
-                      <AccordionContent>
-                        {module.items?.length === 0 && (
-                          <div className="border rounded-md bg-muted p-4 border-dashed flex flex-col items-center gap-2">
-                            <span>No hay contenido en este módulo</span>
-                            <Button onClick={() => onAddItem(module.id)}>
-                              Agregar
-                            </Button>
-                          </div>
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        className={cn(
+                          snapshot.isDragging && 'opacity-50 z-50'
                         )}
-                        {module.items?.length > 0 && (
-                          <div className="space-y-2 flex flex-col">
-                            
-                            <Droppable droppableId={module.id} type="ITEM">
-                              {(provided) => (
-                                <div
-                                  ref={provided.innerRef}
-                                  {...provided.droppableProps}
-                                  className="space-y-1.5"
-                                >
-                                  {module.items?.map((item, index) => (
-                                    <Draggable
-                                      key={item.id}
-                                      draggableId={item.id}
-                                      index={index}
-                                    >
-                                      {(provided) => (
-                                        <div
-                                          ref={provided.innerRef}
-                                          {...provided.draggableProps}
-                                          className="border rounded p-2 flex items-center gap-2"
-                                        >
-                                          <div
-                                            {...provided.dragHandleProps}
-                                            className={`cursor-move ${access?.canEditModules ? "block" : "hidden"}`}
-                                          >
-                                            <Grip className="text-muted-foreground size-4" />
-                                          </div>
+                      >
+                        <ModuleAccordionItem
+                          module={module}
+                          courseId={courseId}
+                          canEdit={canEdit}
+                          dragHandleProps={canEdit ? provided.dragHandleProps : undefined}
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+              </Accordion>
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
 
-                                          {item.title}
-                                          {access?.canEditModules && (
-                                            <div className="flex justify-end items-center gap-2 flex-1">
-                                              <Badge
-                                                variant={
-                                                  item.published
-                                                    ? "default"
-                                                    : "destructive"
-                                                }
-                                              >
-                                                {item.published
-                                                  ? "publicado"
-                                                  : "borrador"}
-                                              </Badge>
-                                            </div>
-                                          )}
-                                        </div>
-                                      )}
-                                    </Draggable>
-                                  ))}
-                                  {provided.placeholder}
-                                </div>
-                              )}
-                            </Droppable>
-                            {access?.canEditModules && (
-                              <Button
-                                size={"sm"}
-                                onClick={() => onAddItem(module.id)}
-                                className="self-end"
-                                variant={"outline"}
-                              >
-                                <PlusCircleIcon />
-                                Agregar
-                              </Button>
-                            )}
-                          </div>
-                        )}
-                      </AccordionContent>
-                    </AccordionItem>
-                  </div>
-                )}
-              </Draggable>
-            ))}
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-    </Accordion>
-  );
-};
-
-export default ModuleList;
+      <CreateModuleDialog
+        courseId={courseId}
+        open={createDialogOpen}
+        onOpenChange={setCreateDialogOpen}
+      />
+    </div>
+  )
+}

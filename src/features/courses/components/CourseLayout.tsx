@@ -1,12 +1,19 @@
 import { ROUTES } from '@/shared/constants/routes'
-import { HomeIcon, User2, BookIcon, Megaphone } from 'lucide-react'
+import { HomeIcon, User2, BookIcon, Megaphone, type LucideProps, ClipboardList } from 'lucide-react'
 import { Link, Outlet, useLocation, useParams } from 'react-router-dom'
 import { useCourseAccess } from "@/features/courses/hooks/use-course-access";
 import ForbiddenPage from '@/components/ForbiddenPage';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import NotFoundPage from '@/components/NotFoundPage';
 
-const items = [
+
+interface Item {
+  title: string;
+  url: (url: string) => string;
+  icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>
+}
+
+const items: Item[] = [
   {
     title: 'Inicio',
     url: ROUTES.COURSE_DETAIL,
@@ -16,6 +23,11 @@ const items = [
     title: 'Miembros',
     url: ROUTES.COURSE_MEMBERS,
     icon: User2
+  },
+  {
+    title: 'Tareas',
+    url: ROUTES.COURSE_ASSIGNMENTS,
+    icon: ClipboardList
   },
   {
     title: 'Contenido',
@@ -28,6 +40,7 @@ const items = [
     icon: Megaphone
   }
 ]
+
 const CourseLayout = () => {
   const { id } = useParams<{ id: string }>()
   const location = useLocation()
