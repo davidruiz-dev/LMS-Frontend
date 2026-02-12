@@ -7,7 +7,9 @@ import { useAuth } from "@/shared/providers/AuthProvider"
 export function useCourseAccess(courseId: string): CourseAccess | null {
   const { user } = useAuth();
   const { data: course, isLoading } = useCourse(courseId);
-  const { data: enrollment } = useEnrollmentsByCourse(courseId);
+  const { data: enrollments } = useEnrollmentsByCourse(courseId);
+
+  const enrollment = enrollments?.find(e => e.user.id === user?.id);
 
   if (!user || isLoading || !course) return null;
 
@@ -33,6 +35,7 @@ export function useCourseAccess(courseId: string): CourseAccess | null {
     canAccessContent: canAccessContent,
     canEnrollUsers: canManageEnrollments,
     canEditModules: canEditModules,
+    isOwner: isOwner || isAdmin,
 
   }
 }

@@ -8,7 +8,7 @@ import { ThemeProvider } from "../theme-provider";
 
 export default function Layout() {
     return (
-        <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+        <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
             <SidebarProvider>
                 {/* SIDEBAR */}
                 <AppSidebar />

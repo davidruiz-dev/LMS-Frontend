@@ -1,7 +1,7 @@
 import { authAPI } from '@/features/auth/services/auth.service';
+import { showError } from '@/helpers/alerts';
 import { QUERY_KEYS, STORAGE_KEYS } from '@/shared/constants';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import Swal from "sweetalert2";
 
 export const useLoginMutation = () => {
     const queryClient = useQueryClient();
@@ -15,13 +15,8 @@ export const useLoginMutation = () => {
             queryClient.invalidateQueries({ queryKey: QUERY_KEYS.AUTH.USER });
         },
         onError: (error) => {
-            console.error('Login failed:', error);
-            Swal.fire({
-                title: 'Error!',
-                text: 'Credencilaes inválidas',
-                icon: 'error',
-                confirmButtonText: 'Ok'
-            })
+            showError(error.message || 'Credencilaes inválidas')
+            console.log(error)
         },
     });
 };

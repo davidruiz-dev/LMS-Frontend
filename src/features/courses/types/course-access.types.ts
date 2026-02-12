@@ -5,4 +5,5 @@ export interface CourseAccess {
   canEnrollUsers: boolean
   canAccessContent: boolean
   canEditModules: boolean
+  isOwner: boolean
 }

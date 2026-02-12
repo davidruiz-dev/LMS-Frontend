@@ -3,6 +3,9 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { ProtectedRoute } from '@/features/auth/components/ProtectedRoute';
 import { PublicRoute } from '@/features/auth/components/PublicRoute';
 import CourseLayout from '@/features/courses/components/CourseLayout';
+import { AssignmentService } from '@/features/courses/services/assignmentsService';
+import { CourseService } from '@/features/courses/services/courseService';
+import { Book } from 'lucide-react';
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 
@@ -28,7 +31,7 @@ const GradeLevelsPage = lazy(() => import('@/features/grade-level/pages/GradeLev
 
 const LazyWrapper = ({ children }: { children: React.ReactNode }) => (
   <Suspense fallback={
-    <div className="fixed inset-0 flex items-center justify-center">
+    <div className="fixed inset-0 flex items-center justify-center bg-background">
       <LoadingSpinner size="lg" />
     </div>
   }>
@@ -40,7 +43,7 @@ const LazyWrapper = ({ children }: { children: React.ReactNode }) => (
 export const router = createBrowserRouter([
   {
     path: '/',
-    errorElement: <LazyWrapper><NotFoundPage /></LazyWrapper>,
+    errorElement: <LazyWrapper><>error</></LazyWrapper>,
     children: [
       {
         path: 'login',
@@ -51,10 +54,16 @@ export const router = createBrowserRouter([
         children: [
           {
             path: 'dashboard',
-            element: <DashboardPage />
+            element: <DashboardPage />,
+            handle: {
+              breadcrumb: () => 'Dashboard'
+            },
           },
           {
             path: 'usuarios',
+            handle: {
+              breadcrumb: () => 'Usuarios'
+            },
             children: [
               {
                 index: true,
@@ -62,16 +71,26 @@ export const router = createBrowserRouter([
               },
               {
                 path: 'agregar',
-                element: <AddUserPage />
+                element: <AddUserPage />,
+                handle: {
+                  breadcrumb: () => 'Nuevo usuario'
+                },
               },
               {
                 path: 'editar/:id',
-                element: <EditUserPage />
+                element: <EditUserPage />,
+                handle: {
+                  breadcrumb: () => 'Editar'
+                },
               }
             ]
           },
           {
             path: 'courses',
+            handle: {
+              breadcrumb: () => 'Cursos',
+              icon: Book
+            },
             children: [
               {
                 index: true,
@@ -79,15 +98,27 @@ export const router = createBrowserRouter([
               },
               {
                 path: 'agregar',
-                element: <AddCoursePage />
+                element: <AddCoursePage />,
+                handle: {
+                  breadcrumb: () => 'Nuevo Curso'
+                }
               },
               {
                 path: 'editar/:id',
-                element: <EditCourseRoute />
+                element: <EditCourseRoute />,
+                handle: {
+                  breadcrumb: () => 'Editar'
+                }
               },
               {
                 path: ':id',
                 element: <CourseLayout />,
+                handle: {
+                  breadcrumb: (match: any) => match.data.name,
+                },
+                loader: async ({ params }) => {
+                  return CourseService.getById(params.id!)
+                },
                 children: [
                   {
                     index: true,
@@ -95,20 +126,41 @@ export const router = createBrowserRouter([
                   },
                   {
                     path: 'enrollments',
-                    element: <CourseEnrollmentsPage />
+                    element: <CourseEnrollmentsPage />,
+                    handle: {
+                      breadcrumb: () => 'Personas'
+                    }
                   },
                   {
                     path: 'modules',
-                    element: <CourseModulesPage />
+                    element: <CourseModulesPage />,
+                    handle: {
+                      breadcrumb: () => 'Módulos'
+                    }
                   },
                   {
                     path: 'assignments',
-                    element: <CourseAssignmentsPage />,
+                    handle: {
+                      breadcrumb: () => 'Tareas'
+                    },
+                    children: [
+                      {
+                        index: true,
+                        element: <CourseAssignmentsPage />,
+                      },
+                      {
+                        path: ':assignmentId',
+                        element: <AssignmentPage />,
+                        handle: {
+                          breadcrumb: (match: any) => match.data.name,
+                        },
+                        loader: async ({ params }) => {
+                          return AssignmentService.findOneByCourse(params.id!, params.assignmentId!)
+                        },
+                      }
+                    ]
                   },
-                  {
-                    path: 'assignments/:assignmentId',
-                    element: <AssignmentPage />
-                  }
+
                 ]
               },
 
@@ -116,10 +168,13 @@ export const router = createBrowserRouter([
           },
           {
             path: 'grados',
+            handle: {
+              breadcrumb: () => 'Grados'
+            },
             children: [
               {
                 index: true,
-                element: <ProtectedRoute><GradeLevelsPage /></ProtectedRoute>
+                element: <GradeLevelsPage />
               }
             ]
           }

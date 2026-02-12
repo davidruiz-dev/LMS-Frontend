@@ -19,5 +19,15 @@ export const AssignmentService = {
     create: async (courseId: string, assignmentFormData: AssignmentFormDataCreate): Promise<Assignment> => {
         const { data } = await api.post(`courses/${courseId}/assignments`, assignmentFormData)
         return data;
+    },
+
+    publish: async (courseId: string, assignmentId: string) => {
+        const { data } = await api.post(`courses/${courseId}/assignments/${assignmentId}/publish`)
+        return data
+    },
+
+    unpublish: async (courseId: string, assignmentId: string) => {
+        const { data } = await api.post(`courses/${courseId}/assignments/${assignmentId}/unpublish`)
+        return data
     }
 }

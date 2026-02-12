@@ -47,7 +47,7 @@ export function ModuleAccordionItem({
     //const hasUnlockDate = module.unlockAt && new Date(module.unlockAt) > new Date();
 
     return (
-        <div className="border rounded-lg bg-card ">
+        <div className="border rounded-lg bg-card px-3">
             <AccordionItem
                 value={module.id}
             >
@@ -55,7 +55,7 @@ export function ModuleAccordionItem({
                     {canEdit && dragHandleProps && (
                         <div
                             {...dragHandleProps}
-                            className="cursor-grab active:cursor-grabbing p-2"
+                            className="cursor-grab active:cursor-grabbing py-2"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <GripVertical className="w-5 h-5 text-muted-foreground hover:text-foreground" />
@@ -98,7 +98,7 @@ export function ModuleAccordionItem({
                         </DropdownMenu>
                     )}
                 </div>
-                <AccordionContent className="px-4 pb-4">
+                <AccordionContent className="">
                     <ModuleItemList courseId={courseId} moduleId={module.id} canEdit={canEdit} />
                 </AccordionContent>
             </AccordionItem>

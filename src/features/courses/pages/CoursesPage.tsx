@@ -29,22 +29,9 @@ export default function CoursesPage() {
 
   return (
     <div className="p-6 space-y-4">
-      <div className="flex justify-between items-center">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink onClick={() => navigate(ROUTES.DASHBOARD)}>
-                <div className="flex items-center gap-2">
-                  <HomeIcon size={15} /> Dashboard
-                </div>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink>Cursos</BreadcrumbLink>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+      <div>
+        <h1 className="text-3xl font-bold">Cursos</h1>
+        <p className="text-muted-foreground">Lista de todos los cursos disponibles.</p>
       </div>
       
       {/* COURSES TABLE */}

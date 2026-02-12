@@ -1,12 +1,8 @@
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyTitle,
-} from "@/components/ui/empty"
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty"
 
 export default function NotFoundPage() {
+  const onClick = () => window.history.back();
+  
   return (
     <div className="h-screen flex items-center justify-center">
       <Empty className="">
@@ -18,7 +14,7 @@ export default function NotFoundPage() {
         </EmptyHeader>
         <EmptyContent>
           <EmptyDescription>
-            <a href="/">Regresar</a>
+            <a onClick={onClick}>Regresar</a>
           </EmptyDescription>
         </EmptyContent>
       </Empty>

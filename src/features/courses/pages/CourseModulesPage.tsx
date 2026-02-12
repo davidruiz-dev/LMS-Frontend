@@ -12,8 +12,8 @@ const CourseModulesPage = () => {
         <div className="space-y-4">
             <div className="flex justify-between items-center md:flex-row flex-col">
                 <div>
-                    <h1 className="text-lg">Módulos del Curso</h1>
-                    <p className="text-gray-400">Organiza y gestiona el contenido de tu curso.</p>
+                    <h1 className="text-3xl font-bold">Módulos del Curso</h1>
+                    <p className="text-muted-foreground">Lista de todo el contenido del curso.</p>
                 </div>
             </div>
             <ModuleList

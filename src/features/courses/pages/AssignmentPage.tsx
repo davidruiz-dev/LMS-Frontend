@@ -1,7 +1,8 @@
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useAssignment } from "@/features/courses/hooks/use-assignments";
-import { BookOpen, Calendar, ChevronRight, Clock, User } from "lucide-react";
+import { useAssignment, useAssignmentPublish, useAssignmentUnpublish } from "@/features/courses/hooks/use-assignments";
+import { BookOpen, Calendar, ChevronRight, Clock, Lock, Unlock, User } from "lucide-react";
 import { useState } from "react";
 import { useParams } from "react-router-dom"
 
@@ -10,6 +11,16 @@ export default function AssignmentPage() {
 
     if (!courseId || !assignmentId) return null;
     const { data: assignment } = useAssignment(courseId, assignmentId);
+    const publishAssignment = useAssignmentPublish(courseId);
+    const unpublishAssignment = useAssignmentUnpublish(courseId);
+
+    const onPublish = async (id: string) => {
+        await publishAssignment.mutateAsync(id);
+    }
+
+    const onUnpublish = async (id: string) => {
+        await unpublishAssignment.mutateAsync(id);
+    }
 
     const calculateTimeLeft = () => {
         if (!assignment) return;
@@ -30,7 +41,7 @@ export default function AssignmentPage() {
     };
 
     const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-    
+
     const formatDate = (dateString: any) => {
         const date = new Date(dateString);
         return date.toLocaleDateString('es-ES', {
@@ -43,28 +54,39 @@ export default function AssignmentPage() {
 
     if (!assignment) return null;
 
-
     return (
         <div className="">
             <div className="max-w-6xl mx-auto">
                 {/* Header */}
                 <header className="mb-8 ">
-                    <div className="flex items-center text-sm  mb-2">
-                        <BookOpen className="h-4 w-4 mr-1" />
-                        <span>{assignment.course.name}</span>
-                        <ChevronRight className="h-4 w-4 mx-1" />
-                        <span>Tareas</span>
-                        <ChevronRight className="h-4 w-4 mx-1" />
-                        <span className="font-medium">{assignment.name}</span>
-                    </div>
-
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                        <div>
+                        <div className="space-y-2">
                             <h1 className="text-4xl font-bold">{assignment.name}</h1>
-
+                            <p className="text-sm text-muted-foreground">
+                                Editado {new Date(assignment.updateAt).toLocaleString("es-ES", {
+                                    dateStyle: "medium",
+                                })}
+                            </p>
                         </div>
 
-                        <div className="flex items-center space-x-4">
+                        {assignment.isPublished ? (
+                            <Button
+                                onClick={() => onUnpublish(assignmentId)}
+                                size={"lg"}
+                            >
+                                <Lock /> Despublicar
+                            </Button>
+                        ) : (
+                            <Button
+                                onClick={() => onPublish(assignmentId)}
+                                size={"lg"}
+                            >
+                                <Unlock /> Publicar
+                            </Button>
+                        )}
+
+
+                        {/* <div className="flex items-center space-x-4">
                             <Badge variant={timeLeft?.overdue ? "destructive" : "default"}>
                                 {timeLeft?.overdue ? 'VENCIDO' : `${assignment.points} puntos`}
                             </Badge>
@@ -76,7 +98,7 @@ export default function AssignmentPage() {
                                         `${timeLeft?.days}d ${timeLeft?.hours}h ${timeLeft?.minutes}m`}
                                 </span>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </header>
 

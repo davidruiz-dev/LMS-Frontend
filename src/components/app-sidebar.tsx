@@ -1,4 +1,4 @@
-import { Command, LayoutDashboard, LogOut, Settings, Users, GraduationCap, Book,  } from "lucide-react"
+import { Command, LayoutDashboard, LogOut, Settings, Users, GraduationCap, Book, } from "lucide-react"
 import {
     Sidebar,
     SidebarContent,
@@ -18,10 +18,10 @@ import { useEffect, useState } from "react"
 import type { Role } from "@/shared/types"
 
 export interface SidebarItem {
-  title: string;
-  path: string;
-  icon?: any;
-  roles: Role[];
+    title: string;
+    path: string;
+    icon?: any;
+    roles: Role[];
 }
 // Menu items.
 const sidebarItems: SidebarItem[] = [
@@ -58,11 +58,11 @@ const sidebarItems: SidebarItem[] = [
 ]
 
 export function AppSidebar() {
-    const {logout, user} = useAuth();
+    const { logout, user } = useAuth();
     const location = useLocation();
     const [items, setItems] = useState<SidebarItem[]>([]);
 
-    useEffect(()=> {
+    useEffect(() => {
         if (user) {
             const visibleItems = sidebarItems.filter(item => item.roles.includes(user?.role));
             setItems(visibleItems)
@@ -94,7 +94,11 @@ export function AppSidebar() {
                         <SidebarMenu>
                             {items.map((item) => (
                                 <SidebarMenuItem key={item.title} >
-                                    <SidebarMenuButton asChild isActive={location.pathname.includes(item.path)}>
+                                    <SidebarMenuButton
+                                        asChild
+                                        isActive={location.pathname.includes(item.path)}
+                                        tooltip={item.title}
+                                    >
                                         <Link to={item.path}>
                                             <item.icon />
                                             <span>{item.title}</span>
@@ -110,7 +114,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton onClick={logout}>
-                            <LogOut/> Cerrar sesión
+                            <LogOut /> Cerrar sesión
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>

@@ -4,7 +4,7 @@ import type { PaginationFilters } from "@/shared/types";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink } from "@/components/ui/pagination";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
-import { ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon, DownloadIcon, MoreHorizontal, PlusCircleIcon, Search, UploadIcon } from "lucide-react";
+import { Book, ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon, DownloadIcon, MoreHorizontal, PlusCircleIcon, Search, UploadIcon } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { ROUTES } from "@/shared/constants/routes";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,9 @@ import { Badge } from "@/components/ui/badge";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/shared/providers/AuthProvider";
 import { USER_ROLES } from "@/shared/constants";
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
+import { SkeletonTable } from "@/components/SkeletonTable";
+import { AlertError } from "@/components/AlertError";
 
 export default function DataTableCourses() {
   const [filters, setFilters] = useState<PaginationFilters>({
@@ -42,6 +45,32 @@ export default function DataTableCourses() {
     }, 500);
     return () => clearTimeout(timeout); // Cancelar timeout si searchTerm cambia antes de que pasen los 500ms
   }, [searchTerm]);
+
+  if(isLoading){
+    <SkeletonTable/>
+  }
+
+  if (data?.data.length === 0) {
+    return (
+      <Empty className="border bg-sidebar">
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <Book />
+          </EmptyMedia>
+          <EmptyTitle>Sin cursos</EmptyTitle>
+          <EmptyDescription>
+            No se han encontrado cursos disponibles.
+          </EmptyDescription>
+        </EmptyHeader>
+      </Empty>
+    )
+  }
+
+  if(isError){
+    <div className="flex justify-center items-center p-10">
+      <AlertError title="Algo salió mal" description="Intentalo más tarde o ponte en contacto con soporte" />
+    </div>
+  }
 
   return (
     <>
@@ -80,28 +109,14 @@ export default function DataTableCourses() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading == true && (
-              <TableRow>
-                <TableCell className="text-center" colSpan={6}>
-                  Cargando...
-                </TableCell>
-              </TableRow>
-            )}
-            {isError == true && (
-              <TableRow>
-                <TableCell className="text-center" colSpan={6}>
-                  Error al cargar los usuarios
-                </TableCell>
-              </TableRow>
-            )}
             {data?.data?.map((course) => (
               <TableRow key={course.id}>
                 <TableCell>
-                  <img 
+                  <img
                     onClick={() => navigate(ROUTES.COURSE_DETAIL(course.id))}
                     src={course.imageUrl}
-                    alt={course.name} 
-                    className="h-12 object-cover rounded-md border cursor-pointer" width={60} height={60} 
+                    alt={course.name}
+                    className="h-12 object-cover rounded-md border cursor-pointer" width={60} height={60}
                   />
                 </TableCell>
                 <TableCell>

@@ -71,10 +71,14 @@ export interface Assignment {
   id: string;
   name: string;
   description: string;
-  points: string;
+  maxPoints: string;
   dueDate: Date;
   availableFrom: Date;
   availableUntil: Date;
   isPublished: boolean;
+  maxAttempts: number
+  allowLateSubmissions: boolean;
   course: Course
+  createdAt: Date;
+  updateAt: Date;
 }

@@ -6,7 +6,6 @@ import ForbiddenPage from '@/components/ForbiddenPage';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import NotFoundPage from '@/components/NotFoundPage';
 
-
 interface Item {
   title: string;
   url: (url: string) => string;
@@ -65,8 +64,8 @@ const CourseLayout = () => {
   }
 
   return (
-    <div className="p-6 space-y-4 flex gap-6 min-h-full items-stretch">
-      <div className="w-[250px]">
+    <div className="space-y-4 flex  min-h-full items-stretch">   
+      <div className="w-[250px] p-4">
         {items.map((item, index) => {
           const url = item.url(id)
           const active = location.pathname === url
@@ -75,8 +74,8 @@ const CourseLayout = () => {
             <Link to={url} key={index}>
               <div
                 className={`flex items-center gap-1 p-2 rounded-md
-                  hover:bg-neutral-100 dark:hover:bg-neutral-800
-                  ${active ? 'dark:bg-neutral-800 bg-neutral-100' : ''}`}
+                  hover:bg-sidebar-accent
+                  ${active && 'bg-sidebar-accent' }`}
               >
                 <item.icon size={17} />
                 <span className="text-sm">{item.title}</span>
@@ -86,7 +85,7 @@ const CourseLayout = () => {
         })}
       </div>
 
-      <div className="w-full">
+      <div className="w-full p-6">
         <Outlet />
       </div>
     </div>

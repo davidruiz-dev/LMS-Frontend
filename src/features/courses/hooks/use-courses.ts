@@ -1,9 +1,9 @@
 import type { CourseFormData } from "@/features/courses/schemas/course.schema";
 import { CourseService } from "@/features/courses/services/courseService";
+import { showError, showSuccess } from "@/helpers/alerts";
 import type { ApiError } from "@/shared/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
-import Swal from "sweetalert2"
 
 export const useCourses = (filters: any = {}) => {
     return useQuery({
@@ -18,20 +18,10 @@ export const useCreateCourse = () => {
         mutationFn: ({ course, image }: { course: CourseFormData, image?: File }) => CourseService.create(course, image),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['courses'] });
-            Swal.fire({
-                icon: "success",
-                title: "Curso agregado",
-                showConfirmButton: false,
-                timer: 2000
-            });
+            showSuccess('Curso agregado')
         },
         onError: (error) => {
-            Swal.fire({
-                icon: "error",
-                title: "Error al añadir curso",
-                showConfirmButton: false,
-                timer: 2000
-            });
+            showError('Error al crear curso')
             console.error(error);
         }
     })
@@ -46,20 +36,10 @@ export function useUpdateCourse() {
         onSuccess: (_, variables) => {
             queryClient.invalidateQueries({ queryKey: ['courses'] });
             queryClient.invalidateQueries({ queryKey: ['course', variables.id] });
-            Swal.fire({
-                icon: "success",
-                title: "Curso actualizado",
-                showConfirmButton: false,
-                timer: 1500
-            });
+            showSuccess('Curso actualizado')
         },
         onError: (error) => {
-            Swal.fire({
-                icon: "error",
-                title: "Error al editar curso",
-                showConfirmButton: false,
-                timer: 1500
-            });
+            showError('Error al editar curso')
             console.error(error);
         },
     });
@@ -79,20 +59,10 @@ export const useDeleteCourse = (id: number) => {
         mutationFn: () => CourseService.delete(id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['courses'] });
-            Swal.fire({
-                icon: "success",
-                title: "Curso eliminado exitosamente",
-                showConfirmButton: false,
-                timer: 1500
-            });
+            showSuccess('Curso eliminado exitosamente')
         },
         onError: (error) => {
-            Swal.fire({
-                icon: "error",
-                title: "Error al eliminar curso",
-                showConfirmButton: false,
-                timer: 1500
-            });
+            showError('Error al eliminar curso')
             console.error(error);
         }
     })
@@ -106,21 +76,10 @@ export const usePublishCourse = () => {
         onSuccess: (updatedCourse, id) => {
             queryClient.invalidateQueries({ queryKey: ['courses'] });
             queryClient.invalidateQueries({ queryKey: ['course', id] });
-            Swal.fire({
-                icon: "success",
-                title: "Curso publicado exitosamente",
-                showConfirmButton: false,
-                timer: 1500
-            });
+            showSuccess('Curso publicado exitosamente')
         },
         onError: (error: AxiosError<ApiError>) => {
-            Swal.fire({
-                icon: "error",
-                title: "Error al eliminar curso",
-                text: error.response?.data?.message || 'Failed to publish course',
-                showConfirmButton: false,
-                timer: 1500
-            });
+            showError(error.response?.data?.message || 'Failed to publish course')
         },
     });
 };

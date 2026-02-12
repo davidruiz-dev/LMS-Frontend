@@ -35,13 +35,13 @@ export default function CreateAssignment({ courseId, open, onOpenChange }: Props
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent>
+            <DialogContent className="sm:max-w-2xl">
                 <DialogHeader>
                     <DialogTitle>Nueva tarea</DialogTitle>
                     <DialogDescription>Completa todos los campos requeridos.</DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
-                    <form className='space-y-4' onSubmit={form.handleSubmit(onSubmit)}>
+                    <form className='space-y-3' onSubmit={form.handleSubmit(onSubmit)}>
                         <FormField
                             control={form.control}
                             name='name'
@@ -61,7 +61,7 @@ export default function CreateAssignment({ courseId, open, onOpenChange }: Props
                             name='description'
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Descripción *opcional</FormLabel>
+                                    <FormLabel>Descripción</FormLabel>
                                     <FormControl>
                                         <Textarea {...field} />
                                     </FormControl>
@@ -77,14 +77,15 @@ export default function CreateAssignment({ courseId, open, onOpenChange }: Props
                                 <FormItem>
                                     <FormLabel>Puntaje</FormLabel>
                                     <FormControl>
-                                        <Input type="number" max={20} min={0} {...field} />
+                                        <Input type="number" max={100} min={0} {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
 
-                        <FormField
+                        <div className="grid grid-cols-2 gap-3">
+                            <FormField
                             control={form.control}
                             name='availableFrom'
                             render={({ field }) => (
@@ -116,6 +117,7 @@ export default function CreateAssignment({ courseId, open, onOpenChange }: Props
                                 </FormItem>
                             )}
                         />
+                        </div>
                         <FormField
                             control={form.control}
                             name='dueDate'
