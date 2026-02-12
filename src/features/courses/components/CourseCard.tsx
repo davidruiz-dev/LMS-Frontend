@@ -1,6 +1,5 @@
 import { AvatarUser } from "@/components/AvatarUser";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
 import type { Course } from "@/features/courses/types/course.types";
 import { COURSE_STATUS } from "@/shared/constants";
@@ -15,7 +14,7 @@ const CourseCard = ({ course }: Props) => {
     const navigate = useNavigate();
 
     return (
-        <Card className="p-0 gap-0">
+        <Card className="p-0 gap-0 cursor-pointer" onClick={() => navigate(ROUTES.COURSE_DETAIL(course.id))}>
             <div className="p-2">
                 <div className="relative">
                     {course.status === COURSE_STATUS.ARCHIVED && (
@@ -36,9 +35,6 @@ const CourseCard = ({ course }: Props) => {
                         <p className="text-xs text-gray-500">{course.instructor.email}</p>
                     </div>
                 </div>
-                <Button className="w-full" variant={"default"}
-                    onClick={() => navigate(ROUTES.COURSE_DETAIL(course.id))}
-                >Ver más</Button>
             </div>
         </Card>
     )

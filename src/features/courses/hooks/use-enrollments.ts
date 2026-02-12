@@ -1,7 +1,7 @@
-import { type EnrollmentFormData } from './../schemas/index';
+import type { EnrollmentFormData } from "@/features/courses/schemas/enrollment.schema";
 import { EnrollmentService } from "@/features/courses/services/enrollmentService";
+import { showError, showSuccess } from "@/helpers/alerts";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import Swal from 'sweetalert2';
 
 export function useEnrollmentsByCourse(id: string | undefined) {
     return useQuery({
@@ -17,20 +17,10 @@ export const useCreateEnrollment = () => {
         mutationFn: (enrollment: EnrollmentFormData) => EnrollmentService.createEnrollment(enrollment),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['enrollments-course'] })
-            Swal.fire({
-                icon: "success",
-                title: "Inscripción creada",
-                showConfirmButton: false,
-                timer: 2000
-            });
+            showSuccess('Inscripción creada')
         },
         onError: (error) => {
-            Swal.fire({
-                icon: "error",
-                title: "Error al crear inscripción",
-                showConfirmButton: false,
-                timer: 2000
-            });
+            showError('Error al crear inscripción')
             console.error(error);
         }
     })

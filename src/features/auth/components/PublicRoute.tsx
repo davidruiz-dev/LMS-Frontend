@@ -10,18 +10,18 @@ interface PublicRouteProps {
 export const PublicRoute: React.FC<PublicRouteProps> = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth()
 
-  if (isLoading) {
-    return (
+  return (
+  <>
+    {isLoading && (
       <div className="fixed inset-0 flex items-center justify-center bg-background z-10">
         <LoadingSpinner size="lg" />
       </div>
-    )
-  }
+    )}
 
-  // Si el usuario ya está autenticado, redirigir al dashboard
-  if (isAuthenticated) {
-    return <Navigate to="/dashboard" replace />
-  }
+    {!isAuthenticated && children}
 
-  return <>{children}</>
+    {isAuthenticated && <Navigate to="/dashboard" replace />}
+  </>
+)
+
 }

@@ -1,5 +1,5 @@
 import { useCourseAccess } from "@/features/courses/hooks/use-course-access"
-import type { CourseAccess } from "@/shared/types"
+import type { CourseAccess } from "@/features/courses/types/course-access.types"
 
 export type GuardState =
   | 'loading'

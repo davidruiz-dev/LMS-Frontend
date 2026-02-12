@@ -3,6 +3,9 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { ProtectedRoute } from '@/features/auth/components/ProtectedRoute';
 import { PublicRoute } from '@/features/auth/components/PublicRoute';
 import CourseLayout from '@/features/courses/components/CourseLayout';
+import { AssignmentService } from '@/features/courses/services/assignmentsService';
+import { CourseService } from '@/features/courses/services/courseService';
+import { Book } from 'lucide-react';
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 
@@ -17,16 +20,18 @@ const EditUserPage = lazy(() => import('@/features/users/pages/EditUserPage'));
 const CoursesPage = lazy(() => import('@/features/courses/pages/CoursesPage'));
 const AddCoursePage = lazy(() => import('@/features/courses/pages/AddCoursePage'));
 const EditCourseRoute = lazy(() => import('@/router/EditCourseRoute'));
-const CoursePage = lazy(() => import('@/features/courses/pages/course-detail/CoursePage'));
-const CourseEnrollments = lazy(() => import('@/features/courses/pages/course-detail/CourseEnrollmentsPage'));
-const CourseModules = lazy(() => import('@/features/courses/pages/course-detail/CourseModulesPage'));
+const CoursePage = lazy(() => import('@/features/courses/pages/CoursePage'));
+const CourseEnrollmentsPage = lazy(() => import('@/features/courses/pages/CourseEnrollmentsPage'));
+const CourseModulesPage = lazy(() => import('@/features/courses/pages/CourseModulesPage'));
+const CourseAssignmentsPage = lazy(() => import('@/features/courses/pages/CourseAssignmentsPage'));
+const AssignmentPage = lazy(() => import('@/features/courses/pages/AssignmentPage'))
 
 const GradeLevelsPage = lazy(() => import('@/features/grade-level/pages/GradeLevelsPage'));
 
 
 const LazyWrapper = ({ children }: { children: React.ReactNode }) => (
   <Suspense fallback={
-    <div className="fixed inset-0 flex items-center justify-center">
+    <div className="fixed inset-0 flex items-center justify-center bg-background">
       <LoadingSpinner size="lg" />
     </div>
   }>
@@ -38,7 +43,7 @@ const LazyWrapper = ({ children }: { children: React.ReactNode }) => (
 export const router = createBrowserRouter([
   {
     path: '/',
-    errorElement: <LazyWrapper><NotFoundPage /></LazyWrapper>,
+    errorElement: <LazyWrapper><>error</></LazyWrapper>,
     children: [
       {
         path: 'login',
@@ -49,10 +54,16 @@ export const router = createBrowserRouter([
         children: [
           {
             path: 'dashboard',
-            element: <DashboardPage />
+            element: <DashboardPage />,
+            handle: {
+              breadcrumb: () => 'Dashboard'
+            },
           },
           {
             path: 'usuarios',
+            handle: {
+              breadcrumb: () => 'Usuarios'
+            },
             children: [
               {
                 index: true,
@@ -60,16 +71,26 @@ export const router = createBrowserRouter([
               },
               {
                 path: 'agregar',
-                element: <AddUserPage />
+                element: <AddUserPage />,
+                handle: {
+                  breadcrumb: () => 'Nuevo usuario'
+                },
               },
               {
                 path: 'editar/:id',
-                element: <EditUserPage />
+                element: <EditUserPage />,
+                handle: {
+                  breadcrumb: () => 'Editar'
+                },
               }
             ]
           },
           {
-            path: 'cursos',
+            path: 'courses',
+            handle: {
+              breadcrumb: () => 'Cursos',
+              icon: Book
+            },
             children: [
               {
                 index: true,
@@ -77,28 +98,69 @@ export const router = createBrowserRouter([
               },
               {
                 path: 'agregar',
-                element: <AddCoursePage />
+                element: <AddCoursePage />,
+                handle: {
+                  breadcrumb: () => 'Nuevo Curso'
+                }
               },
               {
                 path: 'editar/:id',
-                element: <EditCourseRoute />
+                element: <EditCourseRoute />,
+                handle: {
+                  breadcrumb: () => 'Editar'
+                }
               },
               {
                 path: ':id',
                 element: <CourseLayout />,
+                handle: {
+                  breadcrumb: (match: any) => match.data.name,
+                },
+                loader: async ({ params }) => {
+                  return CourseService.getById(params.id!)
+                },
                 children: [
                   {
                     index: true,
                     element: <CoursePage />
                   },
                   {
-                    path: 'inscripciones',
-                    element: <CourseEnrollments />
+                    path: 'enrollments',
+                    element: <CourseEnrollmentsPage />,
+                    handle: {
+                      breadcrumb: () => 'Personas'
+                    }
                   },
                   {
-                    path: 'modulos',
-                    element: <CourseModules />
-                  }
+                    path: 'modules',
+                    element: <CourseModulesPage />,
+                    handle: {
+                      breadcrumb: () => 'Módulos'
+                    }
+                  },
+                  {
+                    path: 'assignments',
+                    handle: {
+                      breadcrumb: () => 'Tareas'
+                    },
+                    children: [
+                      {
+                        index: true,
+                        element: <CourseAssignmentsPage />,
+                      },
+                      {
+                        path: ':assignmentId',
+                        element: <AssignmentPage />,
+                        handle: {
+                          breadcrumb: (match: any) => match.data.name,
+                        },
+                        loader: async ({ params }) => {
+                          return AssignmentService.findOneByCourse(params.id!, params.assignmentId!)
+                        },
+                      }
+                    ]
+                  },
+
                 ]
               },
 
@@ -106,10 +168,13 @@ export const router = createBrowserRouter([
           },
           {
             path: 'grados',
+            handle: {
+              breadcrumb: () => 'Grados'
+            },
             children: [
               {
                 index: true,
-                element: <ProtectedRoute><GradeLevelsPage /></ProtectedRoute>
+                element: <GradeLevelsPage />
               }
             ]
           }

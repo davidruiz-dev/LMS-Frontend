@@ -1,26 +1,23 @@
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty"
 
-const NotFoundPage: React.FC = () => {
+export default function NotFoundPage() {
+  const onClick = () => window.history.back();
+  
   return (
-    <div className="min-h-full flex items-center justify-center bg-background">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-2xl text-center">404 - Page Not Found</CardTitle>
-          <CardDescription className="text-center">
-            The page you are looking for doesn't exist.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex justify-center">
-          <Button asChild>
-            <Link to="/">Regresar</Link>
-          </Button>
-        </CardContent>
-      </Card>
+    <div className="h-screen flex items-center justify-center">
+      <Empty className="">
+        <EmptyHeader>
+          <EmptyTitle>404 - Not Found</EmptyTitle>
+          <EmptyDescription>
+            La página que buscas no existe. Intenta navegando otras páginas.
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <EmptyDescription>
+            <a onClick={onClick}>Regresar</a>
+          </EmptyDescription>
+        </EmptyContent>
+      </Empty>
     </div>
   );
 };
-
-export default NotFoundPage;

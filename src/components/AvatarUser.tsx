@@ -9,7 +9,7 @@ interface AvatarUserProps {
 export const AvatarUser = ({ src, firstName, lastName }: AvatarUserProps) => {
     return (
         <Avatar>
-            <AvatarImage src={src} />
+            <AvatarImage src={src}/>
             <AvatarFallback>
                 {firstName && lastName ? `${firstName.charAt(0).toUpperCase()}${lastName.charAt(0).toUpperCase()}` : ''}
             </AvatarFallback>

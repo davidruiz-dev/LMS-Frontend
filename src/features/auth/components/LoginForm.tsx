@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@/components/ui/button'
@@ -9,11 +9,11 @@ import { loginSchema, type LoginFormData } from '@/features/auth/validations/val
 import { useAuth } from '@/shared/providers/AuthProvider'
 
 export const LoginForm: React.FC = () => {
-  const { login, isLoading } = useAuth()
+  const { login } = useAuth()
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isLoading, isValid },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   })
@@ -58,7 +58,7 @@ export const LoginForm: React.FC = () => {
             </div>
 
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="w-full" disabled={!isValid}>
               {isLoading ? 'Signing in...' : 'Sign in'}
             </Button>
           </form>
