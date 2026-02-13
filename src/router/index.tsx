@@ -2,7 +2,7 @@ import Layout from '@/components/layout/Layout';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { ProtectedRoute } from '@/features/auth/components/ProtectedRoute';
 import { PublicRoute } from '@/features/auth/components/PublicRoute';
-import CourseLayout from '@/features/courses/components/CourseLayout';
+import CourseLayout from '@/features/courses/components/layout/CourseLayout';
 import { AssignmentService } from '@/features/courses/services/assignmentsService';
 import { CourseService } from '@/features/courses/services/courseService';
 import { Book } from 'lucide-react';
@@ -25,6 +25,7 @@ const CourseEnrollmentsPage = lazy(() => import('@/features/courses/pages/Course
 const CourseModulesPage = lazy(() => import('@/features/courses/pages/CourseModulesPage'));
 const CourseAssignmentsPage = lazy(() => import('@/features/courses/pages/CourseAssignmentsPage'));
 const AssignmentPage = lazy(() => import('@/features/courses/pages/AssignmentPage'))
+const CourseAnnouncementsPage = lazy(() => import('@/features/courses/pages/CourseAnnouncementsPage'))
 
 const GradeLevelsPage = lazy(() => import('@/features/grade-level/pages/GradeLevelsPage'));
 
@@ -89,7 +90,6 @@ export const router = createBrowserRouter([
             path: 'courses',
             handle: {
               breadcrumb: () => 'Cursos',
-              icon: Book
             },
             children: [
               {
@@ -139,6 +139,13 @@ export const router = createBrowserRouter([
                     }
                   },
                   {
+                    path: 'announcements',
+                    element: <CourseAnnouncementsPage />,
+                    handle: {
+                      breadcrumb: () => 'Anuncios'
+                    }
+                  },
+                  {
                     path: 'assignments',
                     handle: {
                       breadcrumb: () => 'Tareas'
@@ -159,7 +166,7 @@ export const router = createBrowserRouter([
                         },
                       }
                     ]
-                  },
+                  }
 
                 ]
               },

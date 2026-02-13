@@ -82,3 +82,14 @@ export interface Assignment {
   createdAt: Date;
   updateAt: Date;
 }
+
+export interface Announcement {
+  id: string;
+  title: string;
+  description: string;
+  isPublished: boolean;
+  authorId: string;
+  author: User;
+  createdAt: Date;
+  updateAt: Date;
+}

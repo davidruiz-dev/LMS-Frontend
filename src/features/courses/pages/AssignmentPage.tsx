@@ -2,9 +2,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAssignment, useAssignmentPublish, useAssignmentUnpublish } from "@/features/courses/hooks/use-assignments";
-import { BookOpen, Calendar, ChevronRight, Clock, Lock, Unlock, User } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { BookOpen, Calendar, CalendarClock, ChevronRight, ClipboardClock, ClipboardList, Clock, Lock, PencilLine, Repeat1, Unlock, User } from "lucide-react";
 import { useState } from "react";
 import { useParams } from "react-router-dom"
+import { Separator } from "@/components/ui/separator";
 
 export default function AssignmentPage() {
     const { id: courseId, assignmentId } = useParams<string>();
@@ -55,38 +57,46 @@ export default function AssignmentPage() {
     if (!assignment) return null;
 
     return (
-        <div className="">
-            <div className="max-w-6xl mx-auto">
-                {/* Header */}
-                <header className="mb-8 ">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                        <div className="space-y-2">
-                            <h1 className="text-4xl font-bold">{assignment.name}</h1>
-                            <p className="text-sm text-muted-foreground">
+        <div className="max-w-6xl mx-auto space-y-4">
+            {/* Header */}
+            <header>
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="space-y-1">
+                        <h1 className="text-2xl font-bold">{assignment.name}</h1>
+
+                        <div className="flex gap-6">
+                            <div className="flex items-center gap-1.5">
+                                <div className="flex aspect-square size-5 items-center justify-center rounded bg-blue-800 text-sidebar-primary-foreground">
+                                    <ClipboardList className="size-3" />
+                                </div>
+                                <span className="text-sm font-medium text-gray-400">Tarea</span>
+                            </div>
+                            <p className="text-sm text-gray-400">
                                 Editado {new Date(assignment.updateAt).toLocaleString("es-ES", {
                                     dateStyle: "medium",
                                 })}
                             </p>
                         </div>
+                    </div>
 
-                        {assignment.isPublished ? (
-                            <Button
-                                onClick={() => onUnpublish(assignmentId)}
-                                size={"lg"}
-                            >
-                                <Lock /> Despublicar
-                            </Button>
-                        ) : (
-                            <Button
-                                onClick={() => onPublish(assignmentId)}
-                                size={"lg"}
-                            >
-                                <Unlock /> Publicar
-                            </Button>
-                        )}
+                    {assignment.isPublished ? (
+                        <Button
+                            onClick={() => onUnpublish(assignmentId)}
+                            size={"lg"}
+                        >
+                            <Lock /> Despublicar
+                        </Button>
+                    ) : (
+                        <Button
+                            onClick={() => onPublish(assignmentId)}
+                            size={"lg"}
+                        >
+                            <Unlock /> Publicar
+                        </Button>
+                    )}
 
 
-                        {/* <div className="flex items-center space-x-4">
+                    {/* <div className="flex items-center space-x-4">
                             <Badge variant={timeLeft?.overdue ? "destructive" : "default"}>
                                 {timeLeft?.overdue ? 'VENCIDO' : `${assignment.points} puntos`}
                             </Badge>
@@ -99,39 +109,51 @@ export default function AssignmentPage() {
                                 </span>
                             </div>
                         </div> */}
-                    </div>
-                </header>
-
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Columna izquierda: Contenido principal */}
-                    <div className="lg:col-span-2 space-y-8">
-                        {/* Tarjeta de información del assignment */}
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>Descripción</CardTitle>
-                                <CardDescription className="mt-2">
-                                    <div className="flex items-center">
-                                        <Calendar className="h-4 w-4 mr-1.5 text-gray-500" />
-                                        <p>Fecha límite: {formatDate(assignment.dueDate)} a las 23:59</p>
-                                    </div>
-                                </CardDescription>
-                            </CardHeader>
-
-                            <CardContent>
-                                <div className="prose max-w-none text-gray-700 dark:text-gray-300">
-                                    {assignment.description}
-                                </div>
-                            </CardContent>
-                        </Card>
-
-
-
-                    </div>
-
-
                 </div>
+            </header>
 
-            </div>
+            <Separator />
+
+            <Tabs defaultValue="details" >
+                <TabsList>
+                    <TabsTrigger value="details">Detalles</TabsTrigger>
+                    <TabsTrigger value="questions">Preguntas</TabsTrigger>
+                </TabsList>
+                <TabsContent value="details">
+                    <div className="flex gap-10">
+                        <div className="space-y-3 py-3 font-medium text-sm text-muted-foreground">
+                            <div className="flex items-center gap-2">
+                                <PencilLine size={15} /> Puntos posibles
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <ClipboardClock size={15} /> Fecha de cierre
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Repeat1 size={15} />
+                                Intentos posibles
+                            </div>
+                        </div>
+                        <div className="space-y-3 py-3 font-medium text-sm">
+                            <div>{assignment.maxPoints} puntos</div>
+                            <div>{formatDate(assignment.dueDate)} a las 23:59
+                            </div>
+                            <div>{assignment.maxAttempts} intentos</div>
+                        </div>
+                    </div>
+
+                    <div className="mt-10">
+                        <h1 className="font-bold text-xl">Descripción</h1>
+                        <p className="">
+                            {assignment.description}
+                        </p>
+                    </div>
+                </TabsContent>
+                <TabsContent value="questions">
+
+                </TabsContent>
+            </Tabs>
+
+
         </div>
     )
 }

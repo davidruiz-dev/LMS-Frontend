@@ -19,7 +19,12 @@ const items: Item[] = [
     icon: HomeIcon
   },
   {
-    title: 'Miembros',
+    title: 'Anuncios',
+    url: ROUTES.COURSE_ANNOUNCEMENTS,
+    icon: Megaphone
+  },
+  {
+    title: 'Personas',
     url: ROUTES.COURSE_MEMBERS,
     icon: User2
   },
@@ -33,11 +38,6 @@ const items: Item[] = [
     url: ROUTES.COURSE_MODULES,
     icon: BookIcon
   },
-  {
-    title: 'Anuncios',
-    url: ROUTES.COURSE_ANNOUNCEMENTS,
-    icon: Megaphone
-  }
 ]
 
 const CourseLayout = () => {
