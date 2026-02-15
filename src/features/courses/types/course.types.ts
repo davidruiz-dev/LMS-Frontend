@@ -86,7 +86,7 @@ export interface Assignment {
 export interface Announcement {
   id: string;
   title: string;
-  description: string;
+  content: string;
   isPublished: boolean;
   authorId: string;
   author: User;

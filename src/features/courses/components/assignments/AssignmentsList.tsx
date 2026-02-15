@@ -20,14 +20,16 @@ export default function AssignmentsList({ courseId, canAccess }: Props) {
     const { data: assignments, isLoading, isError, error } = useAssignments(courseId);
 
     if (isError) {
-        <Alert variant="destructive" className="max-w-md">
-            <AlertCircleIcon />
-            <AlertTitle>Error</AlertTitle>
-            <AlertDescription>
-                Error al obtener asignaciones del curso, intentalo denuevo más tarde.
-                {error.message}
-            </AlertDescription>
-        </Alert>
+        return (
+            <Alert variant="destructive" className="max-w-md">
+                <AlertCircleIcon />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>
+                    Error al obtener asignaciones del curso, intentalo denuevo más tarde.
+                    {error.message}
+                </AlertDescription>
+            </Alert>
+        )
     }
 
     if (isLoading) {
@@ -41,17 +43,19 @@ export default function AssignmentsList({ courseId, canAccess }: Props) {
     }
 
     if (!assignments?.length) {
-        <Empty className="bg-muted/30 h-full">
-            <EmptyHeader>
-                <EmptyMedia variant="icon">
-                    <ClipboardList />
-                </EmptyMedia>
-                <EmptyTitle>No hay tareas</EmptyTitle>
-                <EmptyDescription className="max-w-xs text-pretty">
-                    No hay tareas disponibles.
-                </EmptyDescription>
-            </EmptyHeader>
-        </Empty>
+        return (
+            <Empty className="bg-muted/30 h-full">
+                <EmptyHeader>
+                    <EmptyMedia variant="icon">
+                        <ClipboardList />
+                    </EmptyMedia>
+                    <EmptyTitle>No hay tareas</EmptyTitle>
+                    <EmptyDescription className="max-w-xs text-pretty">
+                        No hay tareas disponibles.
+                    </EmptyDescription>
+                </EmptyHeader>
+            </Empty>
+        )
     }
 
     return (
@@ -60,15 +64,16 @@ export default function AssignmentsList({ courseId, canAccess }: Props) {
                 {assignments?.map((assignment) => (
                     <div
                         key={assignment.id}
-                        className="p-4 border rounded bg-card space-y-4 cursor-pointer hover:bg-gray-400/5"
+                        className="p-4 border rounded bg-card cursor-pointer hover:bg-blue-100/20"
                         onClick={() => navigate(ROUTES.COURSE_ASSIGNMENT(courseId, assignment.id))}
                     >
                         {canAccess && (
-                            <div className="flex justify-between">
-                                <Badge variant={assignment.isPublished ? 'default' : 'destructive'}>
-                                    {assignment.isPublished ? (<Unlock />) : (<Lock />)}
-                                    {assignment.isPublished ? 'publicado' : 'borrador'}
-                                </Badge>
+                            <div className="flex justify-between items-center">
+                                <div>
+                                    <Badge variant={assignment.isPublished ? 'default' : 'destructive'}>
+                                        {assignment.isPublished ? 'publicado' : 'borrador'}
+                                    </Badge>
+                                </div>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
                                         <Button variant="ghost" className="h-8 w-8 p-0">
@@ -92,11 +97,11 @@ export default function AssignmentsList({ courseId, canAccess }: Props) {
                                 </DropdownMenu>
                             </div>
                         )}
-                        <div className="space-y-3">
+                        <div className="space-y-2">
                             <h1 className="font-bold">{assignment.name}</h1>
                             <p className="text-sm text-muted-foreground truncate">{assignment.description}</p>
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 mt-3">
                             <Calendar className="size-4" />
                             <span className="text-sm text-muted-foreground">Vence: {new Date(assignment.dueDate).toLocaleString("es-ES", {
                                 dateStyle: "medium",
