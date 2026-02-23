@@ -1,4 +1,4 @@
-import { AnnouncementsService } from "@/features/courses/services/announcementsService"
+import { AnnouncementsService } from "@/features/courses/announcements/services/announcementsService"
 import { showError, showSuccess } from "@/helpers/alerts"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
@@ -21,6 +21,37 @@ export const useCreateAnnouncement = () => {
         },
         onError: (error) => {
             showError(error.message || 'Error al crear anuncio.')
+        }
+    })
+}
+
+
+export const useEditAnnouncement = () => {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: ({courseId, announcementId, data}:{courseId: string, announcementId: string, data: any}) => 
+            AnnouncementsService.edit(courseId, announcementId, data),
+        onSuccess: (_, { courseId }) => {
+            showSuccess('Anuncio editado correctamente.')
+            qc.invalidateQueries({ queryKey: ['announcements', courseId]})
+        },
+        onError: (error) => {
+            showError(error.message || 'Error al editar anuncio.')
+        }
+    })
+}
+
+export const useDeleteAnnouncement = () => {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: ({courseId, announcementId}: {courseId: string, announcementId: string}) =>
+            AnnouncementsService.delete(courseId, announcementId),
+        onSuccess: (_, { courseId }) => {
+            showSuccess('Anuncio eliminado correctamente.')
+            qc.invalidateQueries({ queryKey: ['announcements', courseId]})
+        },
+        onError: (error) => {
+            showError(error.message || 'Error al eliminar el anuncio.')
         }
     })
 }

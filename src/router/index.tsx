@@ -3,7 +3,7 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { ProtectedRoute } from '@/features/auth/components/ProtectedRoute';
 import { PublicRoute } from '@/features/auth/components/PublicRoute';
 import CourseLayout from '@/features/courses/components/layout/CourseLayout';
-import { AssignmentService } from '@/features/courses/services/assignmentsService';
+import { AssignmentService } from '@/features/courses/assignments/services/assignmentsService';
 import { CourseService } from '@/features/courses/services/courseService';
 import { Book } from 'lucide-react';
 import { lazy, Suspense } from 'react';
@@ -21,11 +21,11 @@ const CoursesPage = lazy(() => import('@/features/courses/pages/CoursesPage'));
 const AddCoursePage = lazy(() => import('@/features/courses/pages/AddCoursePage'));
 const EditCourseRoute = lazy(() => import('@/router/EditCourseRoute'));
 const CoursePage = lazy(() => import('@/features/courses/pages/CoursePage'));
-const CourseEnrollmentsPage = lazy(() => import('@/features/courses/pages/CourseEnrollmentsPage'));
-const CourseModulesPage = lazy(() => import('@/features/courses/pages/CourseModulesPage'));
-const CourseAssignmentsPage = lazy(() => import('@/features/courses/pages/CourseAssignmentsPage'));
-const AssignmentPage = lazy(() => import('@/features/courses/pages/AssignmentPage'))
-const CourseAnnouncementsPage = lazy(() => import('@/features/courses/pages/CourseAnnouncementsPage'))
+const CourseEnrollmentsPage = lazy(() => import('@/features/courses/enrollments/pages/CourseEnrollmentsPage'));
+const CourseModulesPage = lazy(() => import('@/features/courses/modules/pages/CourseModulesPage'));
+const CourseAssignmentsPage = lazy(() => import('@/features/courses/assignments/pages/CourseAssignmentsPage'));
+const AssignmentPage = lazy(() => import('@/features/courses/assignments/pages/AssignmentPage'))
+const CourseAnnouncementsPage = lazy(() => import('@/features/courses/announcements/pages/CourseAnnouncementsPage'))
 
 const GradeLevelsPage = lazy(() => import('@/features/grade-level/pages/GradeLevelsPage'));
 

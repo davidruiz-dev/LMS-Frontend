@@ -15,6 +15,8 @@ export interface User {
   updateAt?: Date;
 }
 
+/*
+
 // Entidad Tarea/Asignación
 export interface Assignment {
   id: string;
@@ -59,6 +61,7 @@ export interface Grade {
   gradedAt: string;
 }
 
+*/
 
 // API Response Types
 // export interface ApiResponse<T> {

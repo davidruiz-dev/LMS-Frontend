@@ -1,12 +1,21 @@
-import type { AssignmentFormDataCreate } from "@/features/courses/schemas/assignment.schema";
-import { AssignmentService } from "@/features/courses/services/assignmentsService"
+import type { AssignmentFormDataCreate } from "@/features/courses/assignments/schemas/assignment.schema";
+import { AssignmentService } from "@/features/courses/assignments/services/assignmentsService"
+import type { AssignmentFilters } from "@/features/courses/types/course.types";
 import { showError, showSuccess } from "@/helpers/alerts";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
-export const useAssignments = (courseId: string) => {
+export const useAssignments = (courseId: string, filters: AssignmentFilters = {}) => {
     return useQuery({
-        queryKey: ['assignments', courseId],
-        queryFn: () => AssignmentService.findAllByCourse(courseId),
+        queryKey: ['assignments', courseId, filters],
+        queryFn: () => AssignmentService.findAllByCourse(courseId, filters),
+        enabled: !!courseId,
+    })
+};
+
+export const useUpcomingAssignments = (courseId: string) => {
+    return useQuery({
+        queryKey: ['upcoming-assignments', courseId],
+        queryFn: () => AssignmentService.findUpcomingByCourse(courseId),
         enabled: !!courseId
     })
 };
