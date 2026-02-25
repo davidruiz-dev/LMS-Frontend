@@ -2,10 +2,9 @@ import Layout from '@/components/layout/Layout';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { ProtectedRoute } from '@/features/auth/components/ProtectedRoute';
 import { PublicRoute } from '@/features/auth/components/PublicRoute';
-import CourseLayout from '@/features/courses/components/CourseLayout';
-import { AssignmentService } from '@/features/courses/services/assignmentsService';
+import CourseLayout from '@/features/courses/components/layout/CourseLayout';
+import { AssignmentService } from '@/features/courses/assignments/services/assignmentsService';
 import { CourseService } from '@/features/courses/services/courseService';
-import { Book } from 'lucide-react';
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 
@@ -21,10 +20,18 @@ const CoursesPage = lazy(() => import('@/features/courses/pages/CoursesPage'));
 const AddCoursePage = lazy(() => import('@/features/courses/pages/AddCoursePage'));
 const EditCourseRoute = lazy(() => import('@/router/EditCourseRoute'));
 const CoursePage = lazy(() => import('@/features/courses/pages/CoursePage'));
-const CourseEnrollmentsPage = lazy(() => import('@/features/courses/pages/CourseEnrollmentsPage'));
-const CourseModulesPage = lazy(() => import('@/features/courses/pages/CourseModulesPage'));
-const CourseAssignmentsPage = lazy(() => import('@/features/courses/pages/CourseAssignmentsPage'));
-const AssignmentPage = lazy(() => import('@/features/courses/pages/AssignmentPage'))
+const CourseEnrollmentsPage = lazy(() => import('@/features/courses/enrollments/pages/CourseEnrollmentsPage'));
+const CourseModulesPage = lazy(() => import('@/features/courses/modules/pages/CourseModulesPage'));
+const CourseAssignmentsPage = lazy(() => import('@/features/courses/assignments/pages/CourseAssignmentsPage'));
+const AssignmentPage = lazy(() => import('@/features/courses/assignments/pages/AssignmentPage'))
+const CourseAnnouncementsPage = lazy(() => import('@/features/courses/announcements/pages/CourseAnnouncementsPage'))
+// Quizzes
+const QuizPage = lazy(() => import('@/features/courses/quizzes/pages/QuizPage'));
+const QuizBuilderPage = lazy(() => import('@/features/courses/quizzes/pages/QuizBuilderPage'));
+const QuizTakePage = lazy(() => import('@/features/courses/quizzes/pages/QuizTakePage'));
+const QuizResultsPage = lazy(() => import('@/features/courses/quizzes/pages/QuizResultsPage'))
+const MyAttemptsPage = lazy(()=> import('@/features/courses/quizzes/pages/MyAttemptsPage'))
+const AllAttemptsPage = lazy(() => import('@/features/courses/quizzes/pages/AllAttemptsPage'))
 
 const GradeLevelsPage = lazy(() => import('@/features/grade-level/pages/GradeLevelsPage'));
 
@@ -89,7 +96,6 @@ export const router = createBrowserRouter([
             path: 'courses',
             handle: {
               breadcrumb: () => 'Cursos',
-              icon: Book
             },
             children: [
               {
@@ -139,6 +145,13 @@ export const router = createBrowserRouter([
                     }
                   },
                   {
+                    path: 'announcements',
+                    element: <CourseAnnouncementsPage />,
+                    handle: {
+                      breadcrumb: () => 'Anuncios'
+                    }
+                  },
+                  {
                     path: 'assignments',
                     handle: {
                       breadcrumb: () => 'Tareas'
@@ -159,6 +172,42 @@ export const router = createBrowserRouter([
                         },
                       }
                     ]
+                  },
+                  {
+                    path: 'quizzes',
+                    handle: {
+                      breadcrumb: () => 'Cuestionarios'
+                    },
+                    children: [
+                      {
+                        index: true,
+                        element: <QuizPage />
+                      },
+                      {
+                        path: ':quizId/build',
+                        element: <QuizBuilderPage />
+                      },
+                      {
+                        path: ':quizId/take',
+                        element: <QuizTakePage />
+                      },
+                      {
+                        path: ':quizId/results/:attemptId',
+                        element: <QuizResultsPage />
+                      },
+                      {
+                        path: ':quizId/my-attempts',
+                        element: <MyAttemptsPage />,
+                      },
+                      {
+                        path: ':quizId/attempts',
+                        element: <AllAttemptsPage />,
+                        handle: {
+                          breadcrumb: () => 'Intentos'
+                        }
+                      }
+                    ]
+
                   },
 
                 ]

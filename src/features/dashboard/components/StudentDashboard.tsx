@@ -1,22 +1,18 @@
 import CourseCard from '@/features/courses/components/CourseCard';
 import type { Course } from '@/features/courses/types/course.types';
 import DashboardService from '@/features/dashboard/services/dashboardService';
-import { useEffect, useState, type FC } from 'react'
+import { useEffect, useState } from 'react'
 
-interface Props {
-    studentId: string;
-}
-
-const StudentDashboard: FC<Props> = ({ studentId }) => {
+const StudentDashboard = () => {
     const [courses, setCoures] = useState<Course[]>([]);
 
-    const fetchCoursesEnrolleds = async (studentId: string) => {
-        const response = await DashboardService.findEnrolledActiveCourses(studentId);
+    const fetchCoursesEnrolleds = async () => {
+        const response = await DashboardService.findEnrolledActiveCourses();
         setCoures(response);
     };
 
     useEffect(()=>{
-        fetchCoursesEnrolleds(studentId);
+        fetchCoursesEnrolleds();
     },[])
 
     return (

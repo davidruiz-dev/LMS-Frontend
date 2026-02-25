@@ -1,6 +1,6 @@
 import { queryClient } from './../../../lib/queryClient';
-import type { ModuleFormData, ModuleItemFormData } from "@/features/courses/schemas/module.schema";
-import { moduleService } from "@/features/courses/services/moduleService";
+import type { ModuleFormData, ModuleItemFormData } from "@/features/courses/modules/schemas/module.schema";
+import { moduleService } from "@/features/courses/modules/services/moduleService";
 import type { ReorderModuleItemsDto, ReorderModulesDto } from "@/features/courses/types/course.types";
 import { showError, showSuccess } from '@/helpers/alerts';
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";

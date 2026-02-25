@@ -1,16 +1,16 @@
-import type { Course } from "@/features/courses/types/course.types";
+import type { Course, Enrollment } from "@/features/courses/types/course.types";
 import { api } from "@/lib/client"
 
 const DashboardService = {
     // mover este método a otro servicio para coordinar mejor la arquitectura
-    findAllEnrolledCourses: async (id: string): Promise<Course[]> => {
-        const { data } = await api.get(`/enrollments/user/${id}`);
-        return data;
+    findAllEnrolledCourses: async (): Promise<Course[]> => {
+        const { data } = await api.get(`/enrollments/me`);
+        return await data.map((enrollment: Enrollment) => enrollment.course)
     },
     
-    findEnrolledActiveCourses: async (id: string): Promise<Course[]> => {
-        const { data } = await api.get(`/enrollments/active/user/${id}`);
-        return data;
+    findEnrolledActiveCourses: async (): Promise<Course[]> => {
+        const { data } = await api.get(`/enrollments/me/active`);
+        return await data.map((enrollment: Enrollment) => enrollment.course)
     }
 }
 

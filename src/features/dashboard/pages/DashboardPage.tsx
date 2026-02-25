@@ -11,7 +11,7 @@ const DashboardPage = () => {
       case 'admin':
         return <AdminDashboard />;
       case 'student':
-        return <StudentDashboard studentId={user.id} />;
+        return <StudentDashboard />;
       case 'instructor':
         return <InstructorDashboard />;
       default:

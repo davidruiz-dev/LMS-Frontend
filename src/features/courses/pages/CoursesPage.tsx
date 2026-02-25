@@ -1,19 +1,8 @@
 import DataTableCourses from "@/features/courses/components/DataTableCourses";
-import { ROUTES } from "@/shared/constants/routes";
-import { HomeIcon } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
 import { useAuth } from "@/shared/providers/AuthProvider";
 import { USER_ROLES } from "@/shared/constants";
 
 export default function CoursesPage() {
-  const navigate = useNavigate();
   const { user } = useAuth();
 
   const renderCourses = () => {

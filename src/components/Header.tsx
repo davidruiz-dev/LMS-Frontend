@@ -27,9 +27,8 @@ function Header() {
                             <DropdownMenuLabel>{user?.email}</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem>Profile</DropdownMenuItem>
-                            <DropdownMenuItem>Billing</DropdownMenuItem>
                             <DropdownMenuItem>Team</DropdownMenuItem>
-                            <DropdownMenuItem>Subscription</DropdownMenuItem>
+                            <DropdownMenuItem variant="destructive">Cerrar sesión</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
