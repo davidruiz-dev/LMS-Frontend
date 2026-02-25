@@ -1,5 +1,5 @@
 import { ROUTES } from '@/shared/constants/routes'
-import { HomeIcon, User2, BookIcon, Megaphone, type LucideProps, ClipboardList } from 'lucide-react'
+import { HomeIcon, User2, BookIcon, Megaphone, type LucideProps, ClipboardList, FileQuestion } from 'lucide-react'
 import { Link, Outlet, useLocation, useParams } from 'react-router-dom'
 import { useCourseAccess } from "@/features/courses/hooks/use-course-access";
 import ForbiddenPage from '@/components/ForbiddenPage';
@@ -38,6 +38,11 @@ const items: Item[] = [
     url: ROUTES.COURSE_MODULES,
     icon: BookIcon
   },
+  {
+    title: 'Cuestionarios',
+    url: ROUTES.COURSE_QUIZZES,
+    icon: FileQuestion
+  }
 ]
 
 const CourseLayout = () => {
@@ -65,7 +70,7 @@ const CourseLayout = () => {
 
   return (
     <div className="space-y-4 flex  min-h-full items-stretch">   
-      <div className="w-[250px] p-4">
+      <div className="w-62 p-4">
         {items.map((item, index) => {
           const url = item.url(id)
           const active = location.pathname === url

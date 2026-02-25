@@ -10,6 +10,8 @@ export const ROUTES = {
   COURSE_ANNOUNCEMENTS: (courseId: string) => `/courses/${courseId}/announcements`,
   COURSE_ASSIGNMENTS: (courseId: string) => `/courses/${courseId}/assignments`,
   COURSE_ASSIGNMENT: (courseId: string, assignmentId: string) => `/courses/${courseId}/assignments/${assignmentId}`,
+  COURSE_QUIZZES: (courseId: string) => `/courses/${courseId}/quizzes`,
+  COURSE_QUIZ: (courseId: string, quizId: string) => `/courses/${courseId}/quizzes/${quizId}`,
   
   // Usuarios
   CREATE_USER: '/usuarios/agregar',
