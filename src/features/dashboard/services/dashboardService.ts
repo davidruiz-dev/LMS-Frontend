@@ -1,4 +1,5 @@
-import type { Course, Enrollment } from "@/features/courses/types/course.types";
+import type { Enrollment } from "@/features/courses/enrollments/types/enrollment.types";
+import type { Course } from "@/features/courses/types/course.types";
 import { api } from "@/lib/client"
 
 const DashboardService = {

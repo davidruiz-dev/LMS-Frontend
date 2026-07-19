@@ -57,7 +57,7 @@ export interface Quiz {
   availableUntil?: string;
   published: boolean;
   courseId: string;
-  questions?: QuizQuestion[];
+  questions: QuizQuestion[] | [];
   createdAt: string;
   updatedAt: string;
 }

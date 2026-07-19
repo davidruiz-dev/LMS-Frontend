@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator";
 import { useAssignments } from "@/features/courses/hooks/use-assignments";
 import { ModuleItemType } from "@/features/courses/modules/types/module.types";
+import { useQuizzes } from "../../quizzes/hooks/use-quizzes";
 
 interface Props {
     moduleId: string;
@@ -32,7 +33,9 @@ const CreateModuleItemDialog: FC<Props> = ({ open, onOpenChange, moduleId, cours
     })
 
     const createItem = useCreateModuleItem(courseId, moduleId);
+    // traer data para enlazar con el contenido del módulo
     const { data: assignments } = useAssignments(courseId);
+    const { data: quizzes } = useQuizzes(courseId); // Cambiar a useQuizzes cuando esté disponible
 
     const typeWatch = moduleForm.watch('type');
 
@@ -138,6 +141,34 @@ const CreateModuleItemDialog: FC<Props> = ({ open, onOpenChange, moduleId, cours
                                                         value={assignment.id}
                                                     >
                                                         {assignment.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    )}
+                                />
+                            )}
+
+                            { typeWatch === 'quiz' && (
+                                <FormField
+                                    control={moduleForm.control}
+                                    name="contentId"
+                                    render={({ field }) => (
+                                        <Select
+                                            {...field}
+                                            onValueChange={field.onChange}
+                                            value={field.value}
+                                        >
+                                            <SelectTrigger className="w-full">
+                                                <SelectValue placeholder="seleccionar" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {quizzes?.map((quiz) => (
+                                                    <SelectItem
+                                                        key={quiz.id}
+                                                        value={quiz.id}
+                                                    >
+                                                        {quiz.title}
                                                     </SelectItem>
                                                 ))}
                                             </SelectContent>

@@ -43,7 +43,7 @@ export default function AllAttemptsPage () {
 
     const total = allAttempts.length;
     const completedCount = allAttempts.filter(a => a.status === AttemptStatus.GRADED).length;
-    const avgScore = allAttempts.reduce((sum, a) => sum + (a.score || 0), 0) / total;
+    const avgScore = allAttempts.reduce((sum, a) => sum + Number(a.score || 0), 0) / total;
     const completionRate = Math.round((completedCount / total) * 100);
 
     return { total, avgScore, completedCount, completionRate };
@@ -94,7 +94,7 @@ export default function AllAttemptsPage () {
   };
 
   return (
-    <div className="container max-w-6xl py-8 space-y-6">
+    <div className="container py-8 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
         <Button
@@ -106,11 +106,11 @@ export default function AllAttemptsPage () {
         </Button>
         <div className="flex-1">
           <h1 className="text-3xl font-bold">{quiz.title}</h1>
-          <p className="text-muted-foreground">All Student Attempts</p>
+          <p className="text-muted-foreground">Todos los intentos de los estudiantes</p>
         </div>
         <Button variant="outline" onClick={handleExport}>
           <Download className="mr-2 h-4 w-4" />
-          Export CSV
+          Exportar CSV
         </Button>
       </div>
 
@@ -118,21 +118,21 @@ export default function AllAttemptsPage () {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardHeader className="pb-3">
-            <CardDescription>Total Attempts</CardDescription>
+            <CardDescription>Total de intentos</CardDescription>
             <CardTitle className="text-3xl">{stats.total}</CardTitle>
           </CardHeader>
         </Card>
 
         <Card>
           <CardHeader className="pb-3">
-            <CardDescription>Average Score</CardDescription>
+            <CardDescription>Puntuación media</CardDescription>
             <CardTitle className="text-3xl">{stats.avgScore.toFixed(1)}</CardTitle>
           </CardHeader>
         </Card>
 
         <Card>
           <CardHeader className="pb-3">
-            <CardDescription>Completion Rate</CardDescription>
+            <CardDescription>Tasa de finalización</CardDescription>
             <CardTitle className="text-3xl">{stats.completionRate}%</CardTitle>
           </CardHeader>
         </Card>
@@ -143,7 +143,7 @@ export default function AllAttemptsPage () {
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search students..."
+            placeholder="Buscar estudiantes..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-10"
@@ -154,28 +154,28 @@ export default function AllAttemptsPage () {
       {/* Attempts Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Student Attempts</CardTitle>
+          <CardTitle>Intentos del estudiante</CardTitle>
           <CardDescription>
-            View and manage all student submissions
+            Ver y gestionar todas las entregas de los estudiantes
           </CardDescription>
         </CardHeader>
         <CardContent>
           {filteredAttempts.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-muted-foreground">
-                {search ? 'No attempts found' : 'No attempts yet'}
+                {search ? 'No se encontraron intentos.' : 'Aún no hay intentos.'}
               </p>
             </div>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Student</TableHead>
-                  <TableHead>Attempt</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Score</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>Estudiante</TableHead>
+                  <TableHead>Intento</TableHead>
+                  <TableHead>Estado</TableHead>
+                  <TableHead>Puntuación</TableHead>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead className="text-right">Acciones</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -208,7 +208,7 @@ export default function AllAttemptsPage () {
                           </span>
                         </span>
                       ) : (
-                        <span className="text-muted-foreground">Pending</span>
+                        <span className="text-muted-foreground">Por puntuar</span>
                       )}
                     </TableCell>
                     <TableCell>
@@ -221,7 +221,7 @@ export default function AllAttemptsPage () {
                         onClick={() => navigate(`/courses/${courseId}/quizzes/${quizId}/results/${attempt.id}`)}
                       >
                         <Eye className="mr-2 h-4 w-4" />
-                        Review
+                        Ver resultado
                       </Button>
                     </TableCell>
                   </TableRow>

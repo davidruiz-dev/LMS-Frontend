@@ -1,11 +1,12 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Clock, FileQuestion, Play, Edit, MoreVertical, Settings, Eye, Trash2 } from 'lucide-react';
+import { Clock, FileQuestion, Play, Edit, MoreVertical, Settings, Eye, Trash2, ClipboardCheck } from 'lucide-react';
 import { format } from 'date-fns';
 import { QuizType, type Quiz } from '@/features/courses/quizzes/types/quiz.types';
 import { useNavigate } from 'react-router-dom';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { useInProgressAttempt, usePendingGrading } from '../hooks/use-quizzes';
 
 interface QuizCardProps {
   quiz: Quiz;
@@ -32,6 +33,15 @@ const quizTypeLabels = {
 
 export const QuizCard = ({ quiz, courseId, remainingAttempts, hasAttempts, onStart, onEdit, canEdit, onDelete }: QuizCardProps) => {
   const navigate = useNavigate();
+
+  // Solo cargar pending grading si es instructor
+  const { data: pendingAttempts } = usePendingGrading(quiz.id, canEdit);
+  const pendingCount = canEdit ? (pendingAttempts?.length || 0) : 0;
+
+  // Solo consultar si es estudiante (no instructor/admin)
+  const { data: inProgressAttempt } = useInProgressAttempt(quiz.id, canEdit);
+  const hasInProgress = !canEdit && !!inProgressAttempt;
+
   const isAvailable = () => {
     const now = new Date();
     if (quiz.availableFrom && now < new Date(quiz.availableFrom)) return false;
@@ -41,11 +51,13 @@ export const QuizCard = ({ quiz, courseId, remainingAttempts, hasAttempts, onSta
 
   const canTakeQuiz = () => {
     if (!isAvailable()) return false;
+    if (hasInProgress) return true; // reanudar siempre debe estar habilitado
     if (quiz.allowedAttempts === -1) return true;
     return remainingAttempts > 0;
   };
 
   const getButtonText = () => {
+    if (hasInProgress) return 'Continuar Quiz';
     if (!isAvailable()) return 'No disponible';
     if (quiz.allowedAttempts === -1) return 'Empezar';
     if (remainingAttempts <= 0) return 'Sin intentos';
@@ -53,9 +65,10 @@ export const QuizCard = ({ quiz, courseId, remainingAttempts, hasAttempts, onSta
   };
 
   return (
-    <Card className="hover:shadow-lg transition-shadow">
+    <Card className="hover:shadow-lg transition-shadow relative">
+      {/* Pending Grading Badge (Top Right) */}
       <CardHeader>
-        <div className="flex items-start justify-between">
+        <div className="flex items-start justify-between gap-1.5">
           <div className="space-y-1 flex-1">
             <CardTitle className="line-clamp-1">{quiz.title}</CardTitle>
             {quiz.description && (
@@ -64,6 +77,19 @@ export const QuizCard = ({ quiz, courseId, remainingAttempts, hasAttempts, onSta
               </CardDescription>
             )}
           </div>
+
+          {canEdit && pendingCount > 0 && (
+            <Badge
+              className="bg-orange-500 cursor-pointer hover:bg-orange-500/50"
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/courses/${courseId}/quizzes/${quiz.id}/manual-grading`);
+              }}
+            >
+              <ClipboardCheck className="mr-1 h-3 w-3" />
+              {pendingCount} para calificar
+            </Badge>
+          )}
 
           {canEdit && (
             <DropdownMenu>
@@ -81,6 +107,12 @@ export const QuizCard = ({ quiz, courseId, remainingAttempts, hasAttempts, onSta
                   <Settings className="mr-2 h-4 w-4" />
                   Configuración
                 </DropdownMenuItem>
+                {pendingCount > 0 && (
+                  <DropdownMenuItem onClick={() => navigate(`/courses/${courseId}/quizzes/${quiz.id}/manual-grading`)}>
+                    <ClipboardCheck className="mr-2 h-4 w-4" />
+                    Grade Answers ({pendingCount})
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuItem onClick={() => navigate(`/courses/${courseId}/quizzes/${quiz.id}/attempts`)}>
                   <Eye className="mr-2 h-4 w-4" />
                   Ver intentos

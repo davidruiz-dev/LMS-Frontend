@@ -46,7 +46,7 @@ export default function MyAttemptsPage () {
   ) || 0;
 
   const averageScore = attempts?.length 
-    ? attempts.reduce((sum, attempt) => sum + (attempt.score || 0), 0) / attempts.length
+    ? attempts.reduce((sum, attempt) => sum + Number(attempt.score || 0), 0) / attempts.length
     : 0;
 
   const remainingAttempts = quiz.allowedAttempts === -1 
@@ -56,7 +56,7 @@ export default function MyAttemptsPage () {
   const canRetake = quiz.allowedAttempts === -1 || remainingAttempts > 0;
 
   return (
-    <div className="container max-w-6xl py-8 space-y-6">
+    <div className="container py-8 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
         <Button

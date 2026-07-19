@@ -47,7 +47,7 @@ export default function QuizResultsPage() {
   const passed = percentage >= 60;
 
   return (
-    <div className="container max-w-4xl py-8 space-y-6">
+    <div className="container py-8 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
         <Button

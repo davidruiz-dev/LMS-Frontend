@@ -32,6 +32,7 @@ const QuizTakePage = lazy(() => import('@/features/courses/quizzes/pages/QuizTak
 const QuizResultsPage = lazy(() => import('@/features/courses/quizzes/pages/QuizResultsPage'))
 const MyAttemptsPage = lazy(()=> import('@/features/courses/quizzes/pages/MyAttemptsPage'))
 const AllAttemptsPage = lazy(() => import('@/features/courses/quizzes/pages/AllAttemptsPage'))
+const ManualGradingPage = lazy(() => import('@/features/courses/quizzes/pages/ManualGradingPages'));
 
 const GradeLevelsPage = lazy(() => import('@/features/grade-level/pages/GradeLevelsPage'));
 
@@ -205,6 +206,15 @@ export const router = createBrowserRouter([
                         handle: {
                           breadcrumb: () => 'Intentos'
                         }
+                      },
+                      {
+                        path: ':quizId/manual-grading',
+                        element: <ManualGradingPage/>,
+                        handle: {
+                          breadcrumb: () => 'Calificación manual'
+                        }
+                      },
+                      {
                       }
                     ]
 

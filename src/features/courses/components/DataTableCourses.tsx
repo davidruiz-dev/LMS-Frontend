@@ -61,6 +61,9 @@ export default function DataTableCourses() {
           <EmptyDescription>
             No se han encontrado cursos disponibles.
           </EmptyDescription>
+          {canAccess && (
+            <Link to={ROUTES.CREATE_COURSE}><Button>Agregar curso</Button></Link>
+          )}
         </EmptyHeader>
       </Empty>
     )

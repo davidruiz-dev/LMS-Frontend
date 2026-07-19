@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { quizzesApi } from '@/features/courses/quizzes/services/quizzesService';
+import type { QuizAnswer } from '../types/quiz.types';
 
 
 export const quizKeys = {
@@ -197,5 +198,77 @@ export const useAttemptCounts = (quizIds: string[]) => {
     queryFn: () => quizzesApi.getAttemptCounts(quizIds),
     enabled: quizIds.length > 0,
     staleTime: 30 * 1000, // 30 seconds
+  });
+};
+
+
+// Get pending grading attempts
+export const usePendingGrading = (quizId: string, enabled = true) => {
+  return useQuery({
+    queryKey: [...quizKeys.all, 'pending-grading', quizId],
+    queryFn: () => quizzesApi.getPendingGrading(quizId),
+    enabled: !!quizId && enabled,
+  });
+};
+
+
+// Grade manual answer
+export const useGradeAnswer = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ answerId, points, feedback }: { 
+      answerId: string; 
+      points: number; 
+      feedback?: string;
+    }) => quizzesApi.gradeManualAnswer(answerId, points, feedback),
+    onSuccess: (_, { answerId }) => {
+      // Invalidar queries relacionadas
+      queryClient.invalidateQueries({ queryKey: quizKeys.all });
+      toast.success('Answer graded successfully');
+    },
+    onError: (error) => {
+      toast.error(error.message || 'Failed to grade answer');
+    },
+  });
+};
+
+
+// Get in-progress attempt
+export const useInProgressAttempt = (quizId: string, canEdit = true) => {
+  return useQuery({
+    queryKey: [...quizKeys.all, 'in-progress', quizId],
+    queryFn: () => quizzesApi.getInProgressAttempt(quizId),
+    enabled: !!quizId && !canEdit,
+    staleTime: 0, // Always fetch fresh
+  });
+};
+
+// Save progress (no toast, silent operation)
+export const useSaveProgress = () => {
+  return useMutation({
+    mutationFn: ({ attemptId, answers }: { attemptId: string; answers: QuizAnswer[] }) =>
+      quizzesApi.saveProgress(attemptId, answers),
+    // Silent save, no success toast
+    onError: (error) => {
+      console.error('Failed to save progress:', error.message);
+      // No toast para no molestar al usuario
+    }, 
+  });
+};
+
+// Abandon attempt
+export const useAbandonAttempt = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (attemptId: string) => quizzesApi.abandonAttempt(attemptId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: quizKeys.all });
+      toast.success('Quiz abandoned');
+    },
+    onError: (error) => {
+      toast.error(error.message || 'Failed to abandon quiz');
+    },
   });
 };

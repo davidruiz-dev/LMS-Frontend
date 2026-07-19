@@ -13,6 +13,7 @@ export interface Enrollment {
   id: string;
   course: Course;
   user: User;
+  userId: string;
   status: EnrollmentStatus;
   createdAt: Date;
   updateAt: Date;

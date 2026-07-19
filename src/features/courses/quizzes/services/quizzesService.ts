@@ -1,4 +1,4 @@
-import type { CreateQuestionDto, CreateQuizDto, Quiz, QuizAttempt, QuizQuestion, SubmitQuizDto } from "@/features/courses/quizzes/types/quiz.types";
+import type { CreateQuestionDto, CreateQuizDto, Quiz, QuizAnswer, QuizAttempt, QuizAttemptAnswer, QuizQuestion, SubmitQuizDto } from "@/features/courses/quizzes/types/quiz.types";
 import { api } from "@/lib/client";
 
 export const quizzesApi = {
@@ -79,5 +79,35 @@ export const quizzesApi = {
   getAttemptCounts: async (quizIds: string[]): Promise<Record<string, number>> => {
     const { data } = await api.post<Record<string, number>>(`/quizzes/attempt-counts`, { quizIds });
     return data;
+  },
+
+  getPendingGrading: async (quizId: string): Promise<QuizAttempt[]> => {
+    const { data } = await api.get<QuizAttempt[]>(`/quizzes/${quizId}/pending-grading`);
+    return data;
+  },
+
+  // Manual grading
+  gradeManualAnswer: async (answerId: string, points: number, feedback?: string): Promise<QuizAttemptAnswer> => {
+    const { data } = await api.patch<QuizAttemptAnswer>(`/answers/${answerId}/grade`, { 
+      points, 
+      feedback 
+    });
+    return data;
+  },
+
+  // Get in-progress attempt
+  getInProgressAttempt: async (quizId: string): Promise<QuizAttempt | null> => {
+    const { data } = await api.get<QuizAttempt | null>(`/quizzes/${quizId}/attempts/in-progress`);
+    return data;
+  },
+
+  // Save progress (auto-save)
+  saveProgress: async (attemptId: string, answers: QuizAnswer[]): Promise<void> => {
+    await api.post(`/attempts/${attemptId}/save-progress`, { answers });
+  },
+
+  // Abandon attempt
+  abandonAttempt: async (attemptId: string): Promise<void> => {
+    await api.delete(`/attempts/${attemptId}/abandon`);
   },
 };

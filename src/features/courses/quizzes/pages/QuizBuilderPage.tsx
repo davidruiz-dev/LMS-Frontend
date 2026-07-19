@@ -27,7 +27,7 @@ export default function QuizBuilderPage() {
             <div className="flex flex-col items-center justify-center h-screen">
                 <p className="text-lg font-medium mb-2">Quiz not found</p>
                 <Button onClick={() => navigate(`/courses/${courseId}/quizzes`)}>
-                    Back to Quizzes
+                    Volver a los cuestionarios
                 </Button>
             </div>
         );
@@ -51,41 +51,41 @@ export default function QuizBuilderPage() {
                 </Button>
                 <div className="flex-1">
                     <h1 className="text-3xl font-bold">{quiz.title}</h1>
-                    <p className="text-muted-foreground">Build and manage quiz questions</p>
+                    <p className="text-muted-foreground">Crea y gestiona preguntas de cuestionarios.</p>
                 </div>
                 <Button variant="outline" onClick={() => setIsEditingSettings(true)}>
                     <Settings className="mr-2 h-4 w-4" />
-                    Settings
+                    Ajustes
                 </Button>
             </div>
 
             {/* Quiz Info */}
             <Card>
                 <CardHeader>
-                    <CardTitle>Quiz Overview</CardTitle>
+                    <CardTitle>Resumen del Cuestionario</CardTitle>
                     <CardDescription>{quiz.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-4 gap-4 text-center">
                         <div>
                             <div className="text-2xl font-bold">{quiz.questions?.length || 0}</div>
-                            <div className="text-sm text-muted-foreground">Questions</div>
+                            <div className="text-sm text-muted-foreground">Preguntas</div>
                         </div>
                         <div>
                             <div className="text-2xl font-bold">{totalPoints}</div>
-                            <div className="text-sm text-muted-foreground">Total Points</div>
+                            <div className="text-sm text-muted-foreground">Puntos Totales</div>
                         </div>
                         <div>
                             <div className="text-2xl font-bold">
                                 {quiz.timeLimit ? `${quiz.timeLimit}m` : '∞'}
                             </div>
-                            <div className="text-sm text-muted-foreground">Time Limit</div>
+                            <div className="text-sm text-muted-foreground">Límite de Tiempo</div>
                         </div>
                         <div>
                             <div className="text-2xl font-bold">
                                 {quiz.allowedAttempts === -1 ? '∞' : quiz.allowedAttempts}
                             </div>
-                            <div className="text-sm text-muted-foreground">Attempts</div>
+                            <div className="text-sm text-muted-foreground">Intentos</div>
                         </div>
                     </div>
                 </CardContent>
