@@ -30,12 +30,13 @@ const QuizPage = lazy(() => import('@/features/courses/quizzes/pages/QuizPage'))
 const QuizBuilderPage = lazy(() => import('@/features/courses/quizzes/pages/QuizBuilderPage'));
 const QuizTakePage = lazy(() => import('@/features/courses/quizzes/pages/QuizTakePage'));
 const QuizResultsPage = lazy(() => import('@/features/courses/quizzes/pages/QuizResultsPage'))
-const MyAttemptsPage = lazy(()=> import('@/features/courses/quizzes/pages/MyAttemptsPage'))
+const MyAttemptsPage = lazy(() => import('@/features/courses/quizzes/pages/MyAttemptsPage'))
 const AllAttemptsPage = lazy(() => import('@/features/courses/quizzes/pages/AllAttemptsPage'))
 const ManualGradingPage = lazy(() => import('@/features/courses/quizzes/pages/ManualGradingPages'));
 
 const GradeLevelsPage = lazy(() => import('@/features/grade-level/pages/GradeLevelsPage'));
 
+const AssignmentSubmissionsPage = lazy(() => import('@/features/courses/assignments/pages/AssignmentSubmissionsPage'));
 
 const LazyWrapper = ({ children }: { children: React.ReactNode }) => (
   <Suspense fallback={
@@ -171,7 +172,15 @@ export const router = createBrowserRouter([
                         loader: async ({ params }) => {
                           return AssignmentService.findOneByCourse(params.id!, params.assignmentId!)
                         },
+                      },
+                      {
+                        path: ':assignmentId/submissions',
+                        element: <AssignmentSubmissionsPage />,
+                        handle: {
+                          breadcrumb: () => 'Entregas'
+                        }
                       }
+
                     ]
                   },
                   {
@@ -209,7 +218,7 @@ export const router = createBrowserRouter([
                       },
                       {
                         path: ':quizId/manual-grading',
-                        element: <ManualGradingPage/>,
+                        element: <ManualGradingPage />,
                         handle: {
                           breadcrumb: () => 'Calificación manual'
                         }

@@ -35,3 +35,16 @@ export interface AssignmentFilters {
   sortBy?: string;
   sortOrder?: 'ASC' | 'DESC';
 }
+
+export interface Submission {
+  id: string;
+  studentId: string;
+  assignmentId: string;
+  submittedAt: Date;
+  grade?: number;
+  feedback?: string;
+  status: SubmissionStatus;
+  attempts: number;
+  createdAt: Date;
+  updatedAt: Date;
+}

@@ -12,6 +12,8 @@ export const ROUTES = {
   COURSE_ASSIGNMENT: (courseId: string, assignmentId: string) => `/courses/${courseId}/assignments/${assignmentId}`,
   COURSE_QUIZZES: (courseId: string) => `/courses/${courseId}/quizzes`,
   COURSE_QUIZ: (courseId: string, quizId: string) => `/courses/${courseId}/quizzes/${quizId}/take`,
+  COURSE_SUBMISSIONS: (courseId: string, assignmentId: string) => `/courses/${courseId}/assignments/${assignmentId}/submissions`,
+  COURSE_SUBMISSION: (courseId: string, assignmentId: string, submissionId: string) => `/courses/${courseId}/assignments/${assignmentId}/submission/${submissionId}`,
   
   // Usuarios
   CREATE_USER: '/usuarios/agregar',

@@ -1,8 +1,8 @@
 import type { AssignmentFormDataCreate } from "@/features/courses/assignments/schemas/assignment.schema";
 import { AssignmentService } from "@/features/courses/assignments/services/assignmentsService"
-import type { AssignmentFilters } from "@/features/courses/types/course.types";
 import { showError, showSuccess } from "@/helpers/alerts";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import type { AssignmentFilters } from "../assignments/types/assignment.types";
 
 export const useAssignments = (courseId: string, filters: AssignmentFilters = {}) => {
     return useQuery({
@@ -84,3 +84,4 @@ export const useAssignmentUnpublish = (courseId: string) => {
         }
     })
 }
+

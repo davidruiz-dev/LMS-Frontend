@@ -1,7 +1,6 @@
 import type { AssignmentFormDataCreate } from "@/features/courses/assignments/schemas/assignment.schema";
-import type { AssignmentFilters } from "@/features/courses/assignments/types/assignment.types";
+import type { Assignment, AssignmentFilters } from "@/features/courses/assignments/types/assignment.types";
 import { api } from "@/lib/client"
-import type { Assignment } from "@/shared/types";
 
 
 export const AssignmentService = {
