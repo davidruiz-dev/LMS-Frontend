@@ -37,6 +37,7 @@ const ManualGradingPage = lazy(() => import('@/features/courses/quizzes/pages/Ma
 const GradeLevelsPage = lazy(() => import('@/features/grade-level/pages/GradeLevelsPage'));
 
 const AssignmentSubmissionsPage = lazy(() => import('@/features/courses/assignments/pages/AssignmentSubmissionsPage'));
+const SubmissionPage = lazy(() => import('@/features/courses/assignments/pages/SubmissionPage'));
 
 const LazyWrapper = ({ children }: { children: React.ReactNode }) => (
   <Suspense fallback={
@@ -178,6 +179,13 @@ export const router = createBrowserRouter([
                         element: <AssignmentSubmissionsPage />,
                         handle: {
                           breadcrumb: () => 'Entregas'
+                        }
+                      },
+                      {
+                        path: ':assignmentId/submissions/:submissionId',
+                        element: <SubmissionPage />,
+                        handle: {
+                          breadcrumb: () => 'Entrega'
                         }
                       }
 

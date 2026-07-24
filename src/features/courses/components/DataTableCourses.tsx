@@ -20,8 +20,8 @@ export default function DataTableCourses() {
   const [filters, setFilters] = useState<PaginationFilters>({
     page: 1,
     limit: 10,
-    sortBy: 'createdAt',
-    orderBy: 'DESC',
+    order: 'DESC',
+    orderBy: 'createdAt',
     search: ''
   })
   const { data, isLoading, isError } = useCourses(filters);
@@ -82,7 +82,7 @@ export default function DataTableCourses() {
           <Search className="absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
           <Input
             placeholder="buscar cursos..."
-            className="w-full xl:w-[400px] pl-9"
+            className="w-full xl:w-100 pl-9"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />

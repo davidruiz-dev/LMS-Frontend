@@ -14,5 +14,15 @@ export const SubmissionService = {
         });
 
         return data;
+    },
+
+    getMySubmissions: async (assignmentId: string): Promise<Submission[]> => {
+        const { data } = await api.get(`/assignments/${assignmentId}/submissions/me`);
+        return data;
+    },
+
+    findOneSubmission: async (submissionId: string): Promise<Submission> => {
+        const { data } = await api.get(`submissions/${submissionId}`)
+        return data;
     }
 }

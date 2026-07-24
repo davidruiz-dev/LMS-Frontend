@@ -40,11 +40,25 @@ export interface Submission {
   id: string;
   studentId: string;
   assignmentId: string;
-  submittedAt: Date;
   grade?: number;
   feedback?: string;
+  content: string;
+  isLate: boolean;
+  submittedAt: Date;
+  attemptNumber: number;
   status: SubmissionStatus;
   attempts: number;
+  attachmentFiles: SubmissionAttachment[];
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface SubmissionAttachment {
+  id: string;
+  fileName: string;
+  fileUrl: string;
+  storagePath: string;
+  fileSize: number;
+  submissionId: string;
+  createdAt: Date;
 }

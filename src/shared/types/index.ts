@@ -114,6 +114,6 @@ export interface PaginationFilters {
   search?: string;
   page?: number;
   limit?: number;
-  sortBy?: string;
-  orderBy?: 'ASC' | 'DESC';
+  orderBy?: string;
+  order?: 'ASC' | 'DESC';
 }

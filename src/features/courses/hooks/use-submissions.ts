@@ -4,6 +4,7 @@ import type { Submission } from "../assignments/types/assignment.types";
 import { api } from "@/lib/client";
 import { showError, showSuccess } from "@/helpers/alerts";
 import { SubmissionService } from "../assignments/services/submissionService";
+import type { ApiError } from "@/shared/types";
 
 // ── Keys ──────────────────────────────────────────────────────────────────────
 
@@ -11,8 +12,10 @@ export const submissionKeys = {
     all: ["submissions"] as const,
     byAssignment: (assignmentId: string) =>
         [...submissionKeys.all, "assignment", assignmentId] as const,
-    mine: (assignmentId: string) =>
-        [...submissionKeys.all, "mine", assignmentId] as const,
+    mine: (submissionId: string) =>
+        [...submissionKeys.all, "mine", submissionId] as const,
+    byId: (submissionId: string) =>
+        [...submissionKeys.all, "byId", submissionId] as const,
 };
 
 export function useCreateSubmission(courseId: string, assignmentId: string) {
@@ -25,8 +28,8 @@ export function useCreateSubmission(courseId: string, assignmentId: string) {
       queryClient.invalidateQueries({ queryKey: ['submissions', assignmentId] });
       showSuccess('Tarea entregada correctamente');
     },
-    onError: (error: any) => {
-      showError(error?.message ?? 'Error al entregar la tarea');
+    onError: (error: ApiError) => {
+      showError(error.message ?? 'Error al entregar la tarea');
     },
   });
 }
@@ -42,6 +45,22 @@ export function useAssignmentSubmissions(assignmentId: string) {
         enabled: !!assignmentId,
         staleTime: 30_000,
     });
+}
+
+export function useMySubmissions(submissionId: string){
+    return useQuery({
+        queryKey: submissionKeys.mine(submissionId),
+        queryFn: () => SubmissionService.getMySubmissions(submissionId),
+        enabled: !!submissionId
+    })
+}
+
+export function useSubmission(submissionId: string){
+    return useQuery({
+        queryKey: submissionKeys.byId(submissionId),
+        queryFn: () => SubmissionService.findOneSubmission(submissionId),
+        enabled: !!submissionId
+    })
 }
 
 // ── useGradeSubmission ────────────────────────────────────────────────────────
