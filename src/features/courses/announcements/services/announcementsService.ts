@@ -1,6 +1,6 @@
 import type { CreateAnnouncement, EditAnnouncement } from "@/features/courses/announcements/schemas/announcements.schema";
 import type { Announcement } from "@/features/courses/announcements/types/announcement.types";
-import { api } from "@/lib/client"
+import { api } from "@/shared/lib/client"
 
 export const AnnouncementsService = {
     create: async (courseId: string, announcementData: CreateAnnouncement): Promise<Announcement> => {

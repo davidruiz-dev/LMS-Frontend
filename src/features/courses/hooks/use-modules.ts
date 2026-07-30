@@ -1,6 +1,6 @@
 import type { ModuleFormData, ModuleItemFormData } from "@/features/courses/modules/schemas/module.schema";
 import { moduleService } from "@/features/courses/modules/services/moduleService";
-import { showError, showSuccess } from '@/helpers/alerts';
+import { showError, showSuccess } from '@/shared/helpers/alerts';
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { ReorderModuleItemsDto, ReorderModulesDto } from "../modules/types/module.types";
 

@@ -1,7 +1,7 @@
 import { AvatarUser } from "@/components/AvatarUser";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { getDistanceToNow } from "@/utils/getDistanceToNow";
+import { getDistanceToNow } from "@/shared/utils/getDistanceToNow";
 import EditAnnouncement from "@/features/courses/announcements/components/EditAnnouncement"
 import { MoreVertical } from "lucide-react";
 import { useState } from "react";

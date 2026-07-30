@@ -1,7 +1,7 @@
+import { useAuth } from '@/app/providers/AuthProvider';
 import AdminDashboard from '@/features/dashboard/components/AdminDashboard';
 import InstructorDashboard from '@/features/dashboard/components/InstructorDashboard';
 import StudentDashboard from '@/features/dashboard/components/StudentDashboard';
-import { useAuth } from '@/shared/providers/AuthProvider';
 
 const DashboardPage = () => {
   const { user } = useAuth();
@@ -25,4 +25,4 @@ const DashboardPage = () => {
   )
 }
 
-export default DashboardPage
+export default DashboardPage;

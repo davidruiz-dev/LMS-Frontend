@@ -1,5 +1,5 @@
 import { AnnouncementsService } from "@/features/courses/announcements/services/announcementsService"
-import { showError, showSuccess } from "@/helpers/alerts"
+import { showError, showSuccess } from "@/shared/helpers/alerts"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 export const useAnnouncements = (courseId: string) => {

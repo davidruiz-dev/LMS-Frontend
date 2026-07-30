@@ -11,11 +11,11 @@ import {
     SidebarMenuItem
 } from "@/components/ui/sidebar"
 import { Link, useLocation } from "react-router-dom"
-import { useAuth } from "@/shared/providers/AuthProvider"
 import { ROUTES } from "@/shared/constants/routes"
 import { USER_ROLES } from "@/shared/constants"
 import { useEffect, useState } from "react"
 import type { Role } from "@/shared/types"
+import { useAuth } from "@/app/providers/AuthProvider"
 
 export interface SidebarItem {
     title: string;

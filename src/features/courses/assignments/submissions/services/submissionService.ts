@@ -1,5 +1,5 @@
-import { api } from "@/lib/client";
-import type { Submission } from "../types/assignment.types";
+import { api } from "@/shared/lib/client";
+import type { Submission } from "../../types/assignment.types";
 
 export const SubmissionService = {
     createSubmission: async (courseId:string, assignmentId: string, content: string, files: File[]) => {

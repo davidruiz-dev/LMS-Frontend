@@ -1,5 +1,5 @@
 import type { GradeLevel } from "@/features/grade-level/types";
-import { api } from "@/lib/client";
+import { api } from "@/shared/lib/client";
 import type { PaginatedResponse } from "@/shared/types";
 
 const API_GRADE_LEVEL = '/grade-level';

@@ -1,5 +1,5 @@
 import type { CreateQuestionDto, CreateQuizDto, Quiz, QuizAnswer, QuizAttempt, QuizAttemptAnswer, QuizQuestion, SubmitQuizDto } from "@/features/courses/quizzes/types/quiz.types";
-import { api } from "@/lib/client";
+import { api } from "@/shared/lib/client";
 
 export const quizzesApi = {
   // Quizzes

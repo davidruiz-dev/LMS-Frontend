@@ -16,40 +16,6 @@ export interface User {
 }
 
 /*
-
-// Entidad Tarea/Asignación
-export interface Assignment {
-  id: string;
-  title: string;
-  description: string;
-  dueDate: string;
-  points: number;
-  courseId: string;
-  submissions?: Submission[];
-  attachments?: Attachment[];
-}
-
-// Entidad Entrega
-export interface Submission {
-  id: string;
-  assignmentId: string;
-  studentId: string;
-  submittedAt: string;
-  content: string;
-  grade?: number;
-  feedback?: string;
-  attachments?: Attachment[];
-}
-
-// Entidad Archivo Adjunto
-export interface Attachment {
-  id: string;
-  name: string;
-  url: string;
-  type: string;
-  size: number;
-}
-
 // Entidad Calificación
 export interface Grade {
   id: string;
@@ -70,12 +36,6 @@ export interface Grade {
 //   success: boolean
 // }
 
-// export interface Pagination {
-//     page: number;
-//     limit: number;
-//     orderBy?: string;
-//     order?: 'ASC' | 'DESC';
-// }
 
 export interface PaginatedResponse<T> {
   data: T[];

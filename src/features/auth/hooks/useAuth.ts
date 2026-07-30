@@ -1,5 +1,5 @@
 import { authAPI } from '@/features/auth/services/auth.service';
-import { showError } from '@/helpers/alerts';
+import { showError } from '@/shared/helpers/alerts';
 import { QUERY_KEYS, STORAGE_KEYS } from '@/shared/constants';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 

@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { ArrowLeft, Loader2, Eye, TrendingUp, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 import { AttemptStatus } from '../types/quiz.types';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 
 export default function MyAttemptsPage () {
   const { id: courseId, quizId } = useParams<{ id: string; quizId: string }>();

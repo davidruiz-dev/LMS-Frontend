@@ -9,11 +9,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Loader2, Clock, ChevronLeft, ChevronRight, Flag, AlertCircle } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import { useInProgressAttempt, useQuiz, useSaveProgress, useStartAttempt, useSubmitAttempt } from '../hooks/use-quizzes';
 import { QuestionType, type QuizAnswer, type QuizAttempt } from '../types/quiz.types';
-import { useAuth } from '@/shared/providers/AuthProvider';
 import { USER_ROLES } from '@/shared/constants';
+import { useAuth } from '@/app/providers/AuthProvider';
 
 const AUTOSAVE_INTERVAL_MS = 15_000;
 

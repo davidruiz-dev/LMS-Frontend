@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { DragDropContext, Droppable, Draggable, type DropResult } from '@hello-pangea/dnd';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import { useModuleItems, useReorderModuleItems } from '@/features/courses/hooks/use-modules';
 import { ModuleItemCard } from '@/features/courses/modules/components/ModuleItemCard';
 import CreateModuleItemDialog from '@/features/courses/modules/components/CreateModuleItemDialog';

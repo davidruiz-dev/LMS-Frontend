@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { ArrowLeft, Loader2, Eye, Search, Download } from 'lucide-react';
 import { format } from 'date-fns';
 import { AttemptStatus } from '../types/quiz.types';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import { useState, useMemo } from 'react';
 
 export default function AllAttemptsPage () {

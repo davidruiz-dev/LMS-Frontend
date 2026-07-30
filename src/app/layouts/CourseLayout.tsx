@@ -34,7 +34,7 @@ const items: Item[] = [
     icon: ClipboardList
   },
   {
-    title: 'Contenido',
+    title: 'Módulos',
     url: ROUTES.COURSE_MODULES,
     icon: BookIcon
   },

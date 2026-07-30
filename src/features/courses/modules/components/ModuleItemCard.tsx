@@ -19,7 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { useDeleteModuleItem } from '@/features/courses/hooks/use-modules';

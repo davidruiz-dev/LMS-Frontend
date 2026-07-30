@@ -1,10 +1,10 @@
 import { ModeToggle } from "@/components/mode-toggle"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { SidebarTrigger } from "@/components/ui/sidebar"
-import { useAuth } from "@/shared/providers/AuthProvider"
 import { AvatarUser } from "@/components/AvatarUser"
 import Breadcrumbs from "@/components/breadcrumb"
 import { Separator } from "@/components/ui/separator"
+import { useAuth } from "@/app/providers/AuthProvider"
 
 function Header() {
     const { user } = useAuth()

@@ -1,6 +1,6 @@
 import type { EnrollmentFormData } from "@/features/courses/enrollments/schemas/enrollment.schema";
 import type { Enrollment } from "@/features/courses/enrollments/types/enrollment.types";
-import { api } from "@/lib/client";
+import { api } from "@/shared/lib/client";
 
 export const EnrollmentService = {
     // devuelve las inscripciones del usuario actual

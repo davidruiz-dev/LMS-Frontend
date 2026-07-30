@@ -1,6 +1,6 @@
 import type { CourseFormData } from "@/features/courses/schemas/course.schema";
 import { CourseService } from "@/features/courses/services/courseService";
-import { showError, showSuccess } from "@/helpers/alerts";
+import { showError, showSuccess } from "@/shared/helpers/alerts";
 import type { ApiError } from "@/shared/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
