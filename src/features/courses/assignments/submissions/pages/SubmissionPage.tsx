@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom"
-import { useSubmission } from "../../hooks/use-submissions"
+import { useSubmission } from "../../../hooks/use-submissions"
 import { Button } from "@/components/ui/button";
-import { ExternalLink, FileText } from "lucide-react";
+import { Award, ExternalLink, FileText } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 
@@ -41,7 +41,13 @@ export default function SubmissionPage() {
                             : 'Sin enviar'}
                     </p>
                 </div>
+
                 <div className="flex items-center gap-2">
+                    <Badge variant="default" className="bg-green-700/80 text-white px-3 py-1 ">
+                        <Award className="mr-1 h-6 w-6" />
+                        {submission.grade} pts
+                    </Badge>
+
                     {submission.isLate && <Badge variant="destructive">Tarde</Badge>}
                     <Badge variant={submission.status === 'graded' ? 'default' : 'secondary'}>
                         {STATUS_LABEL[submission.status]}
@@ -73,8 +79,8 @@ export default function SubmissionPage() {
                                     key={file.id}
                                     onClick={() => setActiveFileId(file.id)}
                                     className={`flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium transition-colors ${activeFile?.id === file.id
-                                            ? 'border-primary bg-primary/10 text-primary'
-                                            : 'text-muted-foreground hover:bg-muted'
+                                        ? 'border-primary bg-primary/10 text-primary'
+                                        : 'text-muted-foreground hover:bg-muted'
                                         }`}
                                 >
                                     <FileText className="h-3.5 w-3.5" />

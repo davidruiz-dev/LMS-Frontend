@@ -1,6 +1,6 @@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useDeleteModule } from "@/features/courses/hooks/use-modules";
-import { showError, showSuccess } from "@/helpers/alerts";
+import { showError, showSuccess } from "@/shared/helpers/alerts";
 import { Trash2Icon } from "lucide-react";
 import type { FC } from "react";
 

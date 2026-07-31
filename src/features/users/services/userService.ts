@@ -1,5 +1,5 @@
 import type { UserFormData } from "@/features/users/schemas";
-import { api } from "@/lib/client";
+import { api } from "@/shared/lib/client";
 import type { PaginatedResponse, PaginationFilters, User } from "@/shared/types";
 
 const USER_URL = "/users"

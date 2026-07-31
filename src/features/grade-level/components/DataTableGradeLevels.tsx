@@ -6,12 +6,12 @@ import { Loader2, PlusCircleIcon, Search } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useCreateGradeLevel, useGradeLevels, useUpdateGradeLevel } from '@/features/grade-level/hooks/use-gradeLevels'
-import { useAuth } from '@/shared/providers/AuthProvider'
 import { USER_ROLES } from '@/shared/constants'
 import EditGradeLevelModal from '@/features/grade-level/components/EditGradeLevelModal'
 import CreateGradeLevelModal from '@/features/grade-level/components/CreateGradeLevelModal'
 import type { GradeLevel } from '@/features/grade-level/types'
 import type { PaginationFilters } from '@/shared/types'
+import { useAuth } from '@/app/providers/AuthProvider'
 
 const DataTableGradeLevels: React.FC = () => {
     const { isAuthenticated, user } = useAuth()
@@ -25,8 +25,8 @@ const DataTableGradeLevels: React.FC = () => {
     const [filters, setFilters] = useState<PaginationFilters>({
         page: 1,
         limit: 10,
-        sortBy: 'createdAt',
-        orderBy: 'DESC',
+        order: 'DESC',
+        orderBy: 'createdAt',
         search: ''
     })
 

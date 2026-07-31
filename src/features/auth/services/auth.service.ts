@@ -1,5 +1,5 @@
 import type { LoginCredentials, LoginResponse } from "@/features/auth/types";
-import { api } from "@/lib/client";
+import { api } from "@/shared/lib/client";
 
 export const authAPI = {
   login: async (credentials: LoginCredentials): Promise<LoginResponse> => {

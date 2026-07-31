@@ -1,8 +1,8 @@
-import Layout from '@/components/layout/Layout';
+import Layout from '@/app/layouts/Layout';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { ProtectedRoute } from '@/features/auth/components/ProtectedRoute';
 import { PublicRoute } from '@/features/auth/components/PublicRoute';
-import CourseLayout from '@/features/courses/components/layout/CourseLayout';
+import CourseLayout from '@/app/layouts/CourseLayout';
 import { AssignmentService } from '@/features/courses/assignments/services/assignmentsService';
 import { CourseService } from '@/features/courses/services/courseService';
 import { lazy, Suspense } from 'react';
@@ -16,9 +16,11 @@ const UsersPage = lazy(() => import('@/features/users/pages/UsersPage'));
 const AddUserPage = lazy(() => import('@/features/users/pages/AddUserPage'));
 const EditUserPage = lazy(() => import('@/features/users/pages/EditUserPage'));
 // courses
+const CourseGuard = lazy(() => import('@/guards/CourseGuard'));
+
 const CoursesPage = lazy(() => import('@/features/courses/pages/CoursesPage'));
 const AddCoursePage = lazy(() => import('@/features/courses/pages/AddCoursePage'));
-const EditCourseRoute = lazy(() => import('@/router/EditCourseRoute'));
+const EditCoursePage = lazy(() => import('@/features/courses/pages/EditCoursePage'))
 const CoursePage = lazy(() => import('@/features/courses/pages/CoursePage'));
 const CourseEnrollmentsPage = lazy(() => import('@/features/courses/enrollments/pages/CourseEnrollmentsPage'));
 const CourseModulesPage = lazy(() => import('@/features/courses/modules/pages/CourseModulesPage'));
@@ -36,8 +38,8 @@ const ManualGradingPage = lazy(() => import('@/features/courses/quizzes/pages/Ma
 
 const GradeLevelsPage = lazy(() => import('@/features/grade-level/pages/GradeLevelsPage'));
 
-const AssignmentSubmissionsPage = lazy(() => import('@/features/courses/assignments/pages/AssignmentSubmissionsPage'));
-const SubmissionPage = lazy(() => import('@/features/courses/assignments/pages/SubmissionPage'));
+const AssignmentSubmissionsPage = lazy(() => import('@/features/courses/assignments/submissions/pages/AssignmentSubmissionsPage'));
+const SubmissionPage = lazy(() => import('@/features/courses/assignments/submissions/pages/SubmissionPage'));
 
 const LazyWrapper = ({ children }: { children: React.ReactNode }) => (
   <Suspense fallback={
@@ -114,7 +116,9 @@ export const router = createBrowserRouter([
               },
               {
                 path: 'editar/:id',
-                element: <EditCourseRoute />,
+                element: <CourseGuard check={(a) => a.canEdit}>
+                          <EditCoursePage />
+                        </CourseGuard>,
                 handle: {
                   breadcrumb: () => 'Editar'
                 }

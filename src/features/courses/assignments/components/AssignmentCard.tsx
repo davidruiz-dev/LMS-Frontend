@@ -2,69 +2,143 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { ROUTES } from "@/shared/constants/routes";
-import { getDistanceToNow } from "@/utils/getDistanceToNow";
+import { getDistanceToNow } from "@/shared/utils/getDistanceToNow";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, MoreVertical } from "lucide-react";
-import { getShortDate } from "@/utils/formatDate";
-import { Separator } from "@/components/ui/separator";
-import type { Assignment } from "@/features/courses/assignments/types/assignment.types";
+import { Award, BarChart3, CalendarOffIcon, FileText, MoreVertical, Pencil, Trash2, Users } from "lucide-react";
+import { STATUS_LABEL, type AssignmentWithStats } from "@/features/courses/assignments/types/assignment.types";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { cn } from "@/shared/lib/utils";
+import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
+import { TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
+import { formatLongDate } from "@/shared/utils/formatLongDate";
+import { Tooltip } from "@/components/ui/tooltip";
+
 
 interface AssignmentCardProps {
-    assignment: Assignment;
+    assignment: AssignmentWithStats;
     canAccess?: boolean;
 }
 
 export function AssignmentCard({ assignment, canAccess }: AssignmentCardProps) {
     const navigate = useNavigate();
+    const isOverdue = new Date(assignment.dueDate) < new Date();
+    const timeLeft = getDistanceToNow(assignment.dueDate);
+
+    const getSubmissionStatusDisplay = () => {
+        if (!assignment) return null;
+        if(!assignment.stats.status) return (
+            <Badge variant={"destructive"}>
+                Pendiente
+            </Badge>
+        );
+        const status = STATUS_LABEL[assignment.stats.status];
+        return (
+            <Badge variant={status.variant} className="text-xs">
+                {status.label}
+            </Badge>
+        );
+    };
+
     return (
-        <div
-            key={assignment.id}
-            className="p-4 border rounded bg-card cursor-pointer hover:bg-sky-100/20 dark:hover:bg-sky-100/10 space-y-2"
+        <Card
+            className={cn(
+                "cursor-pointer transition-all hover:shadow-lg",
+                !assignment.isPublished && "opacity-75"
+            )}
             onClick={() => navigate(ROUTES.COURSE_ASSIGNMENT(assignment.courseId, assignment.id))}
         >
-            <div className="flex justify-between items-center">
-                <div className="flex items-center gap-3">
-                    <h1 className="font-bold">{assignment.name}</h1>
-                    <span className="text-xs text-muted-foreground">
-                        publicado {getDistanceToNow(assignment.createdAt)}
-                    </span>
+            <CardHeader>
+                <div className="flex items-start justify-between">
+                    <div className="space-y-1 flex-1">
+                        <div className="flex items-center gap-2">
+                            <h3 className="font-semibold line-clamp-1">{assignment.name}</h3>
+                            
+                        </div>
+                        <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                            <div className="flex items-center gap-1">
+                                <FileText className="h-3 w-3" />
+                                <span>{assignment.maxPoints} pts</span>
+                            </div>
+                            <Badge variant={new Date() > new Date(assignment.dueDate) ? 'destructive' : 'default'}>
+                                <div className="flex items-center gap-1">
+                                    <CalendarOffIcon className="h-3 w-3" />
+                                    <span>{formatLongDate(assignment.dueDate)}</span>
+                                </div>
+                            </Badge>
+                        </div>
+                    </div>
+
                     {canAccess && (
-                        <Badge variant={assignment.isPublished ? 'default' : 'destructive'}>
-                            {assignment.isPublished ? 'publicado' : 'borrador'}
-                        </Badge>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon" onClick={(e) => e.stopPropagation()}>
+                                    <MoreVertical className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>Opciones</DropdownMenuLabel>
+                                <DropdownMenuItem onClick={(e) => {
+                                    e.stopPropagation();
+                                    // Editar tarea
+                                }}>
+                                    <Pencil className="mr-2 h-4 w-4" />
+                                    Editar
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={(e) => {
+                                    e.stopPropagation();
+                                    // Ver estadísticas
+                                }}>
+                                    <BarChart3 className="mr-2 h-4 w-4" />
+                                    Estadísticas
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                    className="text-destructive"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        // Eliminar tarea
+                                    }}
+                                >
+                                    <Trash2 className="mr-2 h-4 w-4" />
+                                    Eliminar
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     )}
                 </div>
-                {canAccess && (
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <MoreVertical className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                            <DropdownMenuItem
-                                onClick={() => navigate(ROUTES.COURSE_ASSIGNMENT(assignment.courseId, assignment.id))}
-                            >
-                                Ver contenido
-                            </DropdownMenuItem>
-                            <Separator />
-                            <DropdownMenuItem
-                                variant="destructive"
-                            >
-                                Eliminar
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                )}
-            </div>
-            <p className="text-sm text-muted-foreground truncate">{assignment.description}</p>
-            <div className="flex">
-                <div className="flex items-center gap-1 p-1.5 bg-amber-200/50 rounded">
-                    <Calendar className="size-3" />
-                    <span className="text-xs">Vence {getShortDate(new Date(assignment.dueDate))}</span>
+            </CardHeader>
+
+            <CardContent className="space-y-3">
+  
+                <div className="flex items-center justify-between text-sm">
+
+                    {!canAccess && assignment.stats.grade && (
+                        <Badge variant={"secondary"}><Award/> {assignment.stats.grade} / {assignment.maxPoints} ptos</Badge>
+                    )}
+
+                    {!canAccess && (
+                        getSubmissionStatusDisplay()
+                    )}
+
+                    
+
+                    {canAccess && assignment.isPublished && (
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <Badge variant="secondary">
+                                        <Users className="mr-1 h-3 w-3" />
+                                        {assignment.stats.totalSubmissions || 0} entregadas
+                                    </Badge>
+                                </TooltipTrigger>
+                            </Tooltip>
+                        </TooltipProvider>
+                    )}
+
                 </div>
-            </div>
-        </div>
+
+                
+            </CardContent>
+        </Card>
     )
 }

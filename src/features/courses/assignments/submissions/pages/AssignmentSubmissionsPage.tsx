@@ -1,7 +1,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import type { Submission } from "../types/assignment.types";
+import type { Submission } from "../../types/assignment.types";
 import { useMemo, useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -11,9 +11,9 @@ import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { ROUTES } from "@/shared/constants/routes";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useAssignment } from "../../hooks/use-assignments";
-import { useEnrollmentsByCourse } from "../../hooks/use-enrollments";
-import { useAssignmentSubmissions, useGradeSubmission } from "../../hooks/use-submissions";
+import { useAssignment } from "../../../hooks/use-assignments";
+import { useEnrollmentsByCourse } from "../../../hooks/use-enrollments";
+import { useAssignmentSubmissions, useGradeSubmission } from "../../../hooks/use-submissions";
 import { es } from "date-fns/locale";
 
 type SortField = "student" | "submittedAt" | "grade" | "attempts";

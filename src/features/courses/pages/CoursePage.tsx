@@ -7,7 +7,7 @@ import { Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/shared/constants/routes";
 import { useCourseAccess } from "@/features/courses/hooks/use-course-access";
-import { getDistanceToNow } from "@/utils/getDistanceToNow";
+import { getDistanceToNow } from "@/shared/utils/getDistanceToNow";
 
 const CoursePage = () => {
     const { id } = useParams<{ id: string }>();
@@ -25,7 +25,7 @@ const CoursePage = () => {
     return (
         <div className="space-y-4">
             <div className="flex items-center justify-between">
-                <h1 className="text-3xl dark:text-gray-100 font-bold">{courseDetail?.name}</h1>
+                <h1 className="text-3xl dark:text-gray-100 font-bold first-letter:uppercase">{courseDetail?.name}</h1>
 
                 {access?.isOwner && (
                     <Button onClick={onPublish} disabled={courseDetail.status === 'published'} variant={'blue'}>

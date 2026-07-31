@@ -1,6 +1,6 @@
 import type { ModuleFormData, ModuleItemFormData } from "@/features/courses/modules/schemas/module.schema";
 import type { Module, ModuleItem, ReorderModuleItemsDto, ReorderModulesDto } from "@/features/courses/modules/types/module.types";
-import { api } from "@/lib/client";
+import { api } from "@/shared/lib/client";
 
 export const moduleService = {
     getModulesByCourse: async (courseId: string): Promise<Module[]> => {

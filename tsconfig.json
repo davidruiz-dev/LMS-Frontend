@@ -6,10 +6,11 @@
   ],
   "compilerOptions": {
     "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
     "paths": {
       "@/*": ["./src/*"],
-      "@/hooks/*": ["src/hooks/*"],
-      "@/lib/*": ["src/lib/*"],
+      "@/hooks/*": ["src/shared/hooks/*"],
+      "@/lib/*": ["src/shared/lib/*"],
       "@/types/*": ["./src/shared/types/*"],
       "@/features/*": ["./src/features/*"]
     }

@@ -1,9 +1,9 @@
 // features/assignments/submissions.hooks.ts
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Submission } from "../assignments/types/assignment.types";
-import { api } from "@/lib/client";
-import { showError, showSuccess } from "@/helpers/alerts";
-import { SubmissionService } from "../assignments/services/submissionService";
+import { api } from "@/shared/lib/client";
+import { showError, showSuccess } from "@/shared/helpers/alerts";
+import { SubmissionService } from "../assignments/submissions/services/submissionService";
 import type { ApiError } from "@/shared/types";
 
 // ── Keys ──────────────────────────────────────────────────────────────────────

@@ -1,5 +1,5 @@
+import { useAuth } from '@/app/providers/AuthProvider'
 import { LoadingSpinner } from '@/components/ui/loading-spinner'
-import { useAuth } from '@/shared/providers/AuthProvider'
 import React from 'react'
 import { Navigate } from 'react-router-dom'
 

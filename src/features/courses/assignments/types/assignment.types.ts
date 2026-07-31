@@ -62,3 +62,24 @@ export interface SubmissionAttachment {
   submissionId: string;
   createdAt: Date;
 }
+
+export const STATUS_LABEL: Record<Submission['status'], { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }> = {
+  submitted: { label: 'Entregado', variant: 'secondary' },
+  graded: { label: 'Calificado', variant: 'default' },
+  pending: { label: 'Pendiente', variant: 'outline' },
+  late: { label: 'Tarde', variant: 'destructive' }
+};
+
+
+// stats
+export interface AssignmentWithStats extends Assignment{
+  stats: AssignmentStats;
+}
+
+type AssignmentStats = {
+  status: SubmissionStatus;
+  submitted: boolean;
+  grade?: number;
+  totalSubmissions: number;
+  averageGrade: number;
+};

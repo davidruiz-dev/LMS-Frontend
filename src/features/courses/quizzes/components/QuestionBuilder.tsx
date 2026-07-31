@@ -10,7 +10,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useAddQuestion, useDeleteQuestion } from '../hooks/use-quizzes';
 import { Plus, Trash2, GripVertical, Check, X, Loader2, FileQuestion } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import { QuestionType, type QuizQuestion } from '@/features/courses/quizzes/types/quiz.types';
 import { questionSchema, type QuestionFormValues } from '@/features/courses/quizzes/schemas/quiz.schema';
 

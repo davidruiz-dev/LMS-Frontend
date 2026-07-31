@@ -1,6 +1,6 @@
 import type { EnrollmentFormData } from "@/features/courses/enrollments/schemas/enrollment.schema";
 import { EnrollmentService } from "@/features/courses/enrollments/services/enrollmentService";
-import { showError, showSuccess } from "@/helpers/alerts";
+import { showError, showSuccess } from "@/shared/helpers/alerts";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useEnrollmentsByCourse(id: string) {

@@ -76,9 +76,12 @@ export default function AssignmentsList({ courseId, canAccess }: Props) {
                     </Select>
                 </div>
             )}
-            <div className="w-full grid grid-cols-1 xl:grid-cols-2 gap-2">
+
+            
+            
+            <div className="w-full grid grid-cols-1 xl:grid-cols-2 gap-4">
                 {assignments.map((assignment) => (
-                    <AssignmentCard assignment={assignment} canAccess={canAccess} />
+                    <AssignmentCard assignment={assignment} canAccess={canAccess} key={assignment.id}/>
                 ))}
             </div>
         </div>

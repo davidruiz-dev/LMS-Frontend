@@ -4,7 +4,7 @@ import { Accordion } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Book, Plus } from "lucide-react";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 import { ModuleAccordionItem } from "@/features/courses/modules/components/ModuleAccordionItem";
 import { CreateModuleDialog } from "@/features/courses/modules/components/CreateModuleDialog";
 import { Skeleton } from "@/components/ui/skeleton";

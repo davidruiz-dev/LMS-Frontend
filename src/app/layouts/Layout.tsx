@@ -3,7 +3,7 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Outlet } from "react-router-dom";
 import { AppSidebar } from "@/components/app-sidebar";
 import Header from "@/components/Header";
-import { ThemeProvider } from "../theme-provider";
+import { ThemeProvider } from "../providers/theme-provider";
 
 
 export default function Layout() {
