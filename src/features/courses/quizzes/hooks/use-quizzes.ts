@@ -225,7 +225,7 @@ export const useGradeAnswer = () => {
     onSuccess: (_, { answerId }) => {
       // Invalidar queries relacionadas
       queryClient.invalidateQueries({ queryKey: quizKeys.all });
-      toast.success('Answer graded successfully');
+      toast.success('Calificado correctamente');
     },
     onError: (error) => {
       toast.error(error.message || 'Failed to grade answer');

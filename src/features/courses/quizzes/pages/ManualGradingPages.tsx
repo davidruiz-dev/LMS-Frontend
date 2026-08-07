@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { usePendingGrading, useQuiz, useGradeAnswer } from '../hooks/use-quizzes';
@@ -94,23 +93,17 @@ export default function ManualGradingPage () {
   ) || 0;
 
   return (
-    <div className="container max-w-6xl py-8 space-y-6">
+    <div className="container space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => navigate(`/courses/${courseId}/quizzes/${quizId}/attempts`)}
-        >
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
+    
         <div className="flex-1">
-          <h1 className="text-3xl font-bold">Manual Grading</h1>
+          <h1 className="text-3xl font-bold">Calificación manual</h1>
           <p className="text-muted-foreground">{quiz.title}</p>
         </div>
         <Badge variant="secondary" className="text-lg px-4 py-2">
           <Clock className="mr-2 h-5 w-5" />
-          {totalPending} pending
+          {totalPending} pendientes
         </Badge>
       </div>
 
@@ -122,10 +115,10 @@ export default function ManualGradingPage () {
               <Clock className="h-5 w-5 text-blue-600 dark:text-blue-400" />
             </div>
             <div>
-              <p className="font-medium mb-1">Manual grading required</p>
+              <p className="font-medium mb-1">Calificación manual requerida</p>
               <p className="text-sm text-muted-foreground">
-                This quiz contains essay, short answer, or fill-in-the-blank questions that require manual grading.
-                Review each student's response and assign points.
+                Este cuestionario contiene preguntas de ensayo, respuesta corta o completar el espacio en blanco que requieren calificación manual.
+                Revisa la respuesta de cada estudiante y asigna puntos.
               </p>
             </div>
           </div>
@@ -137,9 +130,9 @@ export default function ManualGradingPage () {
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <CheckCircle className="h-12 w-12 text-green-500 mb-4" />
-            <p className="text-lg font-medium mb-2">All caught up!</p>
+            <p className="text-lg font-medium mb-2">¡Todo al día!</p>
             <p className="text-sm text-muted-foreground">
-              There are no attempts pending manual grading
+              No hay intentos pendientes de calificación para este cuestionario.
             </p>
           </CardContent>
         </Card>
@@ -162,19 +155,19 @@ export default function ManualGradingPage () {
                           {attempt.student?.firstName} {attempt.student?.lastName}
                         </CardTitle>
                         <CardDescription>
-                          Attempt #{attempt.attemptNumber} • Submitted {format(new Date(attempt.submittedAt!), 'MMM dd, h:mm a')}
+                          Intento #{attempt.attemptNumber} • Enviado {format(new Date(attempt.submittedAt!), 'MMM dd, h:mm a')}
                         </CardDescription>
                       </div>
                     </div>
                     <Badge variant="secondary">
-                      {ungradedAnswers.length} ungraded
+                      {ungradedAnswers.length} pendientes
                     </Badge>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {ungradedAnswers.map((answer) => (
                     <Card key={answer.id} className="border-yellow-200 bg-yellow-50/50 dark:bg-yellow-950/20">
-                      <CardContent className="pt-6">
+                      <CardContent>
                         <div className="space-y-4">
                           {/* Question */}
                           <div>
@@ -183,7 +176,7 @@ export default function ManualGradingPage () {
                                 {answer.question.type.replace('_', ' ')}
                               </Badge>
                               <span className="text-xs text-muted-foreground">
-                                {answer.question.points} points possible
+                                {answer.question.points} puntos posibles
                               </span>
                             </div>
                             <p className="font-medium">{answer.question.questionText}</p>
@@ -192,10 +185,10 @@ export default function ManualGradingPage () {
                           {/* Student Answer */}
                           <div className="p-4 rounded-lg bg-muted/50 border">
                             <Label className="text-xs text-muted-foreground mb-2">
-                              Student's Answer:
+                              Respuesta del estudiante:
                             </Label>
                             <p className="text-sm whitespace-pre-wrap">
-                              {answer.answerText || <em className="text-muted-foreground">No answer provided</em>}
+                              {answer.answerText || <em className="text-muted-foreground">No se proporcionó respuesta</em>}
                             </p>
                           </div>
 
@@ -205,7 +198,7 @@ export default function ManualGradingPage () {
                               onClick={() => openGradingDialog(attempt, answer)}
                               size="sm"
                             >
-                              Grade Answer
+                              Calificar
                             </Button>
                           </div>
                         </div>

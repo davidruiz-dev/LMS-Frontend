@@ -1,21 +1,18 @@
 import type { AssignmentFormDataCreate } from "@/features/courses/assignments/schemas/assignment.schema";
-import type { Assignment, AssignmentFilters, AssignmentWithStats } from "@/features/courses/assignments/types/assignment.types";
+import type { Assignment, AssignmentFilters, AssignmentWithStats, InstructorAssignmentDto, StudentAssignmentDto } from "@/features/courses/assignments/types/assignment.types";
 import { api } from "@/shared/lib/client"
 
 
 export const AssignmentService = {
     // find assignments by course
-    findAllByCourse: async (courseId: string, filters?: AssignmentFilters): Promise<AssignmentWithStats[]> => {
-        const params = new URLSearchParams();
-        if (filters) {
-            Object.entries(filters).forEach(([key, value]) => {
-                if (value !== undefined && value !== null && value !== '') {
-                    params.append(key, String(value));
-                }
-            });
+    findAllByCourse: async (courseId: string, filters?: AssignmentFilters): Promise<StudentAssignmentDto[] | InstructorAssignmentDto[]> => {
+        try {
+            const { data } = await api.get(`courses/${courseId}/assignments`, { params: filters })
+            return data;
+        } catch (error: any) {
+            console.log(error)
+            return [];
         }
-        const { data } = await api.get(`courses/${courseId}/assignments`, { params })
-        return data;
     },
 
     findUpcomingByCourse: async (courseId: string): Promise<Assignment[]> => {

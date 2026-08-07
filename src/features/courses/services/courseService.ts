@@ -1,5 +1,5 @@
 import type { CourseFormData } from "@/features/courses/schemas/course.schema";
-import type { Course } from "@/features/courses/types/course.types";
+import type { Course, CourseWithStats } from "@/features/courses/types/course.types";
 import { api } from "@/shared/lib/client";
 import type { PaginatedResponse, PaginationFilters, } from "@/shared/types";
 
@@ -37,9 +37,9 @@ export const CourseService = {
     return response.data;
   },
 
-  getById: async (id: string): Promise<Course> => {
-    const response = await api.get(`${COURSE_URL}/${id}`)
-    return response.data
+  getById: async (id: string): Promise<CourseWithStats> => {
+    const { data } = await api.get<CourseWithStats>(`${COURSE_URL}/${id}`)
+    return data;
   },
 
   update: async (id: string, course: CourseFormData, image?: File) => {

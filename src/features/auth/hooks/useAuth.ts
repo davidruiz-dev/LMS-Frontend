@@ -31,6 +31,7 @@ export const useCurrentUser = (enabled: boolean = true) => {
     });
 };
 
+// NO IMPLEMENTADO EN EL BACKEND
 export const useLogoutMutation = () => {
     const queryClient = useQueryClient();
 

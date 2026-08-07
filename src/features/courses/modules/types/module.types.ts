@@ -5,7 +5,7 @@ export interface Module {
   position?: number;
   courseId?: string;
   items: ModuleItem[];
-  isPublished?: boolean;
+  isPublished: boolean;
   createdAt: string;
   updateAt: string;
 }

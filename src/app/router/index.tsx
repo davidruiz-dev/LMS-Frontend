@@ -41,6 +41,9 @@ const GradeLevelsPage = lazy(() => import('@/features/grade-level/pages/GradeLev
 const AssignmentSubmissionsPage = lazy(() => import('@/features/courses/assignments/submissions/pages/AssignmentSubmissionsPage'));
 const SubmissionPage = lazy(() => import('@/features/courses/assignments/submissions/pages/SubmissionPage'));
 
+const ProfilePage = lazy(() => import('@/features/profile/pages/ProfilePage'));
+const PublicProfilePage = lazy(() => import('@/features/profile/pages/PublicProfilePage'));
+
 const LazyWrapper = ({ children }: { children: React.ReactNode }) => (
   <Suspense fallback={
     <div className="fixed inset-0 flex items-center justify-center bg-background">
@@ -70,6 +73,20 @@ export const router = createBrowserRouter([
             handle: {
               breadcrumb: () => 'Dashboard'
             },
+          },
+          {
+            path: 'profile',
+            element: <ProfilePage />,
+            handle: {
+              breadcrumb: () => 'Mi Perfil'
+            }
+          },
+          {
+            path: 'profile/:userId',
+            element: <PublicProfilePage />,
+            handle: {
+              breadcrumb: () => 'Perfil'
+            }
           },
           {
             path: 'usuarios',

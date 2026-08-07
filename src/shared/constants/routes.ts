@@ -26,7 +26,7 @@ export const ROUTES = {
   // Estudiante
   STUDENT_DASHBOARD: '/student/dashboard',
   MY_COURSES: '/student/my-courses',
-  STUDENT_PROFILE: '/student/profile',
+  USER_PROFILE: (userId: string) => `/profile/${userId}`,
   
   // Instructor
   INSTRUCTOR_DASHBOARD: '/instructor/dashboard',

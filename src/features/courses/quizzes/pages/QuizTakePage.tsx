@@ -247,9 +247,9 @@ export default function QuizTakePage() {
     return (
       <div className="flex flex-col items-center justify-center h-screen">
         <AlertCircle className="h-12 w-12 text-muted-foreground mb-4" />
-        <p className="text-lg font-medium mb-2">Quiz not available</p>
+        <p className="text-lg font-medium mb-2">Cuestionario no disponible</p>
         <Button onClick={() => navigate(`/courses/${courseId}/quizzes`)}>
-          Back to Quizzes
+          Regresar
         </Button>
       </div>
     );
@@ -260,46 +260,46 @@ export default function QuizTakePage() {
       <div className="container py-12">
         <Card>
           <CardHeader>
-            <CardTitle className="text-3xl">{quiz.title}</CardTitle>
+            <CardTitle className="text-3xl first-letter:capitalize">{quiz.title}</CardTitle>
             {quiz.description && (
-              <CardDescription className="text-base">{quiz.description}</CardDescription>
+              <CardDescription className="text-base first-letter:capitalize">{quiz.description}</CardDescription>
             )}
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col items-center p-4 border rounded-lg">
                 <div className="text-3xl font-bold">{quiz.questions.length}</div>
-                <div className="text-sm text-muted-foreground">Questions</div>
+                <div className="text-sm text-muted-foreground">Preguntas</div>
               </div>
               <div className="flex flex-col items-center p-4 border rounded-lg">
                 <div className="text-3xl font-bold">{quiz.points || 'N/A'}</div>
-                <div className="text-sm text-muted-foreground">Total Points</div>
+                <div className="text-sm text-muted-foreground">Puntos totales</div>
               </div>
               {quiz.timeLimit && (
                 <div className="flex flex-col items-center p-4 border rounded-lg">
                   <div className="text-3xl font-bold">{quiz.timeLimit}</div>
-                  <div className="text-sm text-muted-foreground">Minutes</div>
+                  <div className="text-sm text-muted-foreground">Minutos</div>
                 </div>
               )}
               <div className="flex flex-col items-center p-4 border rounded-lg">
                 <div className="text-3xl font-bold">
                   {quiz.allowedAttempts === -1 ? '∞' : quiz.allowedAttempts}
                 </div>
-                <div className="text-sm text-muted-foreground">Attempts</div>
+                <div className="text-sm text-muted-foreground">Intentos</div>
               </div>
             </div>
 
             <div className="space-y-2 p-4 bg-muted rounded-lg">
-              <h4 className="font-semibold">Instructions:</h4>
+              <h4 className="font-semibold">Instrucciones:</h4>
               <ul className="space-y-1 text-sm text-muted-foreground">
-                <li>• Answer all questions to the best of your ability</li>
+                <li>• Responda a todas las preguntas lo mejor que puedas.</li>
                 {quiz.timeLimit && (
-                  <li>• You have {quiz.timeLimit} minutes to complete this quiz</li>
+                  <li>• Tiene {quiz.timeLimit} minutos para completar este cuestionario</li>
                 )}
-                <li>• You can navigate between questions using the buttons</li>
-                <li>• Your progress is saved automatically, even if you close the tab</li>
+                <li>• Puedes navegar entre las preguntas usando los botones.</li>
+                <li>• Su progreso se guarda automáticamente, incluso si cierra la pestaña</li>
                 {quiz.showCorrectAnswers && (
-                  <li>• Correct answers will be shown after submission</li>
+                  <li>• Las respuestas correctas se mostrarán después de la entrega</li>
                 )}
               </ul>
             </div>
@@ -310,11 +310,11 @@ export default function QuizTakePage() {
                 onClick={() => navigate(`/courses/${courseId}/quizzes`)}
                 className="flex-1"
               >
-                Cancel
+                Cancelar
               </Button>
               <Button onClick={handleStart} disabled={startAttemptMutation.isPending} className="flex-1">
                 {startAttemptMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Start Quiz
+                Empezar
               </Button>
             </div>
           </CardContent>
@@ -334,7 +334,7 @@ export default function QuizTakePage() {
         <div>
           <h1 className="text-2xl font-bold">{quiz.title}</h1>
           <p className="text-sm text-muted-foreground">
-            Question {currentQuestionIndex + 1} of {quiz.questions.length}
+            Pregunta {currentQuestionIndex + 1} de {quiz.questions.length}
           </p>
         </div>
 
@@ -356,8 +356,8 @@ export default function QuizTakePage() {
       <div className="space-y-2">
         <Progress value={progress} />
         <div className="flex justify-between text-xs text-muted-foreground">
-          <span>{answeredCount} answered</span>
-          <span>{quiz.questions.length - answeredCount} remaining</span>
+          <span>{answeredCount} respondidas</span>
+          <span>{quiz.questions.length - answeredCount} restantes</span>
         </div>
       </div>
 
@@ -370,7 +370,7 @@ export default function QuizTakePage() {
                   {currentQuestion.type.replace('_', ' ')}
                 </span>
                 <span className="text-xs font-medium bg-secondary text-secondary-foreground px-2 py-1 rounded">
-                  {currentQuestion.points} points
+                  {currentQuestion.points} puntos
                 </span>
               </div>
               <CardTitle className="text-xl">{currentQuestion.questionText}</CardTitle>
@@ -459,7 +459,7 @@ export default function QuizTakePage() {
       <div className="flex items-center justify-between">
         <Button variant="outline" onClick={goPrevious} disabled={currentQuestionIndex === 0}>
           <ChevronLeft className="mr-2 h-4 w-4" />
-          Previous
+          Anterior
         </Button>
 
         <div className="flex gap-1">
@@ -484,11 +484,11 @@ export default function QuizTakePage() {
         {currentQuestionIndex === quiz.questions.length - 1 ? (
           <Button onClick={() => setShowSubmitDialog(true)}>
             <Flag className="mr-2 h-4 w-4" />
-            Submit Quiz
+            Enviar
           </Button>
         ) : (
           <Button onClick={goNext}>
-            Next
+            Siguiente
             <ChevronRight className="ml-2 h-4 w-4" />
           </Button>
         )}
@@ -497,22 +497,22 @@ export default function QuizTakePage() {
       <AlertDialog open={showSubmitDialog} onOpenChange={setShowSubmitDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Submit Quiz?</AlertDialogTitle>
+            <AlertDialogTitle>¿Enviar Cuestionario?</AlertDialogTitle>
             <AlertDialogDescription>
-              You have answered {answeredCount} out of {quiz.questions.length} questions.
+              Has respondido {answeredCount} de {quiz.questions.length} preguntas.
               {answeredCount < quiz.questions.length && (
                 <span className="block mt-2 text-destructive">
-                  {quiz.questions.length - answeredCount} questions are unanswered.
+                  {quiz.questions.length - answeredCount} preguntas están sin responder.
                 </span>
               )}
-              <span className="block mt-2">Are you sure you want to submit?</span>
+              <span className="block mt-2">Estas seguro que deseas enviar?</span>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Review Answers</AlertDialogCancel>
+            <AlertDialogCancel>Revisar respuestas</AlertDialogCancel>
             <AlertDialogAction onClick={handleSubmit} disabled={submitAttemptMutation.isPending}>
               {submitAttemptMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Submit
+              Enviar
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

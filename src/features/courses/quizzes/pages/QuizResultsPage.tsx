@@ -9,10 +9,10 @@ import { cn } from '@/shared/lib/utils';
 import { QuestionType } from '@/features/courses/quizzes/types/quiz.types';
 
 export default function QuizResultsPage() {
-  const { id: courseId, quizId, attemptId } = useParams<{ 
-    id: string; 
-    quizId: string; 
-    attemptId: string; 
+  const { id: courseId, quizId, attemptId } = useParams<{
+    id: string;
+    quizId: string;
+    attemptId: string;
   }>();
   const navigate = useNavigate();
   const location = useLocation();
@@ -47,19 +47,12 @@ export default function QuizResultsPage() {
   const passed = percentage >= 60;
 
   return (
-    <div className="container py-8 space-y-6">
+    <div className="container space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => navigate(`/courses/${courseId}/quizzes`)}
-        >
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
         <div>
-          <h1 className="text-3xl font-bold">Quiz Results</h1>
-          <p className="text-muted-foreground">{quiz.title}</p>
+          <h1 className="text-3xl font-bold">Resultados</h1>
+          <p className="text-muted-foreground first-letter:capitalize">{quiz.title}</p>
         </div>
       </div>
 
@@ -69,7 +62,7 @@ export default function QuizResultsPage() {
             <div className="flex items-center gap-2">
               <AlertCircle className="h-5 w-5 text-yellow-600" />
               <p className="text-sm font-medium">
-                Time expired! Your quiz was automatically submitted.
+                ¡Se acabó el tiempo! Tu cuestionario se envió automáticamente.
               </p>
             </div>
           </CardContent>
@@ -79,7 +72,7 @@ export default function QuizResultsPage() {
       {/* Score Card */}
       <Card>
         <CardHeader>
-          <CardTitle>Your Score</CardTitle>
+          <CardTitle>Tu puntuación</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex items-center justify-center">
@@ -90,7 +83,7 @@ export default function QuizResultsPage() {
                 passed ? "bg-green-500" : "bg-red-500"
               )}>
                 {passed ? <Check className="mr-1 h-3 w-3" /> : <X className="mr-1 h-3 w-3" />}
-                {passed ? 'Passed' : 'Failed'}
+                {passed ? 'Aprobado' : 'Reprobado'}
               </Badge>
             </div>
           </div>
@@ -100,17 +93,17 @@ export default function QuizResultsPage() {
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
               <div className="text-2xl font-bold">{score}</div>
-              <div className="text-sm text-muted-foreground">Points Earned</div>
+              <div className="text-sm text-muted-foreground">Puntos obtenidos</div>
             </div>
             <div>
               <div className="text-2xl font-bold">{totalPoints}</div>
-              <div className="text-sm text-muted-foreground">Total Points</div>
+              <div className="text-sm text-muted-foreground">Puntos totales</div>
             </div>
             <div>
               <div className="text-2xl font-bold">
                 {attempt.timeSpent ? Math.floor(attempt.timeSpent / 60) : 0}m
               </div>
-              <div className="text-sm text-muted-foreground">Time Spent</div>
+              <div className="text-sm text-muted-foreground">Tiempo invertido</div>
             </div>
           </div>
         </CardContent>
@@ -119,11 +112,11 @@ export default function QuizResultsPage() {
       {/* Questions Review */}
       {quiz.showCorrectAnswers && (
         <div className="space-y-4">
-          <h2 className="text-2xl font-bold">Answer Review</h2>
-          
+          <h2 className="text-2xl font-bold">Revisión de respuestas</h2>
+
           {attempt.answers.map((answer, index) => {
             const question = answer.question;
-            
+
             return (
               <Card key={answer.id}>
                 <CardHeader>
@@ -131,17 +124,17 @@ export default function QuizResultsPage() {
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
                         <span className="text-sm font-medium text-muted-foreground">
-                          Question {index + 1}
+                          Pregunta {index + 1}
                         </span>
                         {answer.isCorrect ? (
                           <Badge className="bg-green-500">
                             <Check className="mr-1 h-3 w-3" />
-                            Correct
+                            Correcto
                           </Badge>
                         ) : (
                           <Badge variant="destructive">
                             <X className="mr-1 h-3 w-3" />
-                            Incorrect
+                            Incorrecto
                           </Badge>
                         )}
                         <span className="text-sm text-muted-foreground">
@@ -156,58 +149,58 @@ export default function QuizResultsPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {/* Multiple Choice / True False */}
-                  {(question.type === QuestionType.MULTIPLE_CHOICE || 
+                  {(question.type === QuestionType.MULTIPLE_CHOICE ||
                     question.type === QuestionType.TRUE_FALSE) && (
-                    <div className="space-y-2">
-                      {question.options.map((option) => {
-                        const isSelected = answer.selectedOptionIds?.includes(option.id);
-                        const isCorrect = option.isCorrect;
-                        
-                        return (
-                          <div
-                            key={option.id}
-                            className={cn(
-                              "flex items-center gap-3 p-3 rounded-lg border-2",
-                              isCorrect && "border-green-500 bg-green-50 dark:bg-green-950",
-                              isSelected && !isCorrect && "border-red-500 bg-red-50 dark:bg-red-950",
-                              !isSelected && !isCorrect && "border-border"
-                            )}
-                          >
-                            {isCorrect ? (
-                              <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
-                            ) : isSelected ? (
-                              <X className="h-4 w-4 text-red-500 flex-shrink-0" />
-                            ) : (
-                              <div className="h-4 w-4 rounded-full border-2 flex-shrink-0" />
-                            )}
-                            <span className="text-sm">{option.text}</span>
-                            {isSelected && (
-                              <Badge variant="outline" className="ml-auto">
-                                Your answer
-                              </Badge>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
+                      <div className="space-y-2">
+                        {question.options.map((option) => {
+                          const isSelected = answer.selectedOptionIds?.includes(option.id);
+                          const isCorrect = option.isCorrect;
+
+                          return (
+                            <div
+                              key={option.id}
+                              className={cn(
+                                "flex items-center gap-3 p-3 rounded-lg border-2",
+                                isCorrect && "border-green-500 bg-green-50 dark:bg-green-950",
+                                isSelected && !isCorrect && "border-red-500 bg-red-50 dark:bg-red-950",
+                                !isSelected && !isCorrect && "border-border"
+                              )}
+                            >
+                              {isCorrect ? (
+                                <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
+                              ) : isSelected ? (
+                                <X className="h-4 w-4 text-red-500 flex-shrink-0" />
+                              ) : (
+                                <div className="h-4 w-4 rounded-full border-2 flex-shrink-0" />
+                              )}
+                              <span className="text-sm">{option.text}</span>
+                              {isSelected && (
+                                <Badge variant="outline" className="ml-auto">
+                                  Tu respuesta
+                                </Badge>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
 
                   {/* Text Answers */}
                   {(question.type === QuestionType.SHORT_ANSWER ||
                     question.type === QuestionType.ESSAY ||
                     question.type === QuestionType.FILL_IN_BLANK) && (
-                    <div className="space-y-2">
-                      <div className="p-4 rounded-lg bg-muted">
-                        <p className="text-sm font-medium mb-2">Your Answer:</p>
-                        <p className="text-sm">{answer.answerText || <em className="text-muted-foreground">No answer provided</em>}</p>
+                      <div className="space-y-2">
+                        <div className="p-4 rounded-lg bg-muted">
+                          <p className="text-sm font-medium mb-2">Tu respuesta:</p>
+                          <p className="text-sm">{answer.answerText || <em className="text-muted-foreground">No se ha proporcionado ninguna respuesta.</em>}</p>
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
 
                   {/* Explanation */}
                   {question.explanation && (
                     <div className="p-4 rounded-lg bg-blue-50 dark:bg-blue-950 border border-blue-200">
-                      <p className="text-sm font-medium mb-2">Explanation:</p>
+                      <p className="text-sm font-medium mb-2">Explicación:</p>
                       <p className="text-sm">{question.explanation}</p>
                     </div>
                   )}
@@ -215,7 +208,7 @@ export default function QuizResultsPage() {
                   {/* Feedback */}
                   {answer.feedback && (
                     <div className="p-4 rounded-lg bg-muted">
-                      <p className="text-sm font-medium mb-2">Instructor Feedback:</p>
+                      <p className="text-sm font-medium mb-2">Comentarios del instructor:</p>
                       <p className="text-sm">{answer.feedback}</p>
                     </div>
                   )}
@@ -231,11 +224,11 @@ export default function QuizResultsPage() {
           variant="outline"
           onClick={() => navigate(`/courses/${courseId}/quizzes`)}
         >
-          Back to Quizzes
+          Regresar
         </Button>
         {quiz.allowedAttempts === -1 || attempt.attemptNumber < quiz.allowedAttempts && (
           <Button onClick={() => navigate(`/courses/${courseId}/quizzes/${quizId}/take`)}>
-            Try Again
+            Reintentar
           </Button>
         )}
       </div>

@@ -8,7 +8,8 @@ export interface User {
   firstName: string;
   lastName: string;
   email: string;
-  avatar?: string;
+  avatarUrl?: string;
+  biography?: string;
   role: Role;
   isActive: boolean
   createdAt?: Date;

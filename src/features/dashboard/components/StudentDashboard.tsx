@@ -14,14 +14,14 @@ const StudentDashboard = () => {
     const { stats, courses } = studentDashboard;
 
     return (
-        <div className='space-y-6'>
+        <div>
             <Tabs defaultValue='courses'>
                 <TabsList>
                     <TabsTrigger value='overview'>Resumen</TabsTrigger>
-                    <TabsTrigger value='courses'>Courses</TabsTrigger>
+                    <TabsTrigger value='courses'>Cursos</TabsTrigger>
                 </TabsList>
                 <TabsContent value='overview'>
-                    <div className='space-y-4'>
+                    <div className='space-y-4 pt-4'>
                         <h1 className="text-3xl font-bold tracking-tight">¡Bienvenido {`${user?.firstName} ${user?.lastName}!`}</h1>
                         <p className="text-muted-foreground">
                             {stats.pendingAssignments === 0
@@ -64,7 +64,7 @@ const StudentDashboard = () => {
                     </div>
                 </TabsContent>
                 <TabsContent value='courses'>
-                    <div className='space-y-2'>
+                    <div className='space-y-4 pt-4'>
                         <h1 className="text-3xl font-bold tracking-tight">Mis Cursos</h1>
                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
                             {courses.map((course) => (

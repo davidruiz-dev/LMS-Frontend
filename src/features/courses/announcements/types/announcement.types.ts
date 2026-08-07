@@ -7,6 +7,7 @@ export interface Announcement {
   isPublished: boolean;
   authorId: string;
   author: User;
+  isPinned: boolean;
   createdAt: Date;
   updateAt: Date;
 }

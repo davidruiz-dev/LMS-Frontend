@@ -69,8 +69,8 @@ const CourseLayout = () => {
   }
 
   return (
-    <div className="space-y-4 flex  min-h-full items-stretch">   
-      <div className="w-62 p-4">
+    <div className="flex md:flex-row flex-col min-h-full items-stretch">   
+      <div className="md:w-62 w-full p-4 flex justify-center flex-wrap md:block gap-2">
         {items.map((item, index) => {
           const url = item.url(id)
           const active = location.pathname === url

@@ -60,9 +60,9 @@ export default function AllAttemptsPage () {
   if (!quiz) {
     return (
       <div className="flex flex-col items-center justify-center h-screen">
-        <p className="text-lg font-medium mb-2">Quiz not found</p>
+        <p className="text-lg font-medium mb-2">Cuestionario no encontrado</p>
         <Button onClick={() => navigate(`/courses/${courseId}/quizzes`)}>
-          Back to Quizzes
+          Regresar
         </Button>
       </div>
     );
@@ -94,18 +94,12 @@ export default function AllAttemptsPage () {
   };
 
   return (
-    <div className="container py-8 space-y-6">
+    <div className="container space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => navigate(`/courses/${courseId}/quizzes`)}
-        >
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
+        
         <div className="flex-1">
-          <h1 className="text-3xl font-bold">{quiz.title}</h1>
+          <h1 className="text-3xl font-bold first-letter:capitalize">{quiz.title}</h1>
           <p className="text-muted-foreground">Todos los intentos de los estudiantes</p>
         </div>
         <Button variant="outline" onClick={handleExport}>

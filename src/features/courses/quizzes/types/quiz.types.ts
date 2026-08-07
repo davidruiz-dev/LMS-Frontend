@@ -60,6 +60,9 @@ export interface Quiz {
   questions: QuizQuestion[] | [];
   createdAt: string;
   updatedAt: string;
+  // stats
+  questionCount?: number;
+  pendingAttempts?: number;
 }
 
 export interface QuizAnswer {

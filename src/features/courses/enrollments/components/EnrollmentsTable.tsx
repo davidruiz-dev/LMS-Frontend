@@ -6,12 +6,13 @@ import { useCourseAccess } from '@/features/courses/hooks/use-course-access'
 import { useDeactivateEnrollment, useEnrollmentsByCourse } from '@/features/courses/hooks/use-enrollments'
 import { ArrowUpDown, MoreHorizontal, PlusCircleIcon, Search } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { type ColumnDef, type ColumnFiltersState, type SortingState, flexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Badge } from '@/components/ui/badge'
 import type { Enrollment } from '@/features/courses/enrollments/types/enrollment.types'
 import EnrollmentForm from '@/features/courses/enrollments/components/EnrollmentForm'
+import { ROUTES } from '@/shared/constants/routes'
 
 const EnrollmentsTable = () => {
     const { id } = useParams<{ id: string }>();
@@ -22,6 +23,7 @@ const EnrollmentsTable = () => {
     const canAddEnrollment = access?.canEnrollUsers ?? false;
     const { data: enrollments = [], isLoading } = useEnrollmentsByCourse(id);
     const deactivateEnrollment = useDeactivateEnrollment();
+    const navigate = useNavigate();
 
     const handleDeactivateEnrollment = (id: string) => {
         if (window.confirm('¿Deseas cancelar esta inscripción?')) {
@@ -37,7 +39,9 @@ const EnrollmentsTable = () => {
                 header: "Estudiante",
                 cell: ({ row }) => {
                     const { firstName, lastName } = row.original.user;
-                    return <div>{`${firstName} ${lastName}`}</div>;
+                    return <div onClick={() =>navigate(ROUTES.USER_PROFILE(row.original.user.id))} className='hover:underline cursor-pointer'>
+                        {`${firstName} ${lastName}`}
+                        </div>;
                 },
             },
             {

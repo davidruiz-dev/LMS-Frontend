@@ -28,5 +28,13 @@ export const SubmissionStatus = {
   SUBMITTED: 'submitted',
   GRADED: 'graded',
   LATE: 'late',
+  RESUBMITTED: 'resubmitted'
 } as const;
 export type SubmissionStatus = (typeof SubmissionStatus)[keyof typeof SubmissionStatus];
+
+
+export interface CourseWithStats extends Course{
+  assignmentsCount: number;
+  enrollmentsCount: number;
+  modulesCount: number;
+}

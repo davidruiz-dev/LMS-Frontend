@@ -1,7 +1,7 @@
-// app/providers/auth-provider.tsx
 import { useCurrentUser, useLoginMutation, useLogoutMutation } from "@/features/auth/hooks/useAuth";
 import type { AuthContextType, LoginCredentials } from "@/features/auth/types";
 import { STORAGE_KEYS, USER_ROLES } from "@/shared/constants";
+import { useQueryClient } from "@tanstack/react-query";
 import { useContext, useEffect, useState, type ReactNode, createContext } from "react";
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -20,6 +20,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   
   // Solo hacer query del usuario si hay token
   const { data: user, isLoading, error } = useCurrentUser(!!token);
+  const queryClient = useQueryClient();
 
   const isAuthenticated = !!token && !!user && !error;
 
@@ -32,8 +33,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  
-
   const canManageCourse = (instructorId: string): boolean => {
     if (!user) return false;
     return user.id === instructorId || user.role === USER_ROLES.ADMIN;
@@ -43,6 +42,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       await logoutMutation.mutateAsync();
       setToken(null);
+      queryClient.clear();
     } catch (error) {
       // Logout local incluso si falla el servidor
       localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);

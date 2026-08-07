@@ -5,9 +5,12 @@ import { AvatarUser } from "@/components/AvatarUser"
 import Breadcrumbs from "@/components/breadcrumb"
 import { Separator } from "@/components/ui/separator"
 import { useAuth } from "@/app/providers/AuthProvider"
+import { useNavigate } from "react-router-dom"
 
 function Header() {
-    const { user } = useAuth()
+    const { user } = useAuth();
+    const navigate = useNavigate();
+    
     return (
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 border-b">
             <div className="flex items-center justify-between gap-2 px-4 w-full">
@@ -21,13 +24,12 @@ function Header() {
                     <Separator orientation="vertical"/>
                     <DropdownMenu>
                         <DropdownMenuTrigger>
-                            <AvatarUser src={user?.avatar} firstName={user!.firstName} lastName={user!.lastName} />
+                            <AvatarUser src={user?.avatarUrl} firstName={user!.firstName} lastName={user!.lastName} />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>{user?.email}</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>Profile</DropdownMenuItem>
-                            <DropdownMenuItem>Team</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => navigate('/profile')}>Perfil</DropdownMenuItem>
                             <DropdownMenuItem variant="destructive">Cerrar sesión</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>

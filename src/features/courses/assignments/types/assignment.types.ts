@@ -67,7 +67,8 @@ export const STATUS_LABEL: Record<Submission['status'], { label: string; variant
   submitted: { label: 'Entregado', variant: 'secondary' },
   graded: { label: 'Calificado', variant: 'default' },
   pending: { label: 'Pendiente', variant: 'outline' },
-  late: { label: 'Tarde', variant: 'destructive' }
+  late: { label: 'Tarde', variant: 'destructive' },
+  resubmitted: { label: 'Reenviado', variant: 'secondary' },
 };
 
 
@@ -83,3 +84,42 @@ type AssignmentStats = {
   totalSubmissions: number;
   averageGrade: number;
 };
+
+
+
+// v2
+
+export type StudentAssignmentStatus = SubmissionStatus | 'not_submitted';
+
+export interface StudentAssignmentDto {
+  id: string;
+  name: string;
+  type: AssignmentType;
+  dueDate: string;
+  maxPoints: number;
+  isAvailable: boolean;
+  status: StudentAssignmentStatus;
+  isOverdue: boolean;
+  submittedAt: string | null;
+  attemptNumber: number;
+  attemptsLeft: number;
+  grade: number | null;
+  isLate: boolean;
+  courseId: string;
+}
+
+export interface InstructorAssignmentDto {
+  id: string;
+  name: string;
+  type: AssignmentType;
+  dueDate: string;
+  maxPoints: number;
+  isPublished: boolean;
+  totalStudents: number;
+  submittedCount: number;
+  gradedCount: number;
+  pendingGradingCount: number;
+  courseId: string;
+}
+
+export type AssignmentListItem = StudentAssignmentDto | InstructorAssignmentDto;
