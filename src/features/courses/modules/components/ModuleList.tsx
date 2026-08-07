@@ -177,7 +177,11 @@ export function ModuleList({ courseId, canEdit }: ModuleListProps) {
             }
           >
             <SelectTrigger className="w-full sm:w-[180px]">
-              <SortDesc className="w-4 h-4 mr-2" />
+              {sortOrder === 'newest' ? (
+                <SortDesc className="w-4 h-4" />
+              ) : (
+                <SortAsc className="w-4 h-4" />
+              )}
               <SelectValue placeholder="Ordenar" />
             </SelectTrigger>
 
