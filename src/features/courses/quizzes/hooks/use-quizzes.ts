@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
 import { quizzesApi } from '@/features/courses/quizzes/services/quizzesService';
-import type { QuizAnswer } from '../types/quiz.types';
+import type { CreateQuestionDto, CreateQuizDto, QuizAnswer, SubmitQuizDto } from '../types/quiz.types';
+import { showError, showSuccess } from '@/shared/helpers/alerts';
 
 
 export const quizKeys = {
@@ -37,14 +37,14 @@ export const useCreateQuiz = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ courseId, data }: { courseId: string; data: any }) =>
+    mutationFn: ({ courseId, data }: { courseId: string; data: CreateQuizDto }) =>
       quizzesApi.createQuiz(courseId, data),
     onSuccess: (_, { courseId }) => {
       queryClient.invalidateQueries({ queryKey: quizKeys.listByCourse(courseId) });
-      toast.success('Quiz created successfully');
+      showSuccess('Quiz created successfully');
     },
     onError: (error) => {
-      toast.error(error.message || 'Failed to create quiz');
+      showError(error.message || 'Failed to create quiz');
     },
   });
 };
@@ -54,15 +54,15 @@ export const useUpdateQuiz = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ quizId, data }: { quizId: string; data: any }) =>
+    mutationFn: ({ quizId, data }: { quizId: string; data: CreateQuizDto }) =>
       quizzesApi.updateQuiz(quizId, data),
     onSuccess: (updatedQuiz) => {
       queryClient.invalidateQueries({ queryKey: quizKeys.detail(updatedQuiz.id) });
       queryClient.invalidateQueries({ queryKey: quizKeys.lists() });
-      toast.success('Quiz updated successfully');
+      showSuccess('Quiz updated successfully');
     },
     onError: (error) => {
-      toast.error(error.message || 'Failed to update quiz');
+      showError(error.message || 'Failed to update quiz');
     },
   });
 };
@@ -76,10 +76,10 @@ export const useDeleteQuiz = () => {
     onSuccess: (_, quizId) => {
       queryClient.invalidateQueries({ queryKey: quizKeys.lists() });
       queryClient.removeQueries({ queryKey: quizKeys.detail(quizId) });
-      toast.success('Quiz deleted successfully');
+      showSuccess('Quiz deleted successfully');
     },
     onError: (error) => {
-      toast.error(error.message || 'Failed to delete quiz');
+      showError(error.message || 'Failed to delete quiz');
     },
   });
 };
@@ -89,14 +89,14 @@ export const useAddQuestion = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ quizId, data }: { quizId: string; data: any }) =>
+    mutationFn: ({ quizId, data }: { quizId: string; data: CreateQuestionDto }) =>
       quizzesApi.addQuestion(quizId, data),
     onSuccess: (_, { quizId }) => {
       queryClient.invalidateQueries({ queryKey: quizKeys.detail(quizId) });
-      toast.success('Question added successfully');
+      showSuccess('Question added successfully');
     },
     onError: (error) => {
-      toast.error(error.message || 'Failed to add question');
+      showError(error.message || 'Failed to add question');
     },
   });
 };
@@ -106,14 +106,14 @@ export const useDeleteQuestion = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ questionId, quizId }: { questionId: string; quizId: string }) =>
+    mutationFn: ({ questionId }: { questionId: string; quizId: string }) =>
       quizzesApi.deleteQuestion(questionId),
     onSuccess: (_, { quizId }) => {
       queryClient.invalidateQueries({ queryKey: quizKeys.detail(quizId) });
-      toast.success('Question deleted successfully');
+      showSuccess('Question deleted successfully');
     },
     onError: (error) => {
-      toast.error(error.message || 'Failed to delete question');
+      showError(error.message || 'Failed to delete question');
     },
   });
 };
@@ -126,10 +126,10 @@ export const useStartAttempt = () => {
     mutationFn: (quizId: string) => quizzesApi.startAttempt(quizId),
     onSuccess: (attempt) => {
       queryClient.invalidateQueries({ queryKey: quizKeys.attempts(attempt.quizId) });
-      toast.success('Quiz started');
+      showSuccess('Quiz started');
     },
     onError: (error) => {
-      toast.error(error.message || 'Failed to start quiz');
+      showError(error.message || 'Failed to start quiz');
     },
   });
 };
@@ -139,15 +139,15 @@ export const useSubmitAttempt = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ attemptId, data }: { attemptId: string; data: any }) =>
+    mutationFn: ({ attemptId, data }: { attemptId: string; data: SubmitQuizDto }) =>
       quizzesApi.submitAttempt(attemptId, data),
     onSuccess: (attempt) => {
       queryClient.invalidateQueries({ queryKey: quizKeys.attempts(attempt.quizId) });
       queryClient.invalidateQueries({ queryKey: quizKeys.attempt(attempt.id) });
-      toast.success('Quiz submitted successfully');
+      showSuccess('Quiz submitted successfully');
     },
     onError: (error) => {
-      toast.error(error.message || 'Failed to submit quiz');
+      showError(error.message || 'Failed to submit quiz');
     },
   });
 };
@@ -217,22 +217,26 @@ export const useGradeAnswer = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ answerId, points, feedback }: { 
-      answerId: string; 
-      points: number; 
+    mutationFn: ({
+      answerId,
+      points,
+      feedback,
+    }: {
+      answerId: string;
+      points: number;
       feedback?: string;
     }) => quizzesApi.gradeManualAnswer(answerId, points, feedback),
-    onSuccess: (_, { answerId }) => {
-      // Invalidar queries relacionadas
+
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: quizKeys.all });
-      toast.success('Calificado correctamente');
+      showSuccess("Calificado correctamente");
     },
+
     onError: (error) => {
-      toast.error(error.message || 'Failed to grade answer');
+      showError(error.message || "Failed to grade answer");
     },
   });
 };
-
 
 // Get in-progress attempt
 export const useInProgressAttempt = (quizId: string, canEdit = true) => {
@@ -265,10 +269,10 @@ export const useAbandonAttempt = () => {
     mutationFn: (attemptId: string) => quizzesApi.abandonAttempt(attemptId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: quizKeys.all });
-      toast.success('Quiz abandoned');
+      showSuccess('Quiz abandoned');
     },
     onError: (error) => {
-      toast.error(error.message || 'Failed to abandon quiz');
+      showError(error.message || 'Failed to abandon quiz');
     },
   });
 };

@@ -1,4 +1,4 @@
-import { useAuth } from '@/app/providers/AuthProvider';
+import { useAuth } from '@/features/auth/hooks/useAuthContext';
 import AdminDashboard from '@/features/dashboard/components/AdminDashboard';
 import InstructorDashboard from '@/features/dashboard/components/InstructorDashboard';
 import StudentDashboard from '@/features/dashboard/components/StudentDashboard';

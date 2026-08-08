@@ -1,8 +1,9 @@
-import { Link, useMatches } from "react-router-dom";
+import type { LucideIcon } from "lucide-react";
+import { Link, useMatches, type UIMatch } from "react-router-dom";
 
 type Handle = {
-  breadcrumb?: (match: any) => string;
-  icon: any
+  breadcrumb?: (match: UIMatch) => string;
+  icon?: LucideIcon
 };
 
 export default function Breadcrumbs() {

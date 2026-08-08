@@ -1,9 +1,9 @@
 import CourseCard from '@/features/courses/components/CourseCard';
 import { useStudentDashboard } from '../hooks/useDashboard';
-import { useAuth } from '@/app/providers/AuthProvider';
 import { Award, CalendarOff, CheckCircle, Clock } from 'lucide-react';
 import { StatCard } from './StatCard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useAuth } from '@/features/auth/hooks/useAuthContext';
 
 const StudentDashboard = () => {
     const { user } = useAuth();

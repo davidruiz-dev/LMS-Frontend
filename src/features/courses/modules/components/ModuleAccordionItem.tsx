@@ -8,12 +8,13 @@ import { EditModuleDialog } from '@/features/courses/modules/components/EditModu
 import { ModuleItemList } from '@/features/courses/modules/components/ModuleItemList';
 import { Badge } from '@/components/ui/badge';
 import type { Module } from '@/features/courses/modules/types/module.types';
+import type { DraggableProvided } from '@hello-pangea/dnd';
 
 interface ModuleAccordionItemProps {
     module: Module;
     courseId: string;
     canEdit?: boolean;
-    dragHandleProps?: any;
+    dragHandleProps?: DraggableProvided;
 }
 
 export function ModuleAccordionItem({

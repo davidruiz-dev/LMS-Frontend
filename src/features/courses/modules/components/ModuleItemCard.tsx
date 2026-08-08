@@ -20,19 +20,19 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/shared/lib/utils';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
 import { useDeleteModuleItem } from '@/features/courses/hooks/use-modules';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/shared/constants/routes';
 import type { ModuleItem, ModuleItemType } from '@/features/courses/modules/types/module.types';
+import type { DraggableProvided } from '@hello-pangea/dnd';
+import EditModuleItemDialog from './EditModuleItemDialog';
 
 interface ModuleItemCardProps {
   item: ModuleItem;
   courseId: string;
   moduleId: string;
   canEdit?: boolean;
-  dragHandleProps?: any;
+  dragHandleProps?: DraggableProvided;
 }
 
 const itemTypeIcons: Record<ModuleItemType, LucideIcon> = {
@@ -63,21 +63,11 @@ export function ModuleItemCard({
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const navigate = useNavigate()
   const deleteItem = useDeleteModuleItem(courseId, moduleId);
-  //   const markComplete = useMarkItemComplete(courseId, moduleId, item.id);
-  //   const markIncomplete = useMarkItemIncomplete(courseId, moduleId, item.id);
 
   const Icon = itemTypeIcons[item.type];
   //   const isCompleted = item.completionRequirement?.completed ?? false;
   //   const isLocked = item.contentDetails?.lockedForUser ?? false;
   //   const hasDueDate = item.contentDetails?.dueAt;
-
-  const handleToggleComplete = () => {
-    // if (isCompleted) {
-    //   markIncomplete.mutate();
-    // } else {
-    //   markComplete.mutate();
-    // }
-  };
 
   const handleDelete = () => {
     if (window.confirm('¿Estás seguro de eliminar este elemento?')) {
@@ -117,17 +107,8 @@ export function ModuleItemCard({
             </div>
           )}
 
-          {/* {item.completionRequirement && !canEdit && (
-            <Checkbox
-              checked={isCompleted}
-              onCheckedChange={handleToggleComplete}
-              disabled={isLocked}
-              className="flex-shrink-0"
-            />
-          )} */}
-
           <div className="flex-shrink-0">
-            <Icon className={cn('size-4', false && 'text-muted-foreground')} />
+            <Icon className={'size-4'} />
           </div>
 
           <div className="flex-1 min-w-0">
@@ -195,13 +176,13 @@ export function ModuleItemCard({
         </div>
       </Card>
 
-      {/* <EditModuleItemDialog
+      <EditModuleItemDialog
         courseId={courseId}
         moduleId={moduleId}
         item={item}
         open={editDialogOpen}
         onOpenChange={setEditDialogOpen}
-      /> */}
+      />
     </>
   );
 }

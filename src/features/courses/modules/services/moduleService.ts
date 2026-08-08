@@ -39,6 +39,11 @@ export const moduleService = {
         return data;
     },
 
+    updateModuleItem: async (courseId: string, moduleId: string, moduleItemId: string, moduleItem: ModuleItemFormData) => {
+        const { data } = await api.patch(`/courses/${courseId}/modules/${moduleId}/items/${moduleItemId}`, moduleItem)
+        return data;
+    },
+
     deleteItem: async (courseId: string, moduleId: string, id: string) => {
         const { data } = await api.delete(`/courses/${courseId}/modules/${moduleId}/items/${id}`);
         return data;

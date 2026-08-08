@@ -1,7 +1,7 @@
-import { useAuth } from '@/app/providers/AuthProvider'
 import { LoadingSpinner } from '@/components/ui/loading-spinner'
 import React from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
+import { useAuth } from '../hooks/useAuthContext'
 
 interface ProtectedRouteProps {
   children: React.ReactNode

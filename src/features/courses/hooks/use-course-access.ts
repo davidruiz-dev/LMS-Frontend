@@ -1,10 +1,10 @@
-import { useAuth } from "@/app/providers/AuthProvider";
+import { useAuth } from "@/features/auth/hooks/useAuthContext";
 import { useCourse } from "@/features/courses/hooks/use-courses"
 import { useEnrollmentsByCourse } from "@/features/courses/hooks/use-enrollments";
 import type { CourseAccess } from "@/features/courses/types/course-access.types";
 import { COURSE_STATUS, USER_ROLES } from "@/shared/constants";
 
-export function useCourseAccess(courseId: string): CourseAccess | null {
+export function useCourseAccess(courseId?: string): CourseAccess | null {
   const { user } = useAuth();
   const { data: course, isLoading } = useCourse(courseId);
   const { data: enrollments } = useEnrollmentsByCourse(courseId);

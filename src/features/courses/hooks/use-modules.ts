@@ -22,7 +22,6 @@ export const useCreateModule = (courseId: string) => {
         },
         onError: (error) => {
             showError(error.message || "Error al crear módulo");
-            console.error(error);
         }
     })
 }
@@ -33,11 +32,11 @@ export const useUpdateModule = (courseId: string, moduleId: string) => {
     return useMutation({
         mutationFn: (data: ModuleFormData) =>
             moduleService.updateModule(courseId, moduleId, data),
-        onSuccess: (updatedModule) => {
+        onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['modules-course'] })
             showSuccess('Módulo actualizado exitosamente');
         },
-        onError: (error: any) => {
+        onError: (error) => {
             showError(error?.message || 'Error al actualizar el módulo');
         },
     });
@@ -52,8 +51,7 @@ export const useDeleteModule = (courseId: string) => {
             showSuccess('Módulo eliminado correctamente')
         },
         onError: (error) => {
-            showError('Error al eliminar el módulo')
-            console.error(error);
+            showError(error.message || 'Error al eliminar el módulo' )
         }
     })
 }
@@ -67,8 +65,7 @@ export const useReorderModules = () => {
             showSuccess("Módulos reordenados correctamente");
         },
         onError: (error) => {
-            showError("Error al reordenar módulos");
-            console.error(error);
+            showError(error.message || "Error al reordenar módulos");
         }
     })
 }
@@ -90,8 +87,21 @@ export const useCreateModuleItem = (courseId: string, moduleId: string) => {
             showSuccess('Contenido agregado correctamente')
         },
         onError: (error) => {
-            showError('Error al agregar contenido al módulo')
-            console.error(error);
+            showError(error.message || 'Error al agregar contenido al módulo')
+        }
+    })
+}
+
+export const useUpdateModuleItem = (courseId: string, moduleId: string, moduleItemId: string) => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (moduleItem: ModuleItemFormData) => moduleService.updateModuleItem(courseId, moduleId, moduleItemId, moduleItem),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['module-items'] })
+            showSuccess('Module Item actualizado')
+        },
+        onError: (error) => {
+            showError(error.message || 'Error al agregar actualizar al contenido')
         }
     })
 }
@@ -106,7 +116,6 @@ export const useDeleteModuleItem = (courseId: string, moduleId: string) => {
         },
         onError: (error) => {
             showError(error.message || "Error al reordenar elementos");
-            console.error(error);
         }
     })
 }
@@ -120,8 +129,7 @@ export const useReorderModuleItems = (courseId: string, moduleId: string) => {
             showSuccess("Elementos reordenados correctamente");
         },
         onError: (error) => {
-            showError("Error al reordenar elementos");
-            console.error(error);
+            showError(error.message || "Error al reordenar elementos");
         }
     })
 }

@@ -62,21 +62,13 @@ function FormCourse({ courseId }: Props) {
     const { data: courseData, isLoading: isLoadingCourse } = useCourse(courseId!);
 
     const loadGradeLevels = async (query?: string) => {
-        try {
-            const response = await GradeLevelService.findByName(query || "");
-            setListGradeLevels(response.data);
-        } catch (error) {
-            console.error('Error al cargar los niveles de grado:', error);
-        }
+        const response = await GradeLevelService.findByName(query || "");
+        setListGradeLevels(response.data);
     };
 
     const loadInstructors = async (email?: string) => {
-        try {
-            const response = await UsersService.findInstructorsByEmail(email || '');
-            setInstructors(response);
-        } catch (error) {
-            throw error;
-        }
+        const response = await UsersService.findInstructorsByEmail(email || '');
+        setInstructors(response);
     };
 
     useEffect(() => {

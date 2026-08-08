@@ -1,9 +1,9 @@
 // components/profile/ProfileStatsCards.tsx
 import { Card } from '@/components/ui/card';
-import { BookOpen, CheckCircle2, ClipboardCheck, Award } from 'lucide-react';
+import { BookOpen, CheckCircle2, ClipboardCheck, Award, type LucideIcon } from 'lucide-react';
 import type { ProfileStatsDto } from '../types/profile.types';
 
-function StatCard({ icon: Icon, label, value }: { icon: any; label: string; value: string | number }) {
+function StatCard({ icon: Icon, label, value }: { icon: LucideIcon; label: string; value: string | number }) {
   return (
     <Card className="p-4 flex items-center gap-3">
       <div className="rounded-full bg-muted p-2">

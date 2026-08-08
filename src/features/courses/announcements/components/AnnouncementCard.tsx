@@ -31,7 +31,6 @@ export default function AnnouncementCard({
     isPinned = false,
     onPin,
     onUnpin,
-    variant = 'default',
     className  
 }: AnnouncementCardProps) {
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);

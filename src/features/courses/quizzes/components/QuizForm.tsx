@@ -55,9 +55,9 @@ export const QuizFormDialog = ({ open, onOpenChange, quiz, courseId }: QuizFormD
   useEffect(() => {
     if (open) {
       form.reset({
-        title: quiz?.title || '',
-        description: quiz?.description || '',
-        type: quiz?.type || QuizType.GRADED,
+        title: quiz?.title ?? '',
+        description: quiz?.description ?? '',
+        type: quiz?.type ?? QuizType.GRADED,
         points: Number(quiz?.points ?? 20),
         timeLimit: quiz?.timeLimit,
         allowedAttempts: quiz?.allowedAttempts ?? 1,
@@ -68,7 +68,7 @@ export const QuizFormDialog = ({ open, onOpenChange, quiz, courseId }: QuizFormD
         published: quiz?.published ?? false,
       });
     }
-  }, [quiz, open]);
+  }, [quiz, open, form]);
 
   const onSubmit = async (data: QuizFormValues) => {
     try {

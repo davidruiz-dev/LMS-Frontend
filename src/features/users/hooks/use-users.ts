@@ -1,9 +1,10 @@
 import type { UserFormData } from "@/features/users/schemas";
 import { UsersService } from "@/features/users/services/userService";
+import type { PaginationFilters } from "@/shared/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2"
 
-export const useUsers = (filters: any = {}) => {
+export const useUsers = (filters: PaginationFilters = {}) => {
     return useQuery({
         queryKey: ["users", filters],
         queryFn: () => UsersService.getAll(filters),

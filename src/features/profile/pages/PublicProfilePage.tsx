@@ -3,17 +3,17 @@ import { useParams, Navigate } from 'react-router-dom';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { useAuth } from '@/app/providers/AuthProvider';
 import { usePublicProfile } from '../hooks/useProfile';
+import { useAuth } from '@/features/auth/hooks/useAuthContext';
 
 export default function PublicProfilePage() {
     const { userId } = useParams<{ userId: string }>();
     const { user } = useAuth();
+    const { data: profile, isLoading, isError } = usePublicProfile(userId);
 
     if (!userId) return <Navigate to="/profile" replace />;
     if (userId === user?.id) return <Navigate to="/profile" replace />;
 
-    const { data: profile, isLoading, isError } = usePublicProfile(userId);
 
     if (isLoading) {
         return (

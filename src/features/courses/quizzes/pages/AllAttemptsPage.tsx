@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ArrowLeft, Loader2, Eye, Search, Download } from 'lucide-react';
+import { Loader2, Eye, Search, Download } from 'lucide-react';
 import { format } from 'date-fns';
 import { AttemptStatus } from '../types/quiz.types';
 import { cn } from '@/shared/lib/utils';

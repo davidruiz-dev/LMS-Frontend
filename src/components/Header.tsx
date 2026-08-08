@@ -4,8 +4,8 @@ import { SidebarTrigger } from "@/components/ui/sidebar"
 import { AvatarUser } from "@/components/AvatarUser"
 import Breadcrumbs from "@/components/breadcrumb"
 import { Separator } from "@/components/ui/separator"
-import { useAuth } from "@/app/providers/AuthProvider"
 import { useNavigate } from "react-router-dom"
+import { useAuth } from "@/features/auth/hooks/useAuthContext"
 
 function Header() {
     const { user } = useAuth();

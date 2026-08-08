@@ -2,14 +2,13 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { ROUTES } from "@/shared/constants/routes";
-import { getDistanceToNow } from "@/shared/utils/getDistanceToNow";
 import { Badge } from "@/components/ui/badge";
 import { Award, BarChart3, CalendarOffIcon, FileText, MoreVertical, Pencil, Trash2, Users } from "lucide-react";
 import { STATUS_LABEL, type AssignmentWithStats } from "@/features/courses/assignments/types/assignment.types";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { cn } from "@/shared/lib/utils";
 import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
-import { TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
+import { TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
 import { formatLongDate } from "@/shared/utils/formatLongDate";
 import { Tooltip } from "@/components/ui/tooltip";
 
@@ -21,8 +20,6 @@ interface AssignmentCardProps {
 
 export function AssignmentCard({ assignment, canAccess }: AssignmentCardProps) {
     const navigate = useNavigate();
-    const isOverdue = new Date(assignment.dueDate) < new Date();
-    const timeLeft = getDistanceToNow(assignment.dueDate);
 
     const getSubmissionStatusDisplay = () => {
         if (!assignment) return null;

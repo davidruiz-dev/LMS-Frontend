@@ -5,7 +5,6 @@ export const quizzesApi = {
   // Quizzes
   getQuizzesByCourse: async (courseId: string): Promise<Quiz[]> => {
     const { data } = await api.get<Quiz[]>(`/courses/${courseId}/quizzes`);
-    console.log(data)
     return data;
   },
 

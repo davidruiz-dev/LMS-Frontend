@@ -320,7 +320,6 @@ function SubmissionRow({
 
 export default function AssignmentSubmissionsPage() {
     const { id: courseId, assignmentId } = useParams<{ id: string; assignmentId: string }>();
-    if (!courseId || !assignmentId) return null;
     const navigate = useNavigate();
 
     const { data: assignment, isLoading: assignmentLoading } = useAssignment(courseId, assignmentId);
@@ -344,7 +343,7 @@ export default function AssignmentSubmissionsPage() {
         return students.map((student) => {
             const subs = allSubmissions
                 .filter((s: Submission) => s.studentId === student.id)
-                .sort((a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+                .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
             const latest = subs[subs.length - 1] ?? null;
             return { student, submissions: subs, latestSubmission: latest };
         });
@@ -466,7 +465,6 @@ export default function AssignmentSubmissionsPage() {
     // ── Early returns ─────────────────────────────────────────────────────────
 
     if (isLoading) return <SubmissionsPageSkeleton />;
-    if (!assignment) return null;
 
     return (
         <div className="space-y-6 pb-10">
@@ -479,7 +477,7 @@ export default function AssignmentSubmissionsPage() {
                             onClick={() => navigate(`/courses/${courseId}/assignments/${assignmentId}`)}
                             className="hover:text-foreground transition-colors"
                         >
-                            {assignment.name}
+                            {assignment?.name}
                         </button>
                         <ChevronRight className="h-3.5 w-3.5" />
                         <span>Entregas</span>
@@ -540,7 +538,7 @@ export default function AssignmentSubmissionsPage() {
                     </p>
                     {stats.avgGrade !== null && (
                         <p className="text-xs text-muted-foreground">
-                            / {assignment.maxPoints ?? "—"} pts
+                            / {assignment?.maxPoints ?? "—"} pts
                         </p>
                     )}
                 </div>
@@ -644,7 +642,7 @@ export default function AssignmentSubmissionsPage() {
                                     <SubmissionRow
                                         key={row.student.id}
                                         row={row}
-                                        maxScore={Number(assignment.maxPoints) ?? 100}
+                                        maxScore={Number(assignment?.maxPoints)}
                                         courseId={courseId!}
                                         assignmentId={assignmentId!}
                                         onGrade={handleGrade}

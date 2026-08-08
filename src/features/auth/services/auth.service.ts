@@ -7,8 +7,8 @@ export const authAPI = {
     return response.data;
   },
 
-  getCurrentUser: async (): Promise<any> => {
-    const response = await api.get<any>('/auth/me');
+  getCurrentUser: async () => {
+    const response = await api.get('/auth/me');
     return response.data;
   },
 

@@ -26,7 +26,7 @@ export default function AnnouncementsList({ courseId, access }: AnnouncementsLis
 
     const filteredAnnouncements = useMemo(() => {
         // filtros
-        let filtered = announcements.filter(announcement => {
+        const filtered = announcements.filter(announcement => {
             const matchedSearch =
                 announcement.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 announcement.content.toLowerCase().includes(searchTerm.toLowerCase()) 
@@ -140,7 +140,7 @@ export default function AnnouncementsList({ courseId, access }: AnnouncementsLis
                 {access && (
                     <Select
                         value={filterType}
-                        onValueChange={(value: any) => setFilterType(value)}
+                        onValueChange={(value) => setFilterType(value as 'published' | 'draft')}
                     >
                         <SelectTrigger >
                             <Filter className="w-4 h-4 mr-2" />

@@ -1,5 +1,5 @@
 import type { AssignmentFormDataCreate } from "@/features/courses/assignments/schemas/assignment.schema";
-import type { Assignment, AssignmentFilters, AssignmentWithStats, InstructorAssignmentDto, StudentAssignmentDto } from "@/features/courses/assignments/types/assignment.types";
+import type { Assignment, AssignmentFilters, InstructorAssignmentDto, StudentAssignmentDto } from "@/features/courses/assignments/types/assignment.types";
 import { api } from "@/shared/lib/client"
 
 
@@ -9,8 +9,7 @@ export const AssignmentService = {
         try {
             const { data } = await api.get(`courses/${courseId}/assignments`, { params: filters })
             return data;
-        } catch (error: any) {
-            console.log(error)
+        } catch {
             return [];
         }
     },

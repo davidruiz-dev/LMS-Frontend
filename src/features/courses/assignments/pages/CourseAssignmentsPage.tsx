@@ -8,7 +8,6 @@ import { useParams } from "react-router-dom";
 
 export default function CourseAssignmentsPage() {
   const { id: courseId } = useParams();
-  if (!courseId) return null;
   const [openModal, setOpenModal] = useState(false);
   const toggle = () => setOpenModal(prev => !prev);
 
@@ -27,9 +26,9 @@ export default function CourseAssignmentsPage() {
         )}
       </div>
 
-      <AssignmentsList courseId={courseId} canAccess={isOwner}/>
+      <AssignmentsList courseId={courseId!} isOwner={isOwner}/>
 
-      <CreateAssignment courseId={courseId} open={openModal} onOpenChange={setOpenModal} />
+      <CreateAssignment courseId={courseId!} open={openModal} onOpenChange={setOpenModal} />
     </div>
   )
 }

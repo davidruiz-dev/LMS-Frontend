@@ -46,22 +46,18 @@ export const QuestionBuilder = ({ quizId, questions = [] }: QuestionBuilderProps
   const questionType = form.watch('type');
 
   const onSubmit = async (data: QuestionFormValues) => {
-    try {
-      // Validar que al menos una opción sea correcta para multiple choice y true/false
-      if (data.type === QuestionType.MULTIPLE_CHOICE || data.type === QuestionType.TRUE_FALSE) {
-        const hasCorrect = data.options.some(opt => opt.isCorrect);
-        if (!hasCorrect) {
-          form.setError('options', { message: 'At least one option must be correct' });
-          return;
-        }
+    // Validar que al menos una opción sea correcta para multiple choice y true/false
+    if (data.type === QuestionType.MULTIPLE_CHOICE || data.type === QuestionType.TRUE_FALSE) {
+      const hasCorrect = data.options.some(opt => opt.isCorrect);
+      if (!hasCorrect) {
+        form.setError('options', { message: 'At least one option must be correct' });
+        return;
       }
-
-      await addQuestionMutation.mutateAsync({ quizId, data });
-      form.reset();
-      setIsAdding(false);
-    } catch (error) {
-      // Error handled by mutation
     }
+
+    await addQuestionMutation.mutateAsync({ quizId, data });
+    form.reset();
+    setIsAdding(false);
   };
 
   const handleDelete = async (questionId: string) => {
@@ -141,7 +137,7 @@ export const QuestionBuilder = ({ quizId, questions = [] }: QuestionBuilderProps
         return (
           <div className="space-y-4">
             <FormLabel>Options</FormLabel>
-            
+
             <div className="space-y-2">
               <FormField
                 control={form.control}
@@ -149,12 +145,12 @@ export const QuestionBuilder = ({ quizId, questions = [] }: QuestionBuilderProps
                 render={({ field }) => (
                   <FormItem>
                     <div className="flex items-center gap-3 rounded-lg border p-4 cursor-pointer hover:bg-accent"
-                         onClick={() => {
-                           form.setValue('options.0.isCorrect', true);
-                           form.setValue('options.1.isCorrect', false);
-                           form.setValue('options.0.text', 'True');
-                           form.setValue('options.1.text', 'False');
-                         }}>
+                      onClick={() => {
+                        form.setValue('options.0.isCorrect', true);
+                        form.setValue('options.1.isCorrect', false);
+                        form.setValue('options.0.text', 'True');
+                        form.setValue('options.1.text', 'False');
+                      }}>
                       <FormControl>
                         <Checkbox checked={field.value} />
                       </FormControl>
@@ -175,12 +171,12 @@ export const QuestionBuilder = ({ quizId, questions = [] }: QuestionBuilderProps
                 render={({ field }) => (
                   <FormItem>
                     <div className="flex items-center gap-3 rounded-lg border p-4 cursor-pointer hover:bg-accent"
-                         onClick={() => {
-                           form.setValue('options.0.isCorrect', false);
-                           form.setValue('options.1.isCorrect', true);
-                           form.setValue('options.0.text', 'True');
-                           form.setValue('options.1.text', 'False');
-                         }}>
+                      onClick={() => {
+                        form.setValue('options.0.isCorrect', false);
+                        form.setValue('options.1.isCorrect', true);
+                        form.setValue('options.0.text', 'True');
+                        form.setValue('options.1.text', 'False');
+                      }}>
                       <FormControl>
                         <Checkbox checked={field.value} />
                       </FormControl>
@@ -260,7 +256,7 @@ export const QuestionBuilder = ({ quizId, questions = [] }: QuestionBuilderProps
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                {question.options.map((option, optIndex) => (
+                {question.options.map((option) => (
                   <div
                     key={option.id}
                     className={cn(
@@ -324,7 +320,7 @@ export const QuestionBuilder = ({ quizId, questions = [] }: QuestionBuilderProps
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Tipo de pregunta</FormLabel>
-                        <Select 
+                        <Select
                           onValueChange={(value) => {
                             field.onChange(value);
                             // Reset options when type changes
@@ -333,14 +329,14 @@ export const QuestionBuilder = ({ quizId, questions = [] }: QuestionBuilderProps
                                 { text: 'True', isCorrect: false, position: 0 },
                                 { text: 'False', isCorrect: false, position: 1 },
                               ]);
-                            } else if (value === QuestionType.SHORT_ANSWER || 
-                                       value === QuestionType.ESSAY || 
-                                       value === QuestionType.FILL_IN_BLANK) {
+                            } else if (value === QuestionType.SHORT_ANSWER ||
+                              value === QuestionType.ESSAY ||
+                              value === QuestionType.FILL_IN_BLANK) {
                               form.setValue('options', [
                                 { text: 'Answer', isCorrect: true, position: 0 },
                               ]);
                             }
-                          }} 
+                          }}
                           defaultValue={field.value}
                         >
                           <FormControl>
@@ -447,7 +443,7 @@ export const QuestionBuilder = ({ quizId, questions = [] }: QuestionBuilderProps
             </p>
             <Button onClick={() => setIsAdding(true)}>
               <Plus className="mr-2 h-4 w-4" />
-                Agregar pregunta
+              Agregar pregunta
             </Button>
           </CardContent>
         </Card>

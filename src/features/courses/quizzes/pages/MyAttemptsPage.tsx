@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ArrowLeft, Loader2, Eye, TrendingUp, Clock } from 'lucide-react';
+import { Loader2, Eye, TrendingUp, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 import { AttemptStatus } from '../types/quiz.types';
 import { cn } from '@/shared/lib/utils';

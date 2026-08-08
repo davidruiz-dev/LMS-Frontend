@@ -1,4 +1,4 @@
-import { Command, LayoutDashboard, LogOut, Settings, Users, GraduationCap, Book, } from "lucide-react"
+import { Command, LayoutDashboard, LogOut, Settings, Users, GraduationCap, Book, type LucideIcon, } from "lucide-react"
 import {
     Sidebar,
     SidebarContent,
@@ -15,12 +15,12 @@ import { ROUTES } from "@/shared/constants/routes"
 import { USER_ROLES } from "@/shared/constants"
 import { useEffect, useState } from "react"
 import type { Role } from "@/shared/types"
-import { useAuth } from "@/app/providers/AuthProvider"
+import { useAuth } from "@/features/auth/hooks/useAuthContext"
 
 export interface SidebarItem {
     title: string;
     path: string;
-    icon?: any;
+    icon: LucideIcon;
     roles: Role[];
 }
 // Menu items.

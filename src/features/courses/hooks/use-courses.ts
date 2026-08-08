@@ -1,11 +1,11 @@
 import type { CourseFormData } from "@/features/courses/schemas/course.schema";
 import { CourseService } from "@/features/courses/services/courseService";
 import { showError, showSuccess } from "@/shared/helpers/alerts";
-import type { ApiError } from "@/shared/types";
+import type { ApiError, PaginationFilters } from "@/shared/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 
-export const useCourses = (filters: any = {}) => {
+export const useCourses = (filters: PaginationFilters = {}) => {
     return useQuery({
         queryKey: ["courses", filters],
         queryFn: () => CourseService.getAll(filters),
@@ -72,8 +72,8 @@ export const useDeleteCourse = (id: number) => {
 export const usePublishCourse = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (id: string) => CourseService.publishCourse(id),
-        onSuccess: (updatedCourse, id) => {
+        mutationFn: (id?: string) => CourseService.publishCourse(id!),
+        onSuccess: (id) => {
             queryClient.invalidateQueries({ queryKey: ['courses'] });
             queryClient.invalidateQueries({ queryKey: ['course', id] });
             showSuccess('Curso publicado exitosamente')

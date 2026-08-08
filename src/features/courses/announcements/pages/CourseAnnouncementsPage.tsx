@@ -4,13 +4,12 @@ import { useParams } from "react-router-dom";
 
 export default function CourseAnnouncementsPage() {
   const { id: courseId } = useParams();
-  if (!courseId) return null;
   
   const access = useCourseAccess(courseId);
   
   return (
     <div className="space-y-6">
-      <AnnouncementsList courseId={courseId} access={access?.isOwner}/>
+      <AnnouncementsList courseId={courseId!} access={access?.isOwner}/>
       
     </div>
   )

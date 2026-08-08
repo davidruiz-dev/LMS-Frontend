@@ -1,75 +1,89 @@
-import { moduleItemSchema, type ModuleItemFormData } from "@/features/courses/modules/schemas/module.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { type FC } from "react";
 import { useForm } from "react-hook-form";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form'
-import { Button } from "@/components/ui/button";
+import { useUpdateModuleItem } from "../../hooks/use-modules";
+import { ModuleItemType, type ModuleItem } from "../types/module.types";
+import { moduleItemSchema, type ModuleItemFormData } from "../schemas/module.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useCreateModuleItem } from "@/features/courses/hooks/use-modules";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
-import { useAssignments } from "@/features/courses/hooks/use-assignments";
-import { ModuleItemType } from "@/features/courses/modules/types/module.types";
+import { useAssignments } from "../../hooks/use-assignments";
 import { useQuizzes } from "../../quizzes/hooks/use-quizzes";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 
-interface Props {
+interface EditModuleItemDialogProps {
+    courseId: string;
     moduleId: string;
-    courseId: string
+    item: ModuleItem;
     open: boolean;
     onOpenChange: (open: boolean) => void;
 }
 
-const CreateModuleItemDialog: FC<Props> = ({ open, onOpenChange, moduleId, courseId }) => {
-    const moduleForm = useForm<ModuleItemFormData>({
-        resolver: zodResolver(moduleItemSchema),
-        defaultValues: {
-            title: '',
-            type: ModuleItemType.ASSIGNMENT,
-            published: false,
-            contentId: ''
-        },
-        mode: 'onChange',
-    })
-
-    const createItem = useCreateModuleItem(courseId, moduleId);
+export default function EditModuleItemDialog({ courseId, moduleId, item, open, onOpenChange }: EditModuleItemDialogProps) {
+    const updateModuleItem = useUpdateModuleItem(courseId, moduleId, item.id);
     // traer data para enlazar con el contenido del módulo
     const { data: assignments } = useAssignments(courseId);
-    const { data: quizzes } = useQuizzes(courseId); // Cambiar a useQuizzes cuando esté disponible
+    const { data: quizzes } = useQuizzes(courseId);
+    const form = useForm<ModuleItemFormData>({
+        resolver: zodResolver(moduleItemSchema),
+        defaultValues: {
+            title: item.title ?? '',
+            type: item.type,
+            content: item.content ?? '',
+            contentId: item.contentId,
+            moduleId: item.moduleId,
+            published: item.published ?? false,
+        }
+    })
 
-    const typeWatch = moduleForm.watch('type');
+    useEffect(() => {
+        if (open) {
+            form.reset({
+                title: item.title ?? '',
+                type: item.type,
+                content: item.content ?? '',
+                contentId: item.contentId,
+                moduleId: item.moduleId,
+                published: item.published ?? false,
+            })
+        }
+    }, [open, item, form]);
 
-    const onSubmit = async (values: ModuleItemFormData) => {
-        await createItem.mutateAsync(values);
-        moduleForm.reset();
+    const typeWatch = form.watch('type');
+
+    const onSubmit = async (data: ModuleItemFormData) => {
+        await updateModuleItem.mutateAsync(data);
         onOpenChange(false);
-    }
+    };
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
-                <Form {...moduleForm}>
-                    <form className='space-y-4' onSubmit={moduleForm.handleSubmit(onSubmit)}>
-                        <DialogHeader>
-                            <DialogTitle>Agregar Contenido</DialogTitle>
-                            <DialogDescription>Completa todos los campos requeridos.</DialogDescription>
-                        </DialogHeader>
+                <DialogHeader>
+                    <DialogTitle>Editar contenido del módulo</DialogTitle>
+                    <DialogDescription>Modifica el contenido del módulo a tu gusto.</DialogDescription>
+                </DialogHeader>
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                         <FormField
-                            control={moduleForm.control}
-                            name='title'
+                            control={form.control}
+                            name="title"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Título</FormLabel>
                                     <FormControl>
                                         <Input {...field} />
                                     </FormControl>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
 
                         <div className="flex items-end gap-3">
                             <FormField
-                                control={moduleForm.control}
+                                control={form.control}
                                 name="type"
                                 render={({ field }) => (
                                     <FormItem>
@@ -92,7 +106,7 @@ const CreateModuleItemDialog: FC<Props> = ({ open, onOpenChange, moduleId, cours
 
                             {typeWatch === 'external_url' && (
                                 <FormField
-                                    control={moduleForm.control}
+                                    control={form.control}
                                     name='content'
                                     render={({ field }) => (
                                         <FormItem className="w-full">
@@ -112,7 +126,7 @@ const CreateModuleItemDialog: FC<Props> = ({ open, onOpenChange, moduleId, cours
 
                             {typeWatch === 'assignment' && (
                                 <FormField
-                                    control={moduleForm.control}
+                                    control={form.control}
                                     name="contentId"
                                     render={({ field }) => (
                                         <Select
@@ -138,9 +152,9 @@ const CreateModuleItemDialog: FC<Props> = ({ open, onOpenChange, moduleId, cours
                                 />
                             )}
 
-                            { typeWatch === 'quiz' && (
+                            {typeWatch === 'quiz' && (
                                 <FormField
-                                    control={moduleForm.control}
+                                    control={form.control}
                                     name="contentId"
                                     render={({ field }) => (
                                         <Select
@@ -170,7 +184,7 @@ const CreateModuleItemDialog: FC<Props> = ({ open, onOpenChange, moduleId, cours
                         <Separator />
 
                         <FormField
-                            control={moduleForm.control}
+                            control={form.control}
                             name="published"
                             render={({ field }) => (
                                 <FormItem className="flex items-center justify-between rounded-lg border p-4">
@@ -193,14 +207,11 @@ const CreateModuleItemDialog: FC<Props> = ({ open, onOpenChange, moduleId, cours
                         />
                         <DialogFooter>
                             <Button variant={"outline"} type="reset" onClick={() => onOpenChange(false)}>Cancelar</Button>
-                            <Button disabled={createItem.isPending || !moduleForm.formState.isValid}>{createItem.isPending ? 'Guardando...' : 'Guardar'}</Button>
+                            <Button type="submit" disabled={updateModuleItem.isPending || !form.formState.isValid}>{updateModuleItem.isPending ? 'Guardando...' : 'Guardar'}</Button>
                         </DialogFooter>
                     </form>
                 </Form>
             </DialogContent>
-
         </Dialog>
     )
 }
-
-export default CreateModuleItemDialog

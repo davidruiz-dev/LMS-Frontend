@@ -1,5 +1,5 @@
 import { ROUTES } from '@/shared/constants/routes'
-import { HomeIcon, User2, BookIcon, Megaphone, type LucideProps, ClipboardList, FileQuestion } from 'lucide-react'
+import { HomeIcon, User2, BookIcon, Megaphone, ClipboardList, FileQuestion, type LucideIcon } from 'lucide-react'
 import { Link, Outlet, useLocation, useParams } from 'react-router-dom'
 import { useCourseAccess } from "@/features/courses/hooks/use-course-access";
 import ForbiddenPage from '@/components/ForbiddenPage';
@@ -9,7 +9,7 @@ import NotFoundPage from '@/components/NotFoundPage';
 interface Item {
   title: string;
   url: (url: string) => string;
-  icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>
+  icon: LucideIcon
 }
 
 const items: Item[] = [
@@ -48,10 +48,8 @@ const items: Item[] = [
 const CourseLayout = () => {
   const { id } = useParams<{ id: string }>()
   const location = useLocation()
-
-  if (!id) return <NotFoundPage />
-
   const access = useCourseAccess(id)
+  if (!id) return <NotFoundPage />
 
   if (!access) {
     return (

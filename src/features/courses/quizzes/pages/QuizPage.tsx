@@ -11,7 +11,7 @@ import { useDeleteQuiz } from "../hooks/use-quizzes";
 
 export default function QuizPage() {
   const { id: courseId } = useParams<{ id: string }>();
-  if (!courseId) return null;
+  
   
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [editingQuiz, setEditingQuiz] = useState<Quiz | null>(null);
@@ -46,7 +46,7 @@ export default function QuizPage() {
         )}
       </div>
 
-      <QuizList courseId={courseId} setEditingQuiz={setEditingQuiz} setDeletingQuiz={setDeletingQuiz} canManage={canManage} />
+      <QuizList courseId={courseId!} setEditingQuiz={setEditingQuiz} setDeletingQuiz={setDeletingQuiz} canManage={canManage} />
 
       {/* Create/Edit Dialog */}
       <QuizFormDialog
@@ -58,7 +58,7 @@ export default function QuizPage() {
           }
         }}
         quiz={editingQuiz}
-        courseId={courseId}
+        courseId={courseId!}
       />
 
       {/* Delete Confirmation */}

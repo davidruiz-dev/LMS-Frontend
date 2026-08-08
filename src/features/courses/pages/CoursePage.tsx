@@ -2,7 +2,7 @@ import { useCourse, usePublishCourse } from "@/features/courses/hooks/use-course
 import { useNavigate, useParams } from "react-router-dom";
 import { AvatarUser } from "@/components/AvatarUser";
 import { useUpcomingAssignments } from "@/features/courses/hooks/use-assignments";
-import { Calendar, Users, BookOpen, Award, Heart, ChevronRight, AlertCircle, FileText, Bell, Settings, Play, Layers, MessageSquare, Zap, BookMarked, Maximize2, CheckCircle, Megaphone } from "lucide-react";
+import { Calendar, Users, BookOpen, Award, Heart, ChevronRight, AlertCircle, FileText, Bell, Settings, Play, Layers, MessageSquare, Zap, BookMarked, Maximize2, CheckCircle, Megaphone, type LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/shared/constants/routes";
 import { useCourseAccess } from "@/features/courses/hooks/use-course-access";
@@ -23,7 +23,7 @@ const QuickAccessCard = ({
     color = "blue",
     badge
 }: {
-    icon: any,
+    icon: LucideIcon,
     label: string,
     count?: number,
     onClick: () => void,
@@ -74,7 +74,7 @@ const ActivityItem = ({
     time,
     type = "info"
 }: {
-    icon: any,
+    icon: LucideIcon,
     title: string,
     description: string,
     time: string,
@@ -105,8 +105,6 @@ const CoursePage = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
 
-    if (!id) return null;
-
     const { data: courseDetail, isLoading, error } = useCourse(id);
     const { data: upcomingAssignments = [] } = useUpcomingAssignments(id);
     const publishCourse = usePublishCourse();
@@ -114,14 +112,7 @@ const CoursePage = () => {
     const [showImagePreview, setShowImagePreview] = useState(false);
 
     const onPublish = () => {
-        publishCourse.mutate(id, {
-            onSuccess: () => {
-                toast.success("Curso publicado exitosamente");
-            },
-            onError: () => {
-                toast.error("Error al publicar el curso");
-            }
-        });
+        publishCourse.mutate(id);
     };
 
     // Estadísticas calculadas
@@ -185,7 +176,7 @@ const CoursePage = () => {
         );
     }
 
-    if (error || !courseDetail) {
+    if (error || !courseDetail || !id) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
                 <AlertCircle className="w-16 h-16 text-red-500" />

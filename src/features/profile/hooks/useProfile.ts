@@ -11,10 +11,10 @@ export function useProfileStats() {
   return useQuery({ queryKey: ['profile', 'me', 'stats'], queryFn: profileService.getStats, staleTime: 60_000 });
 }
 
-export function usePublicProfile(userId: string) {
+export function usePublicProfile(userId?: string) {
   return useQuery({
     queryKey: ['profile', userId],
-    queryFn: () => profileService.getPublic(userId),
+    queryFn: () => profileService.getPublic(userId!),
     enabled: !!userId,
   });
 }
@@ -35,7 +35,7 @@ export function useChangePassword() {
   return useMutation({
     mutationFn: (payload: ChangePasswordPayload) => profileService.changePassword(payload),
     onSuccess: () => showSuccess('Contraseña actualizada'),
-    onError: (err: any) => showError(err?.message ?? 'No se pudo cambiar la contraseña'),
+    onError: (err) => showError(err?.message ?? 'No se pudo cambiar la contraseña'),
   });
 }
 
@@ -44,7 +44,7 @@ export function useUploadAvatar() {
   return useMutation({
     mutationFn: (file: File) => profileService.uploadAvatar(file),
     onSuccess: ({ avatarUrl }) => {
-      qc.setQueryData(['profile', 'me'], (old: any) => (old ? { ...old, avatarUrl } : old));
+      qc.setQueryData(['profile', 'me'], (old: { avatarUrl: string }) => (old ? { ...old, avatarUrl } : old));
       showSuccess('Avatar actualizado');
     },
     onError: () => showError('No se pudo subir la imagen'),

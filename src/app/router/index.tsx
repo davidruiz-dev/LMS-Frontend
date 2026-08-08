@@ -1,12 +1,12 @@
 import Layout from '@/app/layouts/Layout';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { ProtectedRoute } from '@/features/auth/components/ProtectedRoute';
 import { PublicRoute } from '@/features/auth/components/PublicRoute';
 import CourseLayout from '@/app/layouts/CourseLayout';
 import { AssignmentService } from '@/features/courses/assignments/services/assignmentsService';
 import { CourseService } from '@/features/courses/services/courseService';
-import { lazy, Suspense } from 'react';
+import { lazy } from 'react';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { LazyWrapper } from '@/components/LazyWrapper';
 
 // Lazy load components
 const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'));
@@ -36,7 +36,6 @@ const MyAttemptsPage = lazy(() => import('@/features/courses/quizzes/pages/MyAtt
 const AllAttemptsPage = lazy(() => import('@/features/courses/quizzes/pages/AllAttemptsPage'))
 const ManualGradingPage = lazy(() => import('@/features/courses/quizzes/pages/ManualGradingPages'));
 
-const GradeLevelsPage = lazy(() => import('@/features/grade-level/pages/GradeLevelsPage'));
 
 const AssignmentSubmissionsPage = lazy(() => import('@/features/courses/assignments/submissions/pages/AssignmentSubmissionsPage'));
 const SubmissionPage = lazy(() => import('@/features/courses/assignments/submissions/pages/SubmissionPage'));
@@ -44,28 +43,29 @@ const SubmissionPage = lazy(() => import('@/features/courses/assignments/submiss
 const ProfilePage = lazy(() => import('@/features/profile/pages/ProfilePage'));
 const PublicProfilePage = lazy(() => import('@/features/profile/pages/PublicProfilePage'));
 
-const LazyWrapper = ({ children }: { children: React.ReactNode }) => (
-  <Suspense fallback={
-    <div className="fixed inset-0 flex items-center justify-center bg-background">
-      <LoadingSpinner size="lg" />
-    </div>
-  }>
-    {children}
-  </Suspense>
-)
-
+interface BreadcrumbMatch {
+  data: {
+    name: string;
+  };
+}
 
 export const router = createBrowserRouter([
   {
     path: '/',
-    errorElement: <LazyWrapper><>error</></LazyWrapper>,
+    errorElement: <>error page</>,
     children: [
       {
         path: 'login',
         element: <PublicRoute><LoginPage /></PublicRoute>
       },
       {
-        element: <ProtectedRoute><Layout /></ProtectedRoute>,
+        element: (
+          <LazyWrapper>
+            <ProtectedRoute>
+              <Layout />
+            </ProtectedRoute>
+          </LazyWrapper>
+        ),
         children: [
           {
             path: 'dashboard',
@@ -134,8 +134,8 @@ export const router = createBrowserRouter([
               {
                 path: 'editar/:id',
                 element: <CourseGuard check={(a) => a.canEdit}>
-                          <EditCoursePage />
-                        </CourseGuard>,
+                  <EditCoursePage />
+                </CourseGuard>,
                 handle: {
                   breadcrumb: () => 'Editar'
                 }
@@ -144,7 +144,7 @@ export const router = createBrowserRouter([
                 path: ':id',
                 element: <CourseLayout />,
                 handle: {
-                  breadcrumb: (match: any) => match.data.name,
+                  breadcrumb: (match: BreadcrumbMatch) => match.data.name,
                 },
                 loader: async ({ params }) => {
                   return CourseService.getById(params.id!)
@@ -189,7 +189,7 @@ export const router = createBrowserRouter([
                         path: ':assignmentId',
                         element: <AssignmentPage />,
                         handle: {
-                          breadcrumb: (match: any) => match.data.name,
+                          breadcrumb: (match: BreadcrumbMatch) => match.data.name,
                         },
                         loader: async ({ params }) => {
                           return AssignmentService.findOneByCourse(params.id!, params.assignmentId!)
@@ -263,18 +263,7 @@ export const router = createBrowserRouter([
 
             ]
           },
-          {
-            path: 'grados',
-            handle: {
-              breadcrumb: () => 'Grados'
-            },
-            children: [
-              {
-                index: true,
-                element: <GradeLevelsPage />
-              }
-            ]
-          }
+          
         ]
       },
       // Redirecciones

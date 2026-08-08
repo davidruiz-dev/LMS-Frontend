@@ -56,7 +56,7 @@ const UserForm: FC<Props> = ({ userId }) => {
             })
             console.log(userData)
         }
-    }, [userData, userId]);
+    }, [userData, userId, form]);
 
     if (isEditMode && iLoadingUser) {
             return (

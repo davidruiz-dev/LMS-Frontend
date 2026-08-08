@@ -1,21 +1,14 @@
 import { useNavigate } from "react-router-dom";
-import type { AssignmentType, InstructorAssignmentDto } from "../types/assignment.types";
+import type { InstructorAssignmentDto } from "../types/assignment.types";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { ClipboardCheck, FileText, HelpCircle, MessageSquare, type LucideIcon } from "lucide-react";
+import { FileText } from "lucide-react";
 import { ROUTES } from "@/shared/constants/routes";
 
-const TYPE_ICON: Record<AssignmentType, LucideIcon> = {
-    assignment: FileText,
-    quiz: HelpCircle,
-    discussion: MessageSquare,
-    project: ClipboardCheck,
-};
 
 export function InstructorAssignmentRow({ assignment }: { assignment: InstructorAssignmentDto }) {
-    const Icon = TYPE_ICON[assignment.type];
     const navigate = useNavigate();
 
     return (
@@ -23,7 +16,7 @@ export function InstructorAssignmentRow({ assignment }: { assignment: Instructor
             onClick={() => navigate(ROUTES.COURSE_ASSIGNMENT(assignment.courseId, assignment.id))}>
             <div className="flex items-center gap-3">
                 <div className="rounded-full bg-muted p-2">
-                    <Icon className="h-4 w-4" />
+                    <FileText className="h-4 w-4" />
                 </div>
                 <div>
                     <p className="font-medium">{assignment.name}</p>

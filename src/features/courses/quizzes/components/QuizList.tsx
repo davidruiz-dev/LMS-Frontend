@@ -24,8 +24,8 @@ export const QuizList = ({ courseId, setEditingQuiz, setDeletingQuiz, canManage 
   const [filterType, setFilterType] = useState<'all' | 'published' | 'draft'>('all');
 
   const filteredQuizzes = useMemo(() => {
-    let filtered = quizzes.filter(quiz => {
-      let matchedSearch =
+    const filtered = quizzes.filter(quiz => {
+      const matchedSearch =
         quiz.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         quiz.description?.toLowerCase().includes(searchTerm.toLowerCase())
       let matchesFilters = true;
@@ -87,7 +87,7 @@ export const QuizList = ({ courseId, setEditingQuiz, setDeletingQuiz, canManage 
         {canManage && (
           <Select
             value={filterType}
-            onValueChange={(value: any) => setFilterType(value)}
+            onValueChange={(value) => setFilterType(value as 'published' | 'draft')}
           >
             <SelectTrigger >
               <Filter className="w-4 h-4 mr-2" />

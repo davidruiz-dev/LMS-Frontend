@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { useCourseAccess } from '@/features/courses/hooks/use-course-access'
 import { useDeactivateEnrollment, useEnrollmentsByCourse } from '@/features/courses/hooks/use-enrollments'
 import { ArrowUpDown, MoreHorizontal, PlusCircleIcon, Search } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { type ColumnDef, type ColumnFiltersState, type SortingState, flexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
@@ -16,7 +16,7 @@ import { ROUTES } from '@/shared/constants/routes'
 
 const EnrollmentsTable = () => {
     const { id } = useParams<{ id: string }>();
-    if (!id) return null;
+    
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const toggleModal = () => setModalOpen(prev => !prev);
     const access = useCourseAccess(id);
@@ -25,11 +25,11 @@ const EnrollmentsTable = () => {
     const deactivateEnrollment = useDeactivateEnrollment();
     const navigate = useNavigate();
 
-    const handleDeactivateEnrollment = (id: string) => {
-        if (window.confirm('¿Deseas cancelar esta inscripción?')) {
-            deactivateEnrollment.mutate(id)
-        }
+    const handleDeactivateEnrollment = useCallback((id: string) => {
+    if (window.confirm('¿Deseas cancelar esta inscripción?')) {
+        deactivateEnrollment.mutate(id);
     }
+}, [deactivateEnrollment]);
 
     const columns = useMemo<ColumnDef<Enrollment>[]>(() => {
         return [
@@ -111,7 +111,7 @@ const EnrollmentsTable = () => {
                 ]
                 : []),
         ];
-    }, [canAddEnrollment]);
+    }, [canAddEnrollment, handleDeactivateEnrollment, navigate]);
 
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);

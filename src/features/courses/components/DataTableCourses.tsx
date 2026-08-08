@@ -14,7 +14,7 @@ import { USER_ROLES } from "@/shared/constants";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
 import { SkeletonTable } from "@/components/SkeletonTable";
 import { AlertError } from "@/components/AlertError";
-import { useAuth } from "@/app/providers/AuthProvider";
+import { useAuth } from "@/features/auth/hooks/useAuthContext";
 
 export default function DataTableCourses() {
   const [filters, setFilters] = useState<PaginationFilters>({
@@ -102,7 +102,6 @@ export default function DataTableCourses() {
           <TableHeader>
             <TableRow>
               <TableHead>Título</TableHead>
-              <TableHead>Grado</TableHead>
               {canAccess && (
                 <>
                   <TableHead>Estado</TableHead>
@@ -121,12 +120,11 @@ export default function DataTableCourses() {
                       alt={course.name}
                       className="h-12 object-cover rounded-md border cursor-pointer" width={60} height={60}
                     />
-                    <span className="cursor-pointer hover:underline">
+                    <span className="cursor-pointer hover:underline first-letter:capitalize">
                       {course.name}
                     </span>
                   </div>
                 </TableCell>
-                <TableCell>{course.gradeLevel.name} - {course.gradeLevel.level}</TableCell>
                 {canAccess && (
                   <>
                     <TableCell><Badge>{course.status}</Badge></TableCell>

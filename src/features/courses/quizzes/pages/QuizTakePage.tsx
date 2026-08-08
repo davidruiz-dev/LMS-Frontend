@@ -13,7 +13,7 @@ import { cn } from '@/shared/lib/utils';
 import { useInProgressAttempt, useQuiz, useSaveProgress, useStartAttempt, useSubmitAttempt } from '../hooks/use-quizzes';
 import { QuestionType, type QuizAnswer, type QuizAttempt } from '../types/quiz.types';
 import { USER_ROLES } from '@/shared/constants';
-import { useAuth } from '@/app/providers/AuthProvider';
+import { useAuth } from '@/features/auth/hooks/useAuthContext';
 
 const AUTOSAVE_INTERVAL_MS = 15_000;
 
@@ -34,7 +34,6 @@ export default function QuizTakePage() {
   const saveProgressMutation = useSaveProgress();
 
   const [attemptId, setAttemptId] = useState<string | null>(null);
-  const [startedAt, setStartedAt] = useState<Date | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Map<string, QuizAnswer>>(new Map());
   const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
@@ -93,7 +92,6 @@ export default function QuizTakePage() {
       });
 
       setAttemptId(attempt.id);
-      setStartedAt(start);
       setAnswers(answerMap);
       setIsStarted(true);
 

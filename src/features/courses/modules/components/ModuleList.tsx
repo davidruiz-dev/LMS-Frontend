@@ -30,7 +30,7 @@ export function ModuleList({ courseId, canEdit }: ModuleListProps) {
   const reorderModules = useReorderModules();
 
   const displayedModules = useMemo(() => {
-    let filtered = modules.filter((module) => {
+    const filtered = modules.filter((module) => {
       const matchedSearch = module.title
         .toLowerCase()
         .includes(searchTerm.toLowerCase());

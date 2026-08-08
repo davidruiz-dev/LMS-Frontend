@@ -1,5 +1,3 @@
-import type { Course } from "@/features/courses/types/course.types";
-
 export interface StudentDashboardResponse {
     stats: DashboardStatsDto;
     courses: CourseStatDto[];

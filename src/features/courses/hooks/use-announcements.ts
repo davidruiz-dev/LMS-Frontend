@@ -1,6 +1,7 @@
 import { AnnouncementsService } from "@/features/courses/announcements/services/announcementsService"
 import { showError, showSuccess } from "@/shared/helpers/alerts"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import type { CreateAnnouncement, EditAnnouncement } from "../announcements/schemas/announcements.schema"
 
 export const useAnnouncements = (courseId: string) => {
     return useQuery({
@@ -13,7 +14,7 @@ export const useAnnouncements = (courseId: string) => {
 export const useCreateAnnouncement = () => {
     const qc = useQueryClient();
     return useMutation({
-        mutationFn: ({courseId, data}:{courseId: string, data: any}) => 
+        mutationFn: ({courseId, data}:{courseId: string, data: CreateAnnouncement}) => 
             AnnouncementsService.create(courseId, data),
         onSuccess: (_, { courseId }) => {
             showSuccess('Anuncio creado correctamente.')
@@ -29,7 +30,7 @@ export const useCreateAnnouncement = () => {
 export const useEditAnnouncement = () => {
     const qc = useQueryClient();
     return useMutation({
-        mutationFn: ({courseId, announcementId, data}:{courseId: string, announcementId: string, data: any}) => 
+        mutationFn: ({courseId, announcementId, data}:{courseId: string, announcementId: string, data: EditAnnouncement}) => 
             AnnouncementsService.edit(courseId, announcementId, data),
         onSuccess: (_, { courseId }) => {
             showSuccess('Anuncio editado correctamente.')

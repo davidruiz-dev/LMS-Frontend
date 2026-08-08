@@ -3,11 +3,11 @@ import { EnrollmentService } from "@/features/courses/enrollments/services/enrol
 import { showError, showSuccess } from "@/shared/helpers/alerts";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export function useEnrollmentsByCourse(id: string) {
+export function useEnrollmentsByCourse(courseId?: string) {
     return useQuery({
-        queryKey: ['enrollments-course', id],
-        queryFn: () => EnrollmentService.getAllByCourseId(id),
-        enabled: !!id
+        queryKey: ['enrollments-course', courseId],
+        queryFn: () => EnrollmentService.getAllByCourseId(courseId!),
+        enabled: !!courseId
     })
 }
 

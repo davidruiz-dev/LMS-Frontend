@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@/components/ui/button'
@@ -6,8 +6,8 @@ import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { loginSchema, type LoginFormData } from '@/features/auth/validations/validations'
-import { useAuth } from '@/app/providers/AuthProvider'
 import { Eye, EyeOff } from 'lucide-react'
+import { useAuth } from '@/features/auth/hooks/useAuthContext'
 
 export const LoginForm: React.FC = () => {
   const { login } = useAuth()

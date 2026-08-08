@@ -12,10 +12,10 @@ export const useAssignments = (courseId: string, filters: AssignmentFilters = {}
     })
 };
 
-export const useUpcomingAssignments = (courseId: string) => {
+export const useUpcomingAssignments = (courseId?: string) => {
     return useQuery({
         queryKey: ['upcoming-assignments', courseId],
-        queryFn: () => AssignmentService.findUpcomingByCourse(courseId),
+        queryFn: () => AssignmentService.findUpcomingByCourse(courseId!),
         enabled: !!courseId,
         
     })
@@ -36,10 +36,10 @@ export const useCreateAssignment = (courseId: string) => {
     })
 }
 
-export const useAssignment = (courseId: string, id: string) => {
+export const useAssignment = (courseId?: string, id?: string) => {
     return useQuery({
         queryKey: ['assignment', courseId, id],
-        queryFn: () => AssignmentService.findOneByCourse(courseId, id),
+        queryFn: () => AssignmentService.findOneByCourse(courseId!, id!),
         enabled: !!id && !!courseId
     })
 }

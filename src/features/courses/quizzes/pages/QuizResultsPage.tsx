@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { Check, X, AlertCircle, ArrowLeft, Loader2 } from 'lucide-react';
+import { Check, X, AlertCircle, Loader2 } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { QuestionType } from '@/features/courses/quizzes/types/quiz.types';
 
