@@ -12,14 +12,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from "react-router-dom";
 import { useCourse, useCreateCourse, useUpdateCourse } from "@/features/courses/hooks/use-courses";
-import { GradeLevelService } from "@/features/grade-level/services/gradeLevelService";
-import type { GradeLevel } from "@/features/grade-level/types";
 import { ROUTES } from "@/shared/constants/routes";
 import type { User } from "@/shared/types";
 import { UsersService } from "@/features/users/services/userService";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { COURSE_STATUS } from "@/shared/constants";
+import { CourseStatus } from "@/shared/constants";
 import { courseSchema, type CourseFormData } from "@/features/courses/schemas/course.schema";
 
 interface Props {
@@ -36,20 +34,17 @@ function FormCourse({ courseId }: Props) {
             name: '',
             description: '',
             short_description: '',
-            gradeLevelId: undefined,
             instructorId: undefined,
             startDate: undefined,
             endDate: undefined,
-            status: COURSE_STATUS.DRAFT,
+            status: CourseStatus.DRAFT,
         },
         mode: 'onChange'
     });
 
-    const [listGradeLevels, setListGradeLevels] = useState<GradeLevel[]>([]);
     const [instructors, setInstructors] = useState<User[]>([]);
     const [search, setSearch] = useState('');
     const [searchInstructor, setSearchInstructor] = useState('');
-    const [open, setOpen] = useState(false);
     const [openPopOverInstructor, setOpenPopOverInstructor] = useState(false);
     const [imagenFile, setImagenFile] = useState<File>();
     const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -61,40 +56,40 @@ function FormCourse({ courseId }: Props) {
     // Query para obtener el curso en modo edición
     const { data: courseData, isLoading: isLoadingCourse } = useCourse(courseId!);
 
-    const loadGradeLevels = async (query?: string) => {
-        const response = await GradeLevelService.findByName(query || "");
-        setListGradeLevels(response.data);
-    };
-
     const loadInstructors = async (email?: string) => {
         const response = await UsersService.findInstructorsByEmail(email || '');
         setInstructors(response);
     };
 
     useEffect(() => {
-        loadGradeLevels(search);
         loadInstructors(searchInstructor);
     }, [search, searchInstructor]);
 
-    // Cargar datos del curso cuando se obtienen (modo edición)
     useEffect(() => {
         if (courseData && isEditMode) {
+            // Resetear todos los campos
             form.reset({
                 name: courseData.name || '',
                 description: courseData.description || '',
                 short_description: courseData.short_description || '',
-                gradeLevelId: courseData.gradeLevel.id || '',
                 instructorId: courseData?.instructor.id || '',
                 startDate: courseData.startDate ? new Date(courseData.startDate) : undefined,
                 endDate: courseData.endDate ? new Date(courseData.endDate) : undefined,
-                status: courseData.status,
+                status: courseData.status ?? CourseStatus.DRAFT,
             });
+            setTimeout(() => {
+                form.setValue('status', courseData.status || CourseStatus.DRAFT, {
+                    shouldValidate: true,
+                    shouldDirty: false,
+                });
+            }, 0);
+
             // Cargar imagen existente si hay
             if (courseData.imageUrl) {
                 setImagePreview(courseData.imageUrl);
             }
         }
-    }, [courseData, isEditMode, form]);
+    }, [courseData, isEditMode]);
 
     // Manejar cambio de imagen
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -218,7 +213,7 @@ function FormCourse({ courseId }: Props) {
                                 />
 
                                 <div className="grid xl:grid-cols-2 grid-cols-1 gap-4">
-                                    <FormField
+                                    {/* <FormField
                                         control={form.control}
                                         name="gradeLevelId"
                                         render={({ field }) => (
@@ -289,7 +284,7 @@ function FormCourse({ courseId }: Props) {
                                                 <FormMessage />
                                             </FormItem>
                                         )}
-                                    />
+                                    /> */}
 
                                     <FormField
                                         control={form.control}
@@ -444,18 +439,33 @@ function FormCourse({ courseId }: Props) {
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Estado del curso</FormLabel>
-                                                <FormControl>
-                                                    <Select {...field} onValueChange={field.onChange} value={field.value}>
+
+                                                <Select
+                                                    onValueChange={field.onChange}
+                                                    value={field.value}
+                                                >
+                                                    <FormControl>
                                                         <SelectTrigger className="w-full">
-                                                            <SelectValue placeholder="selecciona" />
+                                                            <SelectValue placeholder="Selecciona un estado" />
                                                         </SelectTrigger>
-                                                        <SelectContent>
-                                                            <SelectItem value={COURSE_STATUS.DRAFT}>{COURSE_STATUS.DRAFT}</SelectItem>
-                                                            <SelectItem value={COURSE_STATUS.ARCHIVED}>{COURSE_STATUS.ARCHIVED}</SelectItem>
-                                                            <SelectItem value={COURSE_STATUS.PUBLISHED}>{COURSE_STATUS.PUBLISHED}</SelectItem>
-                                                        </SelectContent>
-                                                    </Select>
-                                                </FormControl>
+                                                    </FormControl>
+
+                                                    <SelectContent>
+                                                        <SelectItem value={CourseStatus.DRAFT}>
+                                                            Borrador
+                                                        </SelectItem>
+
+                                                        <SelectItem value={CourseStatus.ARCHIVED}>
+                                                            Archivado
+                                                        </SelectItem>
+
+                                                        <SelectItem value={CourseStatus.PUBLISHED}>
+                                                            Publicado
+                                                        </SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+
+                                                <FormMessage />
                                             </FormItem>
                                         )}
                                     />

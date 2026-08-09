@@ -2,7 +2,7 @@ import { useAuth } from "@/features/auth/hooks/useAuthContext";
 import { useCourse } from "@/features/courses/hooks/use-courses"
 import { useEnrollmentsByCourse } from "@/features/courses/hooks/use-enrollments";
 import type { CourseAccess } from "@/features/courses/types/course-access.types";
-import { COURSE_STATUS, USER_ROLES } from "@/shared/constants";
+import { CourseStatus, USER_ROLES } from "@/shared/constants";
 
 export function useCourseAccess(courseId?: string): CourseAccess | null {
   const { user } = useAuth();
@@ -16,8 +16,8 @@ export function useCourseAccess(courseId?: string): CourseAccess | null {
   const isOwner = course.instructorId === user.id;
   const isAdmin = user.role === USER_ROLES.ADMIN;
   const isEnrolled = !!enrollment;
-  const isPublished = course.status === COURSE_STATUS.PUBLISHED;
-  const isArchived = course.status === COURSE_STATUS.ARCHIVED;
+  const isPublished = course.status === CourseStatus.PUBLISHED;
+  const isArchived = course.status === CourseStatus.ARCHIVED;
 
   // ----- CAN VIEW -----
   const canView = isAdmin || isOwner || (isPublished && isEnrolled)

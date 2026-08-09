@@ -15,6 +15,7 @@ import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/
 import { SkeletonTable } from "@/components/SkeletonTable";
 import { AlertError } from "@/components/AlertError";
 import { useAuth } from "@/features/auth/hooks/useAuthContext";
+import { CourseStatusBadge } from "./CourseStatusBadge";
 
 export default function DataTableCourses() {
   const [filters, setFilters] = useState<PaginationFilters>({
@@ -48,7 +49,7 @@ export default function DataTableCourses() {
   }, [searchTerm]);
 
   if (isLoading) {
-    <SkeletonTable />
+    return <SkeletonTable />
   }
 
   if (courses?.data.length === 0) {
@@ -71,7 +72,7 @@ export default function DataTableCourses() {
   }
 
   if (isError) {
-    <div className="flex justify-center items-center p-10">
+    return <div className="flex justify-center items-center p-10">
       <AlertError title="Algo salió mal" description="Intentalo más tarde o ponte en contacto con soporte" />
     </div>
   }
@@ -89,7 +90,7 @@ export default function DataTableCourses() {
           />
         </div>
 
-        {user?.role === USER_ROLES.ADMIN && (
+        {canAccess && (
           <div className="flex items-center gap-2">
             <Link to={ROUTES.CREATE_COURSE}><Button><PlusCircleIcon />Agregar</Button></Link>
             <Button variant="outline"><UploadIcon /> Importar</Button>
@@ -100,12 +101,12 @@ export default function DataTableCourses() {
       <div className="rounded-md border">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Título</TableHead>
+            <TableRow className="group transition-colors hover:bg-muted/50">
+              <TableHead className="w-full">Curso</TableHead>
               {canAccess && (
                 <>
-                  <TableHead>Estado</TableHead>
-                  <TableHead>Acciones</TableHead>
+                  <TableHead className="w-32">Estado</TableHead>
+                  <TableHead className="w-20 text-right">Acciones</TableHead>
                 </>
               )}
             </TableRow>
@@ -114,20 +115,32 @@ export default function DataTableCourses() {
             {courses?.data?.map((course) => (
               <TableRow key={course.id}>
                 <TableCell>
-                  <div className="flex items-center gap-2" onClick={() => navigate(ROUTES.COURSE_DETAIL(course.id))}>
+                  <Link
+                    to={ROUTES.COURSE_DETAIL(course.id)}
+                    className="flex items-center gap-3 group"
+                  >
                     <img
                       src={course.imageUrl}
                       alt={course.name}
-                      className="h-12 object-cover rounded-md border cursor-pointer" width={60} height={60}
+                      className="h-12 w-16 shrink-0 rounded-md border object-cover"
                     />
-                    <span className="cursor-pointer hover:underline first-letter:capitalize">
-                      {course.name}
-                    </span>
-                  </div>
+
+                    <div className="min-w-0">
+                      <p className="font-medium truncate group-hover:underline">
+                        {course.name}
+                      </p>
+
+                      <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
+                        {course.short_description}
+                      </p>
+                    </div>
+                  </Link>
                 </TableCell>
                 {canAccess && (
                   <>
-                    <TableCell><Badge>{course.status}</Badge></TableCell>
+                    <TableCell>
+                      <CourseStatusBadge status={course.status} />
+                    </TableCell>
                     <TableCell className="text-center">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>

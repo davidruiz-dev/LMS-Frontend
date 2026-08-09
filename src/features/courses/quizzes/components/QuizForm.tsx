@@ -1,4 +1,3 @@
-
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -27,13 +26,13 @@ export const QuizFormDialog = ({ open, onOpenChange, quiz, courseId }: QuizFormD
   const isEditing = !!quiz;
 
   const formatDateForInput = (date?: string | Date) => {
-  if (!date) return '';
+    if (!date) return '';
 
-  const d = new Date(date);
-  const pad = (n: number) => n.toString().padStart(2, '0');
+    const d = new Date(date);
+    const pad = (n: number) => n.toString().padStart(2, '0');
 
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-};
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  };
 
   const form = useForm<QuizFormValues>({
     resolver: zodResolver(quizFormSchema),
@@ -89,229 +88,368 @@ export const QuizFormDialog = ({ open, onOpenChange, quiz, courseId }: QuizFormD
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="!max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{isEditing ? 'Editar cuestionario' : 'Crear nuevo cuestionario'}</DialogTitle>
-          <DialogDescription>
-            {isEditing ? 'Actualizar configuración del cuestionario' : 'Configurar nueva configuración de cuestionario'}
-          </DialogDescription>
-        </DialogHeader>
+      <DialogTitle>
+        {isEditing ? "Editar cuestionario" : "Crear cuestionario"}
+      </DialogTitle>
+
+      <DialogDescription>
+        {isEditing
+          ? "Modifica la configuración y opciones del cuestionario."
+          : "Configura los detalles, evaluación y opciones del nuevo cuestionario."}
+      </DialogDescription>
+    </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Título</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Examen parcial" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
 
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Descripción</FormLabel>
-                  <FormControl>
-                    <Textarea placeholder="Descripción del cuestionario..." {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {/* Información básica */}
+            <section className="space-y-4">
+              <div>
+                <h3 className="text-sm font-semibold">Información básica</h3>
+                <p className="text-sm text-muted-foreground">
+                  Define la información principal del cuestionario.
+                </p>
+              </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="type"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tipo</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
+              <div className="rounded-lg border bg-card p-4 space-y-4">
+                <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Título</FormLabel>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
+                        <Input
+                          placeholder="Ej. Examen parcial de Matemáticas"
+                          {...field}
+                        />
                       </FormControl>
-                      <SelectContent>
-                        <SelectItem value={QuizType.PRACTICE}>Practice</SelectItem>
-                        <SelectItem value={QuizType.GRADED}>Graded</SelectItem>
-                        <SelectItem value={QuizType.SURVEY}>Survey</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="points"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Puntos totales</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        {...field}
-                        onChange={e => field.onChange(parseFloat(e.target.value))}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Descripción</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Describe brevemente el objetivo de este cuestionario..."
+                          className="min-h-24 resize-none"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </section>
 
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="timeLimit"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Timpo límite (minutos)</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="No limit"
-                        {...field}
-                        value={field.value || ''}
-                        onChange={e => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            {/* Configuración */}
+            <section className="space-y-4">
+              <div>
+                <h3 className="text-sm font-semibold">Configuración</h3>
+                <p className="text-sm text-muted-foreground">
+                  Define cómo será evaluado el cuestionario.
+                </p>
+              </div>
 
-              <FormField
-                control={form.control}
-                name="allowedAttempts"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Intentos permitidos (-1 = unlimited)</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        {...field}
-                        onChange={e => field.onChange(parseInt(e.target.value))}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+              <div className="grid gap-4 sm:grid-cols-2 rounded-lg border bg-card p-4">
+                <FormField
+                  control={form.control}
+                  name="type"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Tipo de cuestionario</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className='w-full'>
+                            <SelectValue placeholder="Selecciona un tipo" />
+                          </SelectTrigger>
+                        </FormControl>
 
-            <FormField
-              control={form.control}
-              name="dueDate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Fecha de vencimiento</FormLabel>
-                  <FormControl>
-                    <Input type="datetime-local" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                        <SelectContent>
+                          <SelectItem value={QuizType.PRACTICE}>
+                            Práctica
+                          </SelectItem>
+                          <SelectItem value={QuizType.GRADED}>
+                            Evaluación
+                          </SelectItem>
+                          <SelectItem value={QuizType.SURVEY}>
+                            Encuesta
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-            <div className="space-y-4">
-              <FormField
-                control={form.control}
-                name="shuffleQuestions"
-                render={({ field }) => (
-                  <FormItem className="flex items-center justify-between rounded-lg border p-4">
-                    <div className="space-y-0.5">
-                      <FormLabel className="text-base">Preguntas aleatorias</FormLabel>
+                <FormField
+                  control={form.control}
+                  name="points"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Puntos totales</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          min={0}
+                          placeholder="100"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(
+                              e.target.value
+                                ? parseFloat(e.target.value)
+                                : undefined
+                            )
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="timeLimit"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Tiempo límite</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            type="number"
+                            min={1}
+                            placeholder="Sin límite"
+                            className="pr-20"
+                            {...field}
+                            value={field.value ?? ""}
+                            onChange={(e) =>
+                              field.onChange(
+                                e.target.value
+                                  ? parseInt(e.target.value)
+                                  : undefined
+                              )
+                            }
+                          />
+                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
+                            minutos
+                          </span>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="allowedAttempts"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Intentos permitidos</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          min={-1}
+                          placeholder="-1 = ilimitados"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(
+                              e.target.value
+                                ? parseInt(e.target.value)
+                                : undefined
+                            )
+                          }
+                        />
+                      </FormControl>
                       <FormDescription>
-                        Orden aleatorio de preguntas para cada intento
+                        Usa -1 para permitir intentos ilimitados.
                       </FormDescription>
-                    </div>
-                    <FormControl>
-                      <Switch checked={field.value} onCheckedChange={field.onChange} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </section>
 
-              <FormField
-                control={form.control}
-                name="shuffleAnswers"
-                render={({ field }) => (
-                  <FormItem className="flex items-center justify-between rounded-lg border p-4">
-                    <div className="space-y-0.5">
-                      <FormLabel className="text-base">Respuestas aleatorias</FormLabel>
+            {/* Fecha */}
+            <section className="space-y-4">
+              <div>
+                <h3 className="text-sm font-semibold">Disponibilidad</h3>
+                <p className="text-sm text-muted-foreground">
+                  Define cuándo estará disponible el cuestionario.
+                </p>
+              </div>
+
+              <div className="rounded-lg border bg-card p-4">
+                <FormField
+                  control={form.control}
+                  name="dueDate"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Fecha de vencimiento</FormLabel>
+                      <FormControl>
+                        <Input type="datetime-local" {...field} />
+                      </FormControl>
                       <FormDescription>
-                        Orden aleatorio de respuestas para cada intento
+                        Los estudiantes no podrán realizar el cuestionario
+                        después de esta fecha.
                       </FormDescription>
-                    </div>
-                    <FormControl>
-                      <Switch checked={field.value} onCheckedChange={field.onChange} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </section>
 
-              <FormField
-                control={form.control}
-                name="showCorrectAnswers"
-                render={({ field }) => (
-                  <FormItem className="flex items-center justify-between rounded-lg border p-4">
-                    <div className="space-y-0.5">
-                      <FormLabel className="text-base">Mostrar respuestas correctas</FormLabel>
-                      <FormDescription>
-                        Mostrar respuestas correctas después de la presentación
-                      </FormDescription>
-                    </div>
-                    <FormControl>
-                      <Switch checked={field.value} onCheckedChange={field.onChange} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+            {/* Opciones */}
+            <section className="space-y-4">
+              <div>
+                <h3 className="text-sm font-semibold">Opciones</h3>
+                <p className="text-sm text-muted-foreground">
+                  Personaliza el comportamiento del cuestionario.
+                </p>
+              </div>
 
-              <FormField
-                control={form.control}
-                name="published"
-                render={({ field }) => (
-                  <FormItem className="flex items-center justify-between rounded-lg border p-4">
-                    <div className="space-y-0.5">
-                      <FormLabel className="text-base">Publicado</FormLabel>
-                      <FormDescription>
-                        Hacer disponible el cuestionario a los estudiantes
-                      </FormDescription>
-                    </div>
-                    <FormControl>
-                      <Switch checked={field.value} onCheckedChange={field.onChange} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>
+              <div className="overflow-hidden rounded-lg border">
 
-            <DialogFooter>
+                <FormField
+                  control={form.control}
+                  name="shuffleQuestions"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center justify-between gap-4 p-4">
+                      <div className="space-y-1">
+                        <FormLabel className="text-sm font-medium">
+                          Preguntas aleatorias
+                        </FormLabel>
+                        <FormDescription>
+                          Cambiar el orden de las preguntas en cada intento.
+                        </FormDescription>
+                      </div>
+
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                <div className="border-t" />
+
+                <FormField
+                  control={form.control}
+                  name="shuffleAnswers"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center justify-between gap-4 p-4">
+                      <div className="space-y-1">
+                        <FormLabel className="text-sm font-medium">
+                          Respuestas aleatorias
+                        </FormLabel>
+                        <FormDescription>
+                          Cambiar el orden de las respuestas en cada intento.
+                        </FormDescription>
+                      </div>
+
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                <div className="border-t" />
+
+                <FormField
+                  control={form.control}
+                  name="showCorrectAnswers"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center justify-between gap-4 p-4">
+                      <div className="space-y-1">
+                        <FormLabel className="text-sm font-medium">
+                          Mostrar respuestas correctas
+                        </FormLabel>
+                        <FormDescription>
+                          Mostrar las respuestas correctas después de completar el cuestionario.
+                        </FormDescription>
+                      </div>
+
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                <div className="border-t" />
+
+                <FormField
+                  control={form.control}
+                  name="published"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center justify-between gap-4 p-4">
+                      <div className="space-y-1">
+                        <FormLabel className="text-sm font-medium">
+                          Publicado
+                        </FormLabel>
+                        <FormDescription>
+                          Hacer disponible el cuestionario para los estudiantes.
+                        </FormDescription>
+                      </div>
+
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+              </div>
+            </section>
+
+            {/* Footer */}
+            <DialogFooter className="border-t pt-4">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => onOpenChange(false)}
                 disabled={isLoading}
               >
-                Cancel
+                Cancelar
               </Button>
+
               <Button type="submit" disabled={isLoading}>
-                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {isEditing ? 'Actualizar' : 'Crear'}
+                {isLoading && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
+
+                {isEditing ? "Actualizar cuestionario" : "Crear cuestionario"}
               </Button>
             </DialogFooter>
+
           </form>
         </Form>
       </DialogContent>

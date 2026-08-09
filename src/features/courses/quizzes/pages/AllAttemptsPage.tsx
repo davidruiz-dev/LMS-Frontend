@@ -10,6 +10,7 @@ import { format } from 'date-fns';
 import { AttemptStatus } from '../types/quiz.types';
 import { cn } from '@/shared/lib/utils';
 import { useState, useMemo } from 'react';
+import { attempStatusTypeLabels } from '../constants/quiz.constants';
 
 export default function AllAttemptsPage () {
   const { id: courseId, quizId } = useParams<{ id: string; quizId: string }>();
@@ -190,7 +191,7 @@ export default function AllAttemptsPage () {
                           attempt.status === AttemptStatus.IN_PROGRESS && "bg-yellow-500"
                         )}
                       >
-                        {attempt.status}
+                        {[attempStatusTypeLabels[attempt.status]]}
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -209,7 +210,8 @@ export default function AllAttemptsPage () {
                       {format(new Date(attempt.startedAt), 'MMM dd, yyyy')}
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button
+                      {attempt.status === AttemptStatus.GRADED && (
+                        <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => navigate(`/courses/${courseId}/quizzes/${quizId}/results/${attempt.id}`)}
@@ -217,6 +219,7 @@ export default function AllAttemptsPage () {
                         <Eye className="mr-2 h-4 w-4" />
                         Ver resultado
                       </Button>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}

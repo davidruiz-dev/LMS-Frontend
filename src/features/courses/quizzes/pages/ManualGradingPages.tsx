@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Loader2, CheckCircle, Clock, User } from 'lucide-react';
 import { format } from 'date-fns';
 import { QuestionType, type QuizAttempt, type QuizAttemptAnswer} from '../types/quiz.types';
+import { questionTypeLabel } from '../constants/quiz.constants';
 
 export default function ManualGradingPage () {
   const { courseId, quizId } = useParams<{ courseId: string; quizId: string }>();
@@ -173,7 +174,7 @@ export default function ManualGradingPage () {
                           <div>
                             <div className="flex items-center gap-2 mb-2">
                               <Badge variant="outline" className="text-xs">
-                                {answer.question.type.replace('_', ' ')}
+                                {[questionTypeLabel[answer.question.type]]}
                               </Badge>
                               <span className="text-xs text-muted-foreground">
                                 {answer.question.points} puntos posibles

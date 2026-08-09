@@ -13,6 +13,7 @@ import { Plus, Trash2, GripVertical, Check, X, Loader2, FileQuestion } from 'luc
 import { cn } from '@/shared/lib/utils';
 import { QuestionType, type QuizQuestion } from '@/features/courses/quizzes/types/quiz.types';
 import { questionSchema, type QuestionFormValues } from '@/features/courses/quizzes/schemas/quiz.schema';
+import { questionTypeLabel } from '../constants/quiz.constants';
 
 interface QuestionBuilderProps {
   quizId: string;
@@ -237,7 +238,7 @@ export const QuestionBuilder = ({ quizId, questions = [] }: QuestionBuilderProps
                       Pregunta {index + 1}
                     </span>
                     <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded">
-                      {question.type.replace('_', ' ')}
+                      {[questionTypeLabel[question.type]]}
                     </span>
                     <span className="text-xs bg-secondary text-secondary-foreground px-2 py-0.5 rounded">
                       {question.points} pts

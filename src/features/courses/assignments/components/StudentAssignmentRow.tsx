@@ -1,19 +1,13 @@
 import { ROUTES } from "@/shared/constants/routes";
 import { useNavigate } from "react-router-dom";
-import type { AssignmentType, StudentAssignmentDto, StudentAssignmentStatus } from "../types/assignment.types";
+import type { StudentAssignmentDto, StudentAssignmentStatus } from "../types/assignment.types";
 import { format } from "date-fns";
 import { cn } from "@/shared/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { ClipboardCheck, FileText, HelpCircle, MessageSquare, type LucideIcon } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { es } from "date-fns/locale";
+import { FileText } from "lucide-react";
 
-const TYPE_ICON: Record<AssignmentType, LucideIcon> = {
-    assignment: FileText,
-    quiz: HelpCircle,
-    discussion: MessageSquare,
-    project: ClipboardCheck,
-};
 
 const STATUS_CONFIG: Record<StudentAssignmentStatus, { label: string; className: string }> = {
     not_submitted: { label: 'Sin entregar', className: 'bg-gray-100 text-gray-600' },
@@ -25,7 +19,6 @@ const STATUS_CONFIG: Record<StudentAssignmentStatus, { label: string; className:
 };
 
 export function StudentAssignmentRow({ assignment }: { assignment: StudentAssignmentDto }) {
-    const Icon = TYPE_ICON[assignment.type];
     const config = STATUS_CONFIG[assignment.status];
     const navigate = useNavigate();
 
@@ -39,7 +32,7 @@ export function StudentAssignmentRow({ assignment }: { assignment: StudentAssign
         >
             <div className="flex items-center gap-3">
                 <div className="rounded-full bg-muted p-2">
-                    <Icon className="h-4 w-4" />
+                    <FileText className="h-4 w-4" />
                 </div>
                 <div>
                     <p className="font-medium">{assignment.name}</p>

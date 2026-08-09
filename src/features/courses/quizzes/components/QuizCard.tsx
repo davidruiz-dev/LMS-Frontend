@@ -19,14 +19,9 @@ interface QuizCardProps {
   canEdit?: boolean;
 }
 
-const quizTypeColors = {
-  [QuizType.PRACTICE]: 'bg-blue-500',
-  [QuizType.GRADED]: 'bg-green-500',
-  [QuizType.SURVEY]: 'bg-purple-500',
-};
 
 const quizTypeLabels = {
-  [QuizType.GRADED]: 'calificado',
+  [QuizType.GRADED]: 'evaluación',
   [QuizType.PRACTICE]: 'práctica',
   [QuizType.SURVEY]: 'encuesta',
 }
@@ -100,7 +95,7 @@ export const QuizCard = ({ quiz, courseId, remainingAttempts, hasAttempts, onSta
                 {pendingCount > 0 && (
                   <DropdownMenuItem onClick={() => navigate(`/courses/${courseId}/quizzes/${quiz.id}/manual-grading`)}>
                     <ClipboardCheck className="mr-2 h-4 w-4" />
-                    Grade Answers ({pendingCount})
+                    Calificar respuestas ({pendingCount})
                   </DropdownMenuItem>
                 )}
                 <DropdownMenuItem onClick={() => navigate(`/courses/${courseId}/quizzes/${quiz.id}/attempts`)}>
@@ -122,12 +117,12 @@ export const QuizCard = ({ quiz, courseId, remainingAttempts, hasAttempts, onSta
 
       <CardContent className="space-y-4">
         <div className="flex items-center gap-2 flex-wrap">
-          <Badge className={quizTypeColors[quiz.type]}>
+          <Badge variant={'outline'}>
             {[quizTypeLabels[quiz.type]]}
           </Badge>
           {quiz.points && (
             <Badge variant="outline">
-              {quiz.points} puntos posibles
+              {quiz.points} pts posibles
             </Badge>
           )}
           {!canEdit && remainingAttempts !== undefined && quiz.allowedAttempts !== -1 && (

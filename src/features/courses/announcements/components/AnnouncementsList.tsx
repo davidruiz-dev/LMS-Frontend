@@ -103,13 +103,13 @@ export default function AnnouncementsList({ courseId, access }: AnnouncementsLis
                                 {stats.total} total
                             </Badge>
                             {stats.published > 0 && (
-                                <Badge variant="outline" className="text-xs text-green-600 border-green-200">
+                                <Badge variant="outline" className="text-xs text-green-600 border-green-200 dark:border-green-200/20">
                                     <CheckCircle className="w-3 h-3 mr-1" />
                                     {stats.published} publicados
                                 </Badge>
                             )}
                             {stats.drafts > 0 && access && (
-                                <Badge variant="outline" className="text-xs text-yellow-600 border-yellow-200">
+                                <Badge variant="outline" className="text-xs text-yellow-600 border-yellow-200 dark:border-yellow-200/20">
                                     <AlertCircle className="w-3 h-3 mr-1" />
                                     {stats.drafts} borradores
                                 </Badge>
@@ -170,14 +170,12 @@ export default function AnnouncementsList({ courseId, access }: AnnouncementsLis
 
             {filteredAnnouncements.length > 0 ? (
                 filteredAnnouncements.map((announcement) => (
-                    <div className="space-y-4">
-                        <AnnouncementCard
+                    <AnnouncementCard
                             key={announcement.id}
                             announcement={announcement}
                             courseId={courseId}
                             access={access}
                         />
-                    </div>
                 ))
             ) : (
                 <div className="text-center py-12 bg-muted/20 rounded-lg">

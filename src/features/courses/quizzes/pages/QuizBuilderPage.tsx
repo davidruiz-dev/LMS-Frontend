@@ -42,15 +42,8 @@ export default function QuizBuilderPage() {
         <div className="container space-y-6">
             {/* Header */}
             <div className="flex items-center gap-4">
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => navigate(`/courses/${courseId}/quizzes`)}
-                >
-                    <ArrowLeft className="h-4 w-4" />
-                </Button>
                 <div className="flex-1">
-                    <h1 className="text-3xl font-bold">{quiz.title}</h1>
+                    <h1 className="text-3xl font-bold first-letter:capitalize">{quiz.title}</h1>
                     <p className="text-muted-foreground">Crea y gestiona preguntas de cuestionarios.</p>
                 </div>
                 <Button variant="outline" onClick={() => setIsEditingSettings(true)}>

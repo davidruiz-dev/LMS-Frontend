@@ -56,13 +56,15 @@ export default function SubmissionPage() {
             </div>
 
             {submission.content && (
-                <p className="rounded-md border bg-muted/30 p-3 text-sm">{submission.content}</p>
+                <div className="rounded-md border bg-muted/30 p-3 space-y-3">
+                    <h3 className="font-semibold">Tus comentarios</h3>
+                    <p className="text-sm first-letter:capitalize">{submission.content}</p>
+                </div>    
             )}
 
             {submission.status === 'graded' && (
                 <div className="flex items-center gap-2 rounded-md border p-3 text-sm">
-                    <span className="font-semibold">{submission.grade} pts</span>
-                    {submission.feedback && <span className="text-muted-foreground">— {submission.feedback}</span>}
+                    {submission.feedback ? <span className="text-muted-foreground">— {submission.feedback}</span> : 'No se proporcionó comentarios del instructor.'}
                 </div>
             )}
 

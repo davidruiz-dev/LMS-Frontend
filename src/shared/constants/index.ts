@@ -49,11 +49,12 @@ export const COURSE_COLORS = [
   '#06B6D4', '#84CC16', '#F97316', '#EC4899', '#6366F1'
 ]
 
-export const COURSE_STATUS = {
+export const CourseStatus = {
   DRAFT: 'draft',
   PUBLISHED: 'published',
   ARCHIVED: 'archived',
 } as const
+export type CourseStatus = (typeof CourseStatus)[keyof typeof CourseStatus];
 
 export const FILE_UPLOAD_CONFIG = {
   MAX_SIZE: 10 * 1024 * 1024, // 10MB

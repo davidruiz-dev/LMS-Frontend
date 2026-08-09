@@ -1,4 +1,3 @@
-
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAttempts, useQuiz } from '../hooks/use-quizzes';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,6 +8,8 @@ import { Loader2, Eye, TrendingUp, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 import { AttemptStatus } from '../types/quiz.types';
 import { cn } from '@/shared/lib/utils';
+import { attempStatusTypeLabels } from '../constants/quiz.constants';
+
 
 export default function MyAttemptsPage () {
   const { id: courseId, quizId } = useParams<{ id: string; quizId: string }>();
@@ -129,7 +130,7 @@ export default function MyAttemptsPage () {
               <TableHeader>
                 <TableRow>
                   <TableHead>Intento</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead>Estado</TableHead>
                   <TableHead>Puntuación</TableHead>
                   <TableHead>Tiempo Transcurrido</TableHead>
                   <TableHead>Fecha</TableHead>
@@ -150,7 +151,7 @@ export default function MyAttemptsPage () {
                           attempt.status === AttemptStatus.IN_PROGRESS && "bg-yellow-500"
                         )}
                       >
-                        {attempt.status}
+                        {[attempStatusTypeLabels[attempt.status]]}
                       </Badge>
                     </TableCell>
                     <TableCell>

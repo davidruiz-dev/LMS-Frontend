@@ -14,6 +14,7 @@ import { useInProgressAttempt, useQuiz, useSaveProgress, useStartAttempt, useSub
 import { QuestionType, type QuizAnswer, type QuizAttempt } from '../types/quiz.types';
 import { USER_ROLES } from '@/shared/constants';
 import { useAuth } from '@/features/auth/hooks/useAuthContext';
+import { questionTypeLabel } from '../constants/quiz.constants';
 
 const AUTOSAVE_INTERVAL_MS = 15_000;
 
@@ -366,6 +367,7 @@ export default function QuizTakePage() {
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-xs font-medium bg-primary/10 text-primary px-2 py-1 rounded">
                   {currentQuestion.type.replace('_', ' ')}
+                  {[questionTypeLabel[currentQuestion.type]]}
                 </span>
                 <span className="text-xs font-medium bg-secondary text-secondary-foreground px-2 py-1 rounded">
                   {currentQuestion.points} puntos

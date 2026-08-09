@@ -23,14 +23,14 @@ export default function ProfilePage() {
   const initials = `${profile.firstName[0] ?? ''}${profile.lastName[0] ?? ''}`.toUpperCase();
 
   return (
-    <div className="space-y-6 max-w-4xl p-6">
+    <div className="space-y-6 max-w-4xl p-6 m-auto">
       <div className="flex items-center gap-4">
         <AvatarUploader avatarUrl={profile.avatarUrl} initials={initials} />
         <div>
-          <h2 className="text-xl font-semibold">
+          <h2 className="text-3xl font-semibold">
             {profile.firstName} {profile.lastName}
           </h2>
-          <p className="text-sm text-muted-foreground">{profile.email}</p>
+          <p className="text-muted-foreground">{profile.email}</p>
         </div>
       </div>
 

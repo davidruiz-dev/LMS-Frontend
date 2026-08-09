@@ -17,10 +17,10 @@ export function AvatarUploader({ avatarUrl, initials }: { avatarUrl: string | nu
   }
 
   return (
-    <div className="relative w-24 h-24">
-      <Avatar className="w-24 h-24">
+    <div className="relative w-32 h-32">
+      <Avatar className="w-32 h-32">
         <AvatarImage src={preview ?? avatarUrl ?? undefined} />
-        <AvatarFallback className="text-xl">{initials}</AvatarFallback>
+        <AvatarFallback className="text-3xl">{initials}</AvatarFallback>
       </Avatar>
       <Button
         size="icon"

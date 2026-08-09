@@ -5,7 +5,6 @@ export type CourseStatus = 'draft' | 'published' | 'archived';
 export interface Course {
   id: string;
   name: string;
-  code: string;
   imageUrl: string;
   description: string;
   short_description: string;
@@ -14,11 +13,11 @@ export interface Course {
   students: User[];
   startDate: string;
   endDate: string;
-  syllabus?: string;
   isActive: boolean;
   status: CourseStatus;
   createdAt: string;
   updateAt: string;
+  deleteAt: string;
 }
 
 export const SubmissionStatus = {
