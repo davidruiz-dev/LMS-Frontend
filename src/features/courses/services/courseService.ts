@@ -22,7 +22,6 @@ export const CourseService = {
     formData.append('name', course.name)
     formData.append('description', course.description)
     formData.append('short_description', course.short_description)
-    formData.append('gradeLevelId', course.gradeLevelId)
     formData.append('instructorId', course.instructorId)
     formData.append('startDate', course.startDate.toString())
     formData.append('endDate', course.endDate.toString())
@@ -47,7 +46,6 @@ export const CourseService = {
     formData.append('name', course.name)
     formData.append('description', course.description)
     formData.append('short_description', course.short_description)
-    formData.append('gradeLevelId', course.gradeLevelId)
     formData.append('instructorId', course.instructorId)
     formData.append('startDate', course.startDate.toString())
     formData.append('endDate', course.endDate.toString())
@@ -63,8 +61,12 @@ export const CourseService = {
     return response.data;
   },
 
-  delete: async (id: number) => {
-    return await api.delete(`${COURSE_URL}/${id}`)
+  archive: async (id: string) => {
+    return await api.patch(`${COURSE_URL}/${id}/archive`)
+  },
+
+  unarchive: async (id: string) => {
+    return await api.patch(`${COURSE_URL}/${id}/unarchive`)
   },
 
   publishCourse: async (id: string): Promise<Course> => {

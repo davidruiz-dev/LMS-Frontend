@@ -7,3 +7,10 @@ export const useStudentDashboard = () => {
         queryFn: () => DashboardService.getStudentDashboard(),
     });
 };
+
+export const useInstructorDashboard = () => {
+    return useQuery({
+        queryKey: ["instructor-dashboard"],
+        queryFn: () => DashboardService.getInstructorDashboard(),
+    });
+};

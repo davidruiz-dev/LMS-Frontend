@@ -31,7 +31,7 @@ export default function EditModuleItemDialog({ courseId, moduleId, item, open, o
         defaultValues: {
             title: item.title ?? '',
             type: item.type,
-            content: item.content ?? '',
+            externalUrl: item.externalUrl ?? '',
             contentId: item.contentId,
             moduleId: item.moduleId,
             published: item.published ?? false,
@@ -43,7 +43,7 @@ export default function EditModuleItemDialog({ courseId, moduleId, item, open, o
             form.reset({
                 title: item.title ?? '',
                 type: item.type,
-                content: item.content ?? '',
+                externalUrl: item.externalUrl ?? '',
                 contentId: item.contentId,
                 moduleId: item.moduleId,
                 published: item.published ?? false,
@@ -107,7 +107,7 @@ export default function EditModuleItemDialog({ courseId, moduleId, item, open, o
                             {typeWatch === 'external_url' && (
                                 <FormField
                                     control={form.control}
-                                    name='content'
+                                    name='externalUrl'
                                     render={({ field }) => (
                                         <FormItem className="w-full">
                                             <FormLabel hidden>URL externa</FormLabel>

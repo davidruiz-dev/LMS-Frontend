@@ -22,7 +22,7 @@ export function useCourseAccess(courseId?: string): CourseAccess | null {
   // ----- CAN VIEW -----
   const canView = isAdmin || isOwner || (isPublished && isEnrolled)
   // ----- CAN EDIT -----
-  const canEdit = isAdmin || isOwner && !isArchived 
+  const canEdit = isAdmin || isOwner 
   // ----- CAN MANAGE  -----
   const canManageEnrollments = isAdmin || isOwner && isPublished
   const canAccessContent = isAdmin ||  isOwner || isEnrolled

@@ -163,7 +163,7 @@ export default function AssignmentsList({ courseId, isOwner }: Props) {
 
 const AssignmentsEmpty = () => {
     return (
-        <Empty>
+        <Empty className="border">
             <EmptyHeader>
                 <EmptyMedia variant="icon">
                     <ClipboardList />

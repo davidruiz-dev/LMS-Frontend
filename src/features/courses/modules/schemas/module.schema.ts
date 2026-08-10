@@ -14,6 +14,7 @@ export const moduleItemSchema = z.object({
     published: z.boolean().optional(),
     contentId: z.string().optional(),
     content: z.string().optional(),
+    externalUrl: z.string().optional(),
     moduleId: z.string({ message: 'El módulo ID es requerido' }).optional(), // se envía por separado
 })
 

@@ -1,4 +1,4 @@
-import { useCourse, usePublishCourse } from "@/features/courses/hooks/use-courses";
+import { useCourse, useArchiveCourse, usePublishCourse, useUnarchiveCourse } from "@/features/courses/hooks/use-courses";
 import { useNavigate, useParams } from "react-router-dom";
 import { AvatarUser } from "@/components/AvatarUser";
 import { useUpcomingAssignments } from "@/features/courses/hooks/use-assignments";
@@ -13,6 +13,8 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { CourseStatus } from "@/shared/constants";
 
 // Componente para Quick Access Grid
 const QuickAccessCard = ({
@@ -108,12 +110,21 @@ const CoursePage = () => {
     const { data: courseDetail, isLoading, error } = useCourse(id);
     const { data: upcomingAssignments = [] } = useUpcomingAssignments(id);
     const publishCourse = usePublishCourse();
+    const archiveCourse = useArchiveCourse();
+    const unarchiveCourse = useUnarchiveCourse();
     const access = useCourseAccess(id);
     const [showImagePreview, setShowImagePreview] = useState(false);
+    const [deleting, setDeleting] = useState(false);
 
-    const onPublish = () => {
-        publishCourse.mutate(id);
+    const handleDelete = async () => {
+        await archiveCourse.mutateAsync(id);
+        setDeleting(false);
+        navigate(ROUTES.COURSES);
     };
+
+    const onPublish = async () => await publishCourse.mutateAsync(id);
+
+    const handleUnarchive = async () => await unarchiveCourse.mutateAsync(id);
 
     // Estadísticas calculadas
     const stats = useMemo(() => {
@@ -198,7 +209,7 @@ const CoursePage = () => {
                 {/* Imagen de fondo (thumbnail) */}
                 <div className="relative h-[300px] md:h-[300px] lg:h-[350px] w-full overflow-hidden rounded-xl">
                     <img
-                        src={courseDetail.imageUrl}
+                        src={courseDetail.imageUrl || 'https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg'}
                         alt={courseDetail.name}
                         className="w-full h-full object-cover"
                     />
@@ -243,12 +254,7 @@ const CoursePage = () => {
                                             <BookOpen className="w-4 h-4" />
                                             {stats?.totalModules || 0} módulos
                                         </span>
-                                        {courseDetail.gradeLevel && (
-                                            <span className="flex items-center gap-1 capitalize">
-                                                <Award className="w-4 h-4" />
-                                                {courseDetail.gradeLevel.name}
-                                            </span>
-                                        )}
+
                                     </div>
                                 </div>
 
@@ -277,7 +283,7 @@ const CoursePage = () => {
                                             <Button
                                                 variant="secondary"
                                                 className="bg-white/20 hover:bg-white/30 text-white border-white/20 backdrop-blur-sm"
-                                                onClick={() => { }}
+                                                onClick={() => navigate(ROUTES.EDIT_COURSE(id))}
                                             >
                                                 <Settings className="w-4 h-4 mr-2" />
                                                 Configurar
@@ -374,7 +380,7 @@ const CoursePage = () => {
                                         lastName={courseDetail.instructor.lastName}
                                     />
                                     <div>
-                                        <p className="font-medium text-lg hover:underline cursor-pointer" onClick={()=>navigate(ROUTES.USER_PROFILE(courseDetail.instructorId))}>
+                                        <p className="font-medium text-lg hover:underline cursor-pointer" onClick={() => navigate(ROUTES.USER_PROFILE(courseDetail.instructorId))}>
                                             {courseDetail.instructor.firstName} {courseDetail.instructor.lastName}
                                         </p>
                                         <p className="text-sm text-muted-foreground">{courseDetail.instructor.email}</p>
@@ -484,22 +490,33 @@ const CoursePage = () => {
                                 <Button
                                     variant="outline"
                                     className="w-full justify-start"
-                                    onClick={() => { }}
+                                    onClick={() => navigate(ROUTES.EDIT_COURSE(id))}
                                 >
                                     <Settings className="w-4 h-4 mr-2" />
                                     Editar curso
                                 </Button>
-                                <Button
-                                    variant="outline"
-                                    className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
-                                    onClick={() => {
-                                        // Implementar archivar curso
-                                        toast.warning("Función de archivar en desarrollo");
-                                    }}
-                                >
-                                    <AlertCircle className="w-4 h-4 mr-2" />
-                                    Archivar curso
-                                </Button>
+                                {courseDetail.status === CourseStatus.PUBLISHED && (
+                                    <Button
+                                        variant="outline"
+                                        className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+                                        onClick={() => setDeleting(true)}
+                                    >
+                                        <AlertCircle className="w-4 h-4 mr-2" />
+                                        {archiveCourse.isPending ? "Archivando..." : "Archivar curso" }
+                                    </Button>
+                                )}
+
+                                {courseDetail.status === CourseStatus.ARCHIVED && (
+                                    <Button
+                                        variant="outline"
+                                        className="w-full justify-start"
+                                        onClick={handleUnarchive}
+                                        disabled={unarchiveCourse.isPending}
+                                    >
+                                        <CheckCircle className="w-4 h-4 mr-2" />
+                                        {unarchiveCourse.isPending ? "Desarchivando..." : "Desarchivar curso" }
+                                    </Button>
+                                )}
                             </CardContent>
                         </Card>
                     )}
@@ -518,6 +535,37 @@ const CoursePage = () => {
                     </div>
                 </DialogContent>
             </Dialog>
+
+
+            <AlertDialog
+                open={deleting}
+                onOpenChange={setDeleting}
+            >
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            ¿Estás seguro?
+                        </AlertDialogTitle>
+
+                        <AlertDialogDescription>
+                            Esto archivará el curso. Al archivarlo, no se permitirán nuevas inscripciones ni nuevas actividades. El progreso, entregas y calificaciones existentes se conservarán.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>
+                            Cancelar
+                        </AlertDialogCancel>
+
+                        <AlertDialogAction
+                            onClick={handleDelete}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        >
+                            Archivar
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 };

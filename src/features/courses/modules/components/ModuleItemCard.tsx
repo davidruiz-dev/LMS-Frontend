@@ -77,7 +77,7 @@ export function ModuleItemCard({
 
   const handleItemClick = () => {
     if (item.type === 'external_url') {
-      window.open(item.externalUrl || item.content, '_blank');
+      window.open(item.externalUrl, '_blank');
     }
     if (item.type === 'assignment') {
       navigate(ROUTES.COURSE_ASSIGNMENT(courseId, item.contentId))

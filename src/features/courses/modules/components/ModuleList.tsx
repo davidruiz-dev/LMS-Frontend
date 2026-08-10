@@ -114,20 +114,7 @@ export function ModuleList({ courseId, canEdit }: ModuleListProps) {
 
   return (
     <div className="space-y-4">
-      {!modules.length && (
-        <Empty className="bg-muted/30 h-full">
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <Book />
-            </EmptyMedia>
-            <EmptyTitle>Sin módulos</EmptyTitle>
-            <EmptyDescription className="max-w-xs text-pretty">
-              No hay módulos disponibles en este momento, vuelve pronto.
-            </EmptyDescription>
-          </EmptyHeader>
-        </Empty>
-      )}
-
+  
       {/* filtros */}
       <div className="flex flex-col xl:flex-row gap-3">
         {/* Buscador */}

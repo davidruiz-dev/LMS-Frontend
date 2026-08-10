@@ -4,6 +4,11 @@ export interface StudentDashboardResponse {
     upcomingDeadlines: UpcomingDeadlineDto[];
 }
 
+export interface InstructorDashboardResponse {
+    stats: DashboardStatsDto;
+    courses: CourseStatDto[];
+}
+
 export interface DashboardStatsDto {
     totalAssignments: number;
     submittedAssignments: number;

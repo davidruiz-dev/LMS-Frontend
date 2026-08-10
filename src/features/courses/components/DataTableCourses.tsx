@@ -8,7 +8,6 @@ import { Book, ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRigh
 import { Link, useNavigate } from "react-router-dom";
 import { ROUTES } from "@/shared/constants/routes";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { USER_ROLES } from "@/shared/constants";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
@@ -120,7 +119,7 @@ export default function DataTableCourses() {
                     className="flex items-center gap-3 group"
                   >
                     <img
-                      src={course.imageUrl}
+                      src={course.imageUrl || 'https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg'}
                       alt={course.name}
                       className="h-12 w-16 shrink-0 rounded-md border object-cover"
                     />

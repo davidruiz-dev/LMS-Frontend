@@ -27,7 +27,8 @@ const CreateModuleItemDialog: FC<Props> = ({ open, onOpenChange, moduleId, cours
             title: '',
             type: ModuleItemType.ASSIGNMENT,
             published: false,
-            contentId: ''
+            contentId: '',
+            externalUrl: '',
         },
         mode: 'onChange',
     })
@@ -93,7 +94,7 @@ const CreateModuleItemDialog: FC<Props> = ({ open, onOpenChange, moduleId, cours
                             {typeWatch === 'external_url' && (
                                 <FormField
                                     control={moduleForm.control}
-                                    name='content'
+                                    name='externalUrl'
                                     render={({ field }) => (
                                         <FormItem className="w-full">
                                             <FormLabel hidden>URL externa</FormLabel>

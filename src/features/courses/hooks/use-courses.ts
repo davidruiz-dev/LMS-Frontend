@@ -53,20 +53,38 @@ export function useCourse(id: string | undefined) {
     });
 }
 
-export const useDeleteCourse = (id: number) => {
+export const useArchiveCourse = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: () => CourseService.delete(id),
+        mutationFn: (id?: string) => CourseService.archive(id!),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['courses'] });
-            showSuccess('Curso eliminado exitosamente')
+            showSuccess('Curso archivado exitosamente')
         },
         onError: (error) => {
-            showError('Error al eliminar curso')
+            showError('Error al archivar curso')
             console.error(error);
         }
     })
 }
+
+export const useUnarchiveCourse = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (id?: string) =>
+            CourseService.unarchive(id!),
+
+        onSuccess: (_, id) => {
+            queryClient.invalidateQueries({ queryKey: ['courses'] });
+            queryClient.invalidateQueries({ queryKey: ['course', id] });
+            showSuccess('Curso desarchivado exitosamente')
+        },
+        onError: (error) => {
+            showError(error.message || 'Error al desarchivar curso')
+        },
+    });
+};
 
 // Publish Course
 export const usePublishCourse = () => {
