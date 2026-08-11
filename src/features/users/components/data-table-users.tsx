@@ -16,8 +16,8 @@ function DataTableUsers() {
     const [filters, setFilters] = useState<PaginationFilters>({
         page: 1,
         limit: 10,
-        sortBy: 'createdAt',
-        orderBy: 'DESC',
+        order: 'DESC',
+        orderBy: 'createdAt',
         search: ''
     })
     const { data, isLoading, isError } = useUsers(filters);

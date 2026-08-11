@@ -100,7 +100,7 @@ export function ModuleItemList({ courseId, moduleId, canEdit = false }: ModuleIt
                                                 courseId={courseId}
                                                 moduleId={moduleId}
                                                 canEdit={canEdit}
-                                                dragHandleProps={canEdit ? provided.dragHandleProps : undefined}
+                                                dragHandleProps={provided.dragHandleProps}
                                             />
                                         </div>
                                     )}

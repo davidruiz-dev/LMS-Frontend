@@ -20,7 +20,7 @@ export default defineConfig({
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
-          ui: ['@radix-ui/react-button', '@radix-ui/react-dialog'],
+          ui: ['@radix-ui/react-dialog'],
           query: ['@tanstack/react-query', 'axios'],
         },
       },

@@ -24,7 +24,7 @@ import { useDeleteModuleItem } from '@/features/courses/hooks/use-modules';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/shared/constants/routes';
 import type { ModuleItem, ModuleItemType } from '@/features/courses/modules/types/module.types';
-import type { DraggableProvided } from '@hello-pangea/dnd';
+import type { DraggableProvidedDragHandleProps } from '@hello-pangea/dnd';
 import EditModuleItemDialog from './EditModuleItemDialog';
 
 interface ModuleItemCardProps {
@@ -32,7 +32,7 @@ interface ModuleItemCardProps {
   courseId: string;
   moduleId: string;
   canEdit?: boolean;
-  dragHandleProps?: DraggableProvided;
+  dragHandleProps: DraggableProvidedDragHandleProps | null;
 }
 
 const itemTypeIcons: Record<ModuleItemType, LucideIcon> = {
