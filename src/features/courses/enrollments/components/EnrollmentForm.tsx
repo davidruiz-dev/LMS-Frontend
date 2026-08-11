@@ -35,11 +35,6 @@ const EnrollmentForm: FC<Props> = ({ isOpen, onClose, courseId }) => {
     // queries mutations
     const createEnrollment = useCreateEnrollment();
 
-    const fetchStudents = async (search: string) => {
-        const { data } = await UsersService.findStudentsByEmail(search || '');
-        setStudents(data);
-    }
-
     const onSubmit = async (values: EnrollmentFormData) => {
         await createEnrollment.mutateAsync({ courseId, enrollment: values });
         form.reset();
@@ -47,8 +42,12 @@ const EnrollmentForm: FC<Props> = ({ isOpen, onClose, courseId }) => {
     }
 
     useEffect(() => {
-        fetchStudents(search);
-    }, [search]);
+        const fetchStudents = async () => {
+            const { data } = await UsersService.findStudentsByEmail(courseId, search || '');
+            setStudents(data);
+        }
+        fetchStudents()
+    }, [search, courseId]);
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>

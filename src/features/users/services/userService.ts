@@ -54,10 +54,10 @@ export const UsersService = {
   //   return response.data;
   // },
 
-  findStudentsByEmail: async (name?: string) => {
-    let url = `${USER_URL}/students/search`;
-    if (name) {
-      url += `?email=${encodeURIComponent(name)}`;
+  findStudentsByEmail: async (courseId: string, email?: string) => {
+    let url = `${USER_URL}/${courseId}/search`;
+    if (email) {
+      url += `?email=${encodeURIComponent(email)}`;
     }
     return api.get(url);
   }

@@ -2,7 +2,7 @@ import { useCourse, useArchiveCourse, usePublishCourse, useUnarchiveCourse } fro
 import { useNavigate, useParams } from "react-router-dom";
 import { AvatarUser } from "@/components/AvatarUser";
 import { useUpcomingAssignments } from "@/features/courses/hooks/use-assignments";
-import { Calendar, Users, BookOpen, Award, Heart, ChevronRight, AlertCircle, FileText, Bell, Settings, Play, Layers, MessageSquare, Zap, BookMarked, Maximize2, CheckCircle, Megaphone, type LucideIcon } from "lucide-react";
+import { Calendar, Users, BookOpen, Award, Heart, ChevronRight, AlertCircle, FileText, Bell, Settings, Play, Layers, BookMarked, Maximize2, CheckCircle, Megaphone, type LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/shared/constants/routes";
 import { useCourseAccess } from "@/features/courses/hooks/use-course-access";
@@ -68,40 +68,40 @@ const QuickAccessCard = ({
     );
 };
 
-// Componente para Activity Feed
-const ActivityItem = ({
-    icon: Icon,
-    title,
-    description,
-    time,
-    type = "info"
-}: {
-    icon: LucideIcon,
-    title: string,
-    description: string,
-    time: string,
-    type?: 'info' | 'success' | 'warning' | 'error'
-}) => {
-    const colors = {
-        info: "bg-blue-50 text-blue-600",
-        success: "bg-green-50 text-green-600",
-        warning: "bg-yellow-50 text-yellow-600",
-        error: "bg-red-50 text-red-600",
-    };
+// // Componente para Activity Feed
+// const ActivityItem = ({
+//     icon: Icon,
+//     title,
+//     description,
+//     time,
+//     type = "info"
+// }: {
+//     icon: LucideIcon,
+//     title: string,
+//     description: string,
+//     time: string,
+//     type?: 'info' | 'success' | 'warning' | 'error'
+// }) => {
+//     const colors = {
+//         info: "bg-blue-50 text-blue-600",
+//         success: "bg-green-50 text-green-600",
+//         warning: "bg-yellow-50 text-yellow-600",
+//         error: "bg-red-50 text-red-600",
+//     };
 
-    return (
-        <div className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors">
-            <div className={`p-2 rounded-full ${colors[type]} flex-shrink-0`}>
-                <Icon className="w-4 h-4" />
-            </div>
-            <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium">{title}</p>
-                <p className="text-sm text-muted-foreground">{description}</p>
-                <p className="text-xs text-muted-foreground mt-1">{time}</p>
-            </div>
-        </div>
-    );
-};
+//     return (
+//         <div className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors">
+//             <div className={`p-2 rounded-full ${colors[type]} flex-shrink-0`}>
+//                 <Icon className="w-4 h-4" />
+//             </div>
+//             <div className="flex-1 min-w-0">
+//                 <p className="text-sm font-medium">{title}</p>
+//                 <p className="text-sm text-muted-foreground">{description}</p>
+//                 <p className="text-xs text-muted-foreground mt-1">{time}</p>
+//             </div>
+//         </div>
+//     );
+// };
 
 const CoursePage = () => {
     const { id } = useParams<{ id: string }>();
@@ -137,29 +137,29 @@ const CoursePage = () => {
     }, [courseDetail]);
 
     // Actividades recientes (mock)
-    const recentActivities = [
-        {
-            icon: Users,
-            title: "Nuevo estudiante inscrito",
-            description: "María González se ha inscrito al curso",
-            time: "Hace 2 horas",
-            type: "success" as const
-        },
-        {
-            icon: FileText,
-            title: "Tarea entregada",
-            description: "Carlos Ruiz entregó el proyecto final",
-            time: "Hace 5 horas",
-            type: "info" as const
-        },
-        {
-            icon: MessageSquare,
-            title: "Nuevo comentario",
-            description: "Ana Martínez comentó en la lección 3",
-            time: "Hace 1 día",
-            type: "warning" as const
-        },
-    ];
+    // const recentActivities = [
+    //     {
+    //         icon: Users,
+    //         title: "Nuevo estudiante inscrito",
+    //         description: "María González se ha inscrito al curso",
+    //         time: "Hace 2 horas",
+    //         type: "success" as const
+    //     },
+    //     {
+    //         icon: FileText,
+    //         title: "Tarea entregada",
+    //         description: "Carlos Ruiz entregó el proyecto final",
+    //         time: "Hace 5 horas",
+    //         type: "info" as const
+    //     },
+    //     {
+    //         icon: MessageSquare,
+    //         title: "Nuevo comentario",
+    //         description: "Ana Martínez comentó en la lección 3",
+    //         time: "Hace 1 día",
+    //         type: "warning" as const
+    //     },
+    // ];
 
     if (isLoading) {
         return (
@@ -459,7 +459,7 @@ const CoursePage = () => {
                     </Card>
 
                     {/* Actividad reciente */}
-                    <Card>
+                    {/* <Card>
                         <CardHeader>
                             <CardTitle className="text-sm flex items-center gap-2">
                                 <Zap className="w-4 h-4" />
@@ -481,7 +481,7 @@ const CoursePage = () => {
                                 </div>
                             )}
                         </CardContent>
-                    </Card>
+                    </Card> */}
 
                     {/* Acciones de administración */}
                     {access?.isOwner && (

@@ -5,7 +5,7 @@ import type { CourseStatDto } from "@/features/dashboard/types/dashboard.types";
 import { ROUTES } from "@/shared/constants/routes";
 import { MoreVertical } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/features/auth/hooks/useAuthContext";
 
 interface CourseCardProps {

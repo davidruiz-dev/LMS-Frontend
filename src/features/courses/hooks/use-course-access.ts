@@ -17,7 +17,7 @@ export function useCourseAccess(courseId?: string): CourseAccess | null {
   const isAdmin = user.role === USER_ROLES.ADMIN;
   const isEnrolled = !!enrollment;
   const isPublished = course.status === CourseStatus.PUBLISHED;
-  const isArchived = course.status === CourseStatus.ARCHIVED;
+  //const isArchived = course.status === CourseStatus.ARCHIVED;
 
   // ----- CAN VIEW -----
   const canView = isAdmin || isOwner || (isPublished && isEnrolled)

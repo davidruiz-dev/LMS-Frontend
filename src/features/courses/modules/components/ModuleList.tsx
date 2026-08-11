@@ -2,7 +2,7 @@ import { useModulesByCourse, useReorderModules } from "@/features/courses/hooks/
 import { DragDropContext, Draggable, Droppable, type DropResult } from "@hello-pangea/dnd";
 import { Accordion } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { Bell, Book, Filter, Plus, Search, SortAsc, SortDesc } from "lucide-react";
+import { Bell, Filter, Plus, Search, SortAsc, SortDesc } from "lucide-react";
 import { useMemo, useState } from "react";
 import { cn } from "@/shared/lib/utils";
 import { ModuleAccordionItem } from "@/features/courses/modules/components/ModuleAccordionItem";
@@ -10,7 +10,6 @@ import { CreateModuleDialog } from "@/features/courses/modules/components/Create
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircleIcon } from "lucide-react"
-import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 

@@ -43,7 +43,6 @@ function FormCourse({ courseId }: Props) {
     });
 
     const [instructors, setInstructors] = useState<User[]>([]);
-    const [search, setSearch] = useState('');
     const [searchInstructor, setSearchInstructor] = useState('');
     const [openPopOverInstructor, setOpenPopOverInstructor] = useState(false);
     const [imagenFile, setImagenFile] = useState<File>();
@@ -63,7 +62,7 @@ function FormCourse({ courseId }: Props) {
 
     useEffect(() => {
         loadInstructors(searchInstructor);
-    }, [search, searchInstructor]);
+    }, [searchInstructor]);
 
     useEffect(() => {
         if (courseData && isEditMode) {
@@ -89,7 +88,7 @@ function FormCourse({ courseId }: Props) {
                 setImagePreview(courseData.imageUrl);
             }
         }
-    }, [courseData, isEditMode]);
+    }, [courseData, isEditMode, form]);
 
     // Manejar cambio de imagen
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

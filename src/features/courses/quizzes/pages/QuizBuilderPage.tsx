@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useQuiz } from '../hooks/use-quizzes';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, Settings, Loader2 } from 'lucide-react';
+import { Settings, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { QuestionBuilder } from '@/features/courses/quizzes/components/QuestionBuilder';
 import { QuizFormDialog } from '@/features/courses/quizzes/components/QuizForm';
