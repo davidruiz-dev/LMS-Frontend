@@ -14,3 +14,10 @@ export const useInstructorDashboard = () => {
         queryFn: () => DashboardService.getInstructorDashboard(),
     });
 };
+
+export const useAdminDashboard = () => {
+    return useQuery({
+        queryKey: ["admin-dashboard"],
+        queryFn: () => DashboardService.getAdminDashboard(),
+    });
+};

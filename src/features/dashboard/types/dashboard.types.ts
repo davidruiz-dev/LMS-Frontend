@@ -9,6 +9,12 @@ export interface InstructorDashboardResponse {
     courses: CourseStatDto[];
 }
 
+export interface AdminDashboardResponse {
+    stats: DashboardStatsDto;
+    courses: CourseStatDto[];
+    // agregar más campos proximamente
+}
+
 export interface DashboardStatsDto {
     totalAssignments: number;
     submittedAssignments: number;

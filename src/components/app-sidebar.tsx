@@ -1,4 +1,4 @@
-import { Command, LayoutDashboard, LogOut, Settings, Users, GraduationCap, Book, type LucideIcon, } from "lucide-react"
+import { Command, LayoutDashboard, LogOut, Settings, Users, Book, type LucideIcon, } from "lucide-react"
 import {
     Sidebar,
     SidebarContent,
@@ -30,12 +30,6 @@ const sidebarItems: SidebarItem[] = [
         path: ROUTES.DASHBOARD,
         icon: LayoutDashboard,
         roles: ['admin', 'student', 'instructor']
-    },
-    {
-        title: "Grados",
-        path: ROUTES.GRADE_LEVELS,
-        icon: GraduationCap,
-        roles: [USER_ROLES.ADMIN]
     },
     {
         title: "Cursos",
